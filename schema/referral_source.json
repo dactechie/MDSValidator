@@ -1,0 +1,17 @@
+{
+    "type": "string",
+    "enum": [
+      "Self",
+      "Family member/friend",
+      "Medical Practitioner",
+      "Hospital",
+      "Mental health care service",
+      "Alcohol and other drug treatment service",
+      "Other community/health care service",
+      "Correctional service",
+      "Police diversion",
+      "Court diversion",
+      "Other",
+      "Not stated/inadequately described"
+    ]
+  }

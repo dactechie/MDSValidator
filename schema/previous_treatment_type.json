@@ -1,0 +1,16 @@
+{
+    "type": "string",
+    "$id": "#treatment_type",
+    "enum": [
+        "Withdrawl management (detoxification)",
+        "Counselling",
+        "Rehabilitation",
+        "Pharmacotherapy",
+        "Support and case management only",
+        "Information and education only",
+        "Assessment only",
+        "Other",
+        "No previous treatment received",
+        ""
+    ]
+}

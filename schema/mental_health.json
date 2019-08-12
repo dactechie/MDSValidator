@@ -1,0 +1,10 @@
+{
+    "type": "string",
+    "enum":[
+      "Diagnosed three months ago or less",
+      "Diagnosed more than three months ago but less than or equal to twelve months ago",
+      "Diagnosed more than twelve months ago",
+      "Never been diagnosed",
+      "Not stated/inadequately described"
+    ]
+}

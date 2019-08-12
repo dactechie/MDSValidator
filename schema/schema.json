@@ -1,0 +1,73 @@
+{
+    "type": "object",
+    "version": 1.0,
+    "description": " removed additionalProperties: false",
+    "required": [ "episodes" ],
+    "properties": {
+      "episodes": {"type": "array", "items": { "$ref": "#/definitions/episode" } }
+    },
+    "definitions": {
+      "episode": {
+        "type": "object",
+        "required": [
+          "ID", "SLK 581",
+          "Sex", "DOB", "Date accuracy indicator", "Country of birth",  "Postcode (Australian)",
+          "Indigenous status", "Preferred language",
+          "Commencement date", "End date","Client type",
+          "Principle drug of concern", "ODC1", "ODC2", "ODC3","ODC4", "ODC5",
+          "Main treatment type",       "OTT1", "OTT2", "OTT3","OTT4", "OTT5",
+          "Reason for cessation",
+          "Method of use for PDC","Usual accommodation", "Living arrangements",
+          "Injecting drug use status", "Treatment delivery setting", "Source of referral", 
+          "Mental health", "Previous alcohol and other drug treatment received"
+        ],
+        
+        "properties": {
+            "ENROLLING PROVIDER": { "type": "string" },
+            "ID":   { "type": "string" },
+            "FULL NAME":  { "type": "string" },
+            "First name":  { "type": "string" },
+            "Surname":  { "type": "string" },
+            "Sex":  { "type": "string", "enum": [ "Male", "Female", "Other", "Not stated"] },
+            "DOB":  { "type": "string" },
+            "Date accuracy indicator": {"$ref": "date_accuracy_indicator.json"},
+            "SLK 581":            {"type": "string",
+             "slkpattern" : "^[2A-Z]{5}([012]?[0-9]|3[01])(0?[1-9]|1[012])(19[4-9][0-9]|20[01][0-9])[01]$"
+            },
+            "Country of birth":   {"$ref": "definition_countries.json"},
+            "Indigenous status":  {"$ref": "ATSI.json"},
+            "Preferred language": {"$ref": "definition_languages.json"},
+            "Postcode (Australian)": {"type": "string",
+              "pattern" : "^[0-9]{4}|Overseas|Other|No fixed address (or not applicable)|Unknown|Not stated/inadequately described$"
+            },
+            "Commencement date" : {"type": "string" },
+            "End date": {"type": "string" },
+            "Client type": {"type": "string",
+              "enum": ["Own alcohol or other drug use", "Other's alcohol or other drug use"]
+            },
+            "Principle drug of concern": {"$ref": "drugs.json"},
+            "ODC1":{"$ref": "drugs.json"}, "ODC2":{"$ref": "drugs.json"}, "ODC3":{"$ref": "drugs.json"},
+            "ODC4":{"$ref": "drugs.json"}, "ODC5":{"$ref": "drugs.json"},
+
+            "Main treatment type": {"$ref": "main_treatment_type.json"},
+            "OTT1": {"$ref": "other_treatment_type.json"}, "OTT2": {"$ref": "other_treatment_type.json"},
+            "OTT3": {"$ref": "other_treatment_type.json"}, "OTT4": {"$ref": "other_treatment_type.json"},
+            "OTT5": {"$ref": "other_treatment_type.json"},
+
+            "Reason for cessation": {"$ref": "cessation_reason.json"},
+
+            "Method of use for PDC" : {"type": "string",
+              "enum": ["", "Ingests", "Smokes", "Injects", "Sniffs (powder)", "Inhales (vapour)", "Other",
+                "Not stated/inadequately described"]
+            },
+            "Usual accommodation" :       {"$ref": "accommodation.json"},
+            "Living arrangements":        {"$ref": "living_arrangements.json"},
+            "Injecting drug use status":  {"$ref": "injt_drug_use_status.json"},
+            "Treatment delivery setting": {"$ref": "treatment_delivery_setting.json"},
+            "Source of referral":         {"$ref": "referral_source.json"},
+            "Mental health":              {"$ref": "mental_health.json"},
+            "Previous alcohol and other drug treatment received": {"$ref": "previous_treatment_type.json"}
+          }
+        }
+      }
+}
