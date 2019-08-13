@@ -78,7 +78,7 @@ mds_aliases = {
             "Both Aboriginal and TSI"
         ],
                 
-        "Counselling" : [ "DATS counselling" ],
+        "Counselling" : [ "DATS Counselling" ],
         "Support and case management only": [
             "Support & case management only"
         ],
@@ -122,6 +122,7 @@ mds_aliases = {
         "Serbia" : ["Serbia and Montenegro"],
         "Arabic" : ["Arabic (Including Lebanese)"],
         "British Antarctic" : ["British Antarctic Territory"],
+        "Myanmar" : ["Burma (Myanmar)"],
         #Prev treatment
         #"-" : ["Not Stated"],
         "Information and education only"  :["Information and Education only"],

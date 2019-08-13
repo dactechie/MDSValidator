@@ -1,7 +1,7 @@
 import json
 from datetime import  date
 import jsonschema as jsc
-from json_logic import jsonLogic #, add_operation
+from json_logic import jsonLogic , add_operation
 from MJValidationError import MJValidationError
 from MDS_constants import MDS_Dates, MDS
 from MDS_RULES import rule_definitions
@@ -61,9 +61,13 @@ class JSONValidator(object):
             dce_fields = [dce['field'] for dce in date_conversion_errors]
             temp_rd = remove_vrules(dce_fields)
             temp_rules = [rd['rule'] for rd in temp_rd]
-        result =''
+        
         #try: 
-        result = jsonLogic(temp_rules, data_row)
+        result = [] 
+        for r in temp_rules :
+            rr = jsonLogic(r, data_row)
+            result.append(rr)
+        
         #except TypeError:
         #    print(f"type erropr index: {rec_idx}  \t", data_row)
         
@@ -124,28 +128,28 @@ class JSONValidator(object):
             add_error_obj(errors, e, data, id_field)
         
         fn_date_converter = get_date_converter(sample_date_str=episodes[0][MDS_Dates[0]])
-        #add_operation("has_duplicate_values",has_duplicate_values)
-        #add_operation("check_slk", self.check_slk)
+        add_operation("has_duplicate_values",has_duplicate_values)
+        add_operation("check_slk", self.check_slk)
 
 
         client_eps = {}
 
         for i, ep_data in enumerate(episodes):
             JSONValidator.validate_logic(errors, ep_data, i, fn_date_converter, id_field, client_eps, closed_eps_only)
-            has_duplicate_values(ep_data[MDS['PDC']],
-                                ep_data['ODC1'],
-                                ep_data['ODC2'],
-                                ep_data['ODC3'],
-                                ep_data['ODC4'],
-                                ep_data['ODC5'],
-                            )
-            has_duplicate_values(ep_data[MDS['MTT']],
-                                ep_data['OTT1'],
-                                ep_data['OTT2'],
-                                ep_data['OTT3'],
-                                ep_data['OTT4'],
-                                ep_data['OTT5'],
-                            )
+            # has_duplicate_values(ep_data[MDS['PDC']],
+            #                     ep_data['ODC1'],
+            #                     ep_data['ODC2'],
+            #                     ep_data['ODC3'],
+            #                     ep_data['ODC4'],
+            #                     ep_data['ODC5'],
+            #                 )
+            # has_duplicate_values(ep_data[MDS['MTT']],
+            #                     ep_data['OTT1'],
+            #                     ep_data['OTT2'],
+            #                     ep_data['OTT3'],
+            #                     ep_data['OTT4'],
+            #                     ep_data['OTT5'],
+            #                 )
 
         if self.slk_suggestions:
             fuse_suggestions_into_errors(errors, self.slk_suggestions)
