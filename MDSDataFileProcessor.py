@@ -48,7 +48,7 @@ def get_data_or_die(filename, data_header, hmap):
 
 def main(args):
     #data = setup_test_data('./data copy.csv')
-    FILENAME =  'AMDS Combined 12.08.19.csv' #TSS_AMDS_23.07.19_noEID.csv' #'TSS_AMDS.csv' # 'Althea.csv' #'TSS_AMDS.csv' # 'TSS_AMDS_23.07.19.csv' #./data copy.csv' # 'data_overlap.csv' #
+    FILENAME = 'AMDS Combined 12.08.19.csv' #  'Arcadia-Resi-Jan-Jun.csv' #'AMDS Combined 12.08.19.csv' #
     MODE = 0
     closed_eps_only= False
     start_time = time()
@@ -75,59 +75,6 @@ def main(args):
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv))
-
     # #data = setup_test_data('./data copy.csv')
-    # #data = setup_test_data('./data copy.csv')
-    # FILENAME =     './data copy.csv'
-    # MODE = 0 
-    # #setup_time = time()
-    
-    # start_time = time()
-    
-    # schema_dir = os.path.join(os.getcwd(), 'schema/')
-    # schema_file_name = os.path.realpath(os.path.join(schema_dir, 'schema.json'))
-    # jv = JSONValidator(schema_dir, schema_file_name)
-
-    # header = read_header(FILENAME)
-
-    # missing_headers, header_warnings = jv.validate_header(header,mode=MODE)
-
-
-
-    # data = read_data(FILENAME, header)
-
-    # if not data or not data['episodes'] or len(data['episodes']) < 1 :
-    #     print("No data to validate. quitting...")
-    #     sys.exit(0)
-     
-    # #mode 0 : not strict - with warnings     #mode 1 : strict (no alias translations) - no warnings, all errors
-    # verrors, warnings =  jv.validate(data,mode=MODE)
-    
-    # end_time = time()
-    
-    # log_results(verrors, warnings, header_warnings)
-    
-    # print(f"\n \t\t ...End of validation... \n\t\t Processing time {round(end_time - start_time,2)} seconds. ")
-    # #print(f"\n\t\t Setup time {round(start_time - setup_time,2)}")
-
-    
-    # #print("\n\n \t\t ...Writing results to spreadsheet..\n")
-
-            
-    # # print(w)
-    # #write_data_to_book(data['episodes'], verrors ,'./book1')
-
-
-    # #print("\n\n \t\t ...End of Program...\n")
-    # while True:
-    #     num = input("enter number of data row : ")
-        
-    #     d = {'episodes': [data[int(num)]]}
-    #     verrors = validate_json(jv, d)
-    #     #print(verrors)
-    #     data_row = data[int(num)]
-        
-    #     for i , k in enumerate(data[int(num)]):
-    #         print(f"{i} key : {k}")
 
 

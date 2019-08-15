@@ -47,7 +47,6 @@ class JSONValidator(object):
         return validator, schemaObj
 
 
-
     # TODO : schema validation may have already deduced that dates, etc may be invalid.
     #        those errors  would contain the rec_index of the error too
     @staticmethod
@@ -131,32 +130,15 @@ class JSONValidator(object):
         add_operation("has_duplicate_values",has_duplicate_values)
         add_operation("check_slk", self.check_slk)
 
-
         client_eps = {}
-
         for i, ep_data in enumerate(episodes):
             JSONValidator.validate_logic(errors, ep_data, i, fn_date_converter, id_field, client_eps, closed_eps_only)
-            # has_duplicate_values(ep_data[MDS['PDC']],
-            #                     ep_data['ODC1'],
-            #                     ep_data['ODC2'],
-            #                     ep_data['ODC3'],
-            #                     ep_data['ODC4'],
-            #                     ep_data['ODC5'],
-            #                 )
-            # has_duplicate_values(ep_data[MDS['MTT']],
-            #                     ep_data['OTT1'],
-            #                     ep_data['OTT2'],
-            #                     ep_data['OTT3'],
-            #                     ep_data['OTT4'],
-            #                     ep_data['OTT5'],
-            #                 )
 
         if self.slk_suggestions:
             fuse_suggestions_into_errors(errors, self.slk_suggestions)
 
         return errors , warnings
  
-
     
     def check_slk(self, id, data_slk, firstname, lastname, DOB_str, sex_str):
         must_be = getSLK(firstname, lastname, DOB_str, sex_str)

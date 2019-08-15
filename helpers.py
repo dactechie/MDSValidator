@@ -45,7 +45,7 @@ involved_field_sets =  [set(rd['involvedFields']) for rd in rd_with_involved_fie
 
 headers_map = alias_map_lam(mds_aliases['headers'])
 fvalues_map = alias_map_lam(mds_aliases['fieldValues'])
-val_translation_excluded_fields = [MDS["ID"], MDS["DOB"], MDS["PCODE"], MDS["SLK"] ]
+val_translation_excluded_fields = ["ENROLLING PROVIDER", "EID" ,MDS["ID"], MDS["DOB"], MDS["PCODE"], MDS["SLK"] ]
 
 def read_header(filename:str)->list:
     with open(filename, 'r') as csvfile:
@@ -56,18 +56,20 @@ def read_header(filename:str)->list:
 
 def read_data(filename, data_header, hmap)->dict:
     with open(filename, 'r') as csvfile:
-        csvfile.readline()
+        csvfile.readline()       
         reader = csv.DictReader(csvfile, data_header)        
         data_dicts = []
 
-        if MDS['FNAME'] not in data_header:
+        if MDS['FNAME'] not in data_header and "FULL NAME" in data_header:
             for i, r in enumerate(reader):
                 row = copy.deepcopy(r)
-                row[MDS['LNAME']], row[MDS['FNAME']]  = str.split(row["FULL NAME"], ", ")
-                del row["FULL NAME"]
-                data_dicts.append(row)
-                data_header.extend([MDS['FNAME'], MDS['LNAME']])
+                if row.get("FULL NAME"):                
+                    row[MDS['LNAME']], row[MDS['FNAME']]  = str.split(row["FULL NAME"], ", ")
+                    del row["FULL NAME"]
+                data_dicts.append(row)                
             reader = data_dicts
+            data_header.remove("FULL NAME")
+            data_header.extend([MDS['FNAME'], MDS['LNAME']])
             
         clean_headers = {dh:remove_unicode(dh) for dh in data_header}
         tmp_k = None
@@ -127,13 +129,11 @@ def translate_to_MDS_values(data):
     warnings = []
     fields_to_check = [k for k in data[0] if k not in val_translation_excluded_fields]
 
-
-
     for i, ddict in enumerate(data):# each row                          [ {row1}, {row2}  {ID: 2}]
         #for data_key, v in ddict.items(): # each field within a row     row1->  { k1:v1 , k2:v2} 
         for data_key in fields_to_check:
-            v =  ddict[data_key]
-            conv_data_val = v#.lower()
+            v =  ddict[data_key]            
+            conv_data_val = v.strip()
             if conv_data_val in fvalues_map:
                 conv_data_val = fvalues_map[conv_data_val]
                 warnings.append (

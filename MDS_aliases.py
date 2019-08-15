@@ -152,6 +152,7 @@ mds_aliases = {
 
 
 mds_aliases['headers'][M['ID']]     = ["PAT ID", "PID"]
+mds_aliases['headers'][M['FNAME']]   = ["First Name"]
 mds_aliases['headers'][M['PDC']]     = ["PDC"]
 mds_aliases['headers'][M['SEX']]     = ["SEX"]
 mds_aliases['headers'][M['DOB']]     = ["Date of birth"]
@@ -175,6 +176,3 @@ mds_aliases['headers'][M['CLNT_TYP']] = ["CLIENT"]
 mds_aliases['headers'][M['SRC_REF']]  = ["SOURCE"]
 mds_aliases['headers'][M['COMM_DATE']]= ["ENROLMENT", "Commencement Date", "Commencement date"]
 mds_aliases['headers'][M['END_DATE']] = ["DISCHARGE"]
-#mds_aliases['headers'][M['']]     = [""]
-#mds_aliases['headers'][M['']]     = [""]
-#mds_aliases['headers'][M['']]     = [""]
