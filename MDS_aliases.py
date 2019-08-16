@@ -83,6 +83,7 @@ mds_aliases = {
             "Support & case management only"
         ],
         "Lysergic acid diethylamide": ["LSD"],
+        "Ethanol": [     "Alcohol"   ],
         "MDMA": [     "Ecstasy (MDMA)"   ],
         "Cannabinoids" : [   "Cannabis"    ],
         "Nicotine" : [  "Nicotine/tobacco"  ],
@@ -103,8 +104,7 @@ mds_aliases = {
         ],
 
         "Other specialised community residential": [
-            "Other specialised community residential"
-            
+            "Other specialised community residential"            
         ],
         
         "Other's alcohol or other drug use" : ["Other's alcohol/other drug use"],
@@ -116,13 +116,14 @@ mds_aliases = {
         "Other community/health care service" : ["Other community/health service"],
 
         "Change in main treatment type" : ["Change in the main treatment type"],
+        "Change in delivery setting" : ["Change in the delivery setting"],
         "No previous treatment received" : ["No treatment"],
 
         "Vietnam" : ["Viet Nam"],
         "Serbia" : ["Serbia and Montenegro"],
         "Arabic" : ["Arabic (Including Lebanese)"],
         "British Antarctic" : ["British Antarctic Territory"],
-        "Myanmar" : ["Burma (Myanmar)"],
+        "Myanmar" : ["Burma (Myanmar)", "Burma (Republic of the Union of Myanmar)"],
         #Prev treatment
         #"-" : ["Not Stated"],
         "Information and education only"  :["Information and Education only"],
@@ -137,16 +138,13 @@ mds_aliases = {
         "Withdrawl management (detoxification)" : ["Withdrawal Management (detoxification)"],        
         "Alone" : ["alone"],
         "Other relative(s)" : ["Family member/Friend", "Other Relative(s)"], # TODO check me Family memner/friend eqiuivalemtr
-        "Residential treatment facility" : ["Residential Treatment Facility"]
+        "Residential treatment facility" : ["Residential Treatment Facility"],
         #:["Sniffs (powder)"]
-        #"Correctional service" : ["Correctional Service"]
+        "Correctional service" : ["Correctional Service"]
 
 
         # "" : [""],
         # "" : [""],
-
-
-
     }
 }
 

@@ -33,9 +33,12 @@ def get_formatted_sql(data, template, record_id):
 
     
 def has_duplicate_values(*arr):
-    #vals = [v for v in arr if v]
-    vals = list(filter(None, arr))
-    return len(vals) != len(set(vals))
+    
+    k, varr = arr[0],  list(filter(None,*arr[1:]))
+    if not k:
+        return False
+
+    return k in varr
 
     
 '''

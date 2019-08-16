@@ -48,7 +48,7 @@ def get_data_or_die(filename, data_header, hmap):
 
 def main(args):
     #data = setup_test_data('./data copy.csv')
-    FILENAME = 'AMDS Combined 12.08.19.csv' #  'Arcadia-Resi-Jan-Jun.csv' #'AMDS Combined 12.08.19.csv' #
+    FILENAME =  'AMDS Full unchecked 16.08.19.csv' #  'Arcadia-Resi-Jan-Jun.csv' #'AMDS Combined 12.08.19.csv' #
     MODE = 0
     closed_eps_only= False
     start_time = time()

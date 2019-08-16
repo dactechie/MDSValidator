@@ -50,7 +50,7 @@ def write_data_to_book(data, errors, book_name):
         app = xw.App(visible=False)
         book = app.books.open("./MDSTemplate.xltx")
         ws = book.sheets[0]
-        headers = ws.range('A1:BR1').value
+        headers = ws.range('A1:BT1').value
       
         rows = get_rows_to_write(headers,  len(headers),  data, errors)
 

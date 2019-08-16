@@ -22,11 +22,67 @@ rule_definitions = [
             ]}
   },
   {
-      "message": "Can't have duplicate PDC/ODCs.",
-      "field": M['PDC'],
+    "message": "Can't have duplicate PDC/ODCs.",
+    "field":'ODC5',
+    "type" :"Error",
+    "rule":{"!": 
+        {"has_duplicate_values":[{"var":'ODC5'},[{"var":"ODC4"},{"var":"ODC3"},{"var":"ODC3"},{"var":"ODC1"},{"var":M["PDC"]}]]}
+    }
+  },
+  {
+    "message": "Can't have duplicate PDC/ODCs.",
+    "field": 'ODC4',
+    "type" :"Error",
+    "rule":{"!": 
+        {"has_duplicate_values":[{"var":'ODC4'},[{"var":"ODC3"},{"var":"ODC2"},{"var":"ODC1"},{"var":M["PDC"]}]]}
+    }
+  },
+  {
+    "message": "Can't have duplicate PDC/ODCs.",
+    "field": 'ODC3',
+    "type" :"Error",
+    "rule":{"!": 
+        {"has_duplicate_values":[{"var":"ODC3"},[{"var":"ODC2"},{"var":"ODC1"},{"var":M["PDC"]}]]}
+    }
+},
+  {
+    "message": "Can't have duplicate PDC/ODCs.",
+    "field": 'ODC2',
+    "type" :"Error",
+    "rule":{"!": 
+        {"has_duplicate_values":[{"var":'ODC2'},[{"var":"ODC1"},{"var":M["PDC"]}]]}
+    }
+  },
+  {
+    "message": "Can't have duplicate PDC/ODCs.",
+    "field": M['PDC'],
+    "type" :"Error",
+    "rule":{"!": 
+        {"has_duplicate_values":[{"var":M['PDC']},[{"var":"ODC1"}]]}
+    }
+  },
+  {
+      "message": "Can't have duplicate MTT/OTTs.",
+      "field": 'OTT4',
       "type" :"Error",
       "rule":{"!": 
-          {"has_duplicate_values":[{"var":M['PDC']},{"var":"ODC1"},{"var":"ODC2"},{"var":"ODC3"},{"var":"ODC4"},{"var":"ODC5"}]}
+          {"has_duplicate_values":[{"var":'OTT4'},[{"var":"OTT1"},{"var":"OTT2"},{"var":"OTT3"},M['MTT']]]}
+      }
+  },
+  {
+      "message": "Can't have duplicate MTT/OTTs.",
+      "field": 'OTT3',
+      "type" :"Error",
+      "rule":{"!": 
+          {"has_duplicate_values":[{"var":'OTT3'},[{"var":"OTT1"},{"var":"OTT2"},M['MTT']]]}
+      }
+  },
+  {
+      "message": "Can't have duplicate MTT/OTTs.",
+      "field": 'OTT2',
+      "type" :"Error",
+      "rule":{"!": 
+          {"has_duplicate_values":[{"var":'OTT2'},[{"var":"OTT1"},M['MTT']]]}
       }
   },
   {
@@ -34,31 +90,32 @@ rule_definitions = [
       "field": M['MTT'],
       "type" :"Error",
       "rule":{"!": 
-          {"has_duplicate_values":[{"var":M['MTT']},{"var":"OTT1"},{"var":"OTT2"},{"var":"OTT3"},{"var":"OTT4"},{"var":"OTT5"}]}
+          {"has_duplicate_values":[{"var":M['MTT']},[{"var":"OTT1"}]]}
       }
   },
   {
-    "message": f"When {M['CLNT_TYP']} is 'Other's AOD use', '{M['PDC']}' and '{M['METHOD']}' must be empty.",
+    "message": f"When {M['CLNT_TYP']} is 'Other's AOD use', '{M['PDC']}', '{M['METHOD']}', '{M['INJ_USE']}' and all ODCs must be empty.",
     "field": M['CLNT_TYP'],
     "type" :"Error",
     "rule": {"if": [  # rule 9
               {"==": [{"var":M['CLNT_TYP']}, "Other's alcohol or other drug use" ]},
               {"and": [
-                  {"==": [{"var":M['PDC']}, "" ]}, {"==": [{"var":"ODC1"}, ""]},
-                  {"==": [{"var":M['METHOD']}, "" ]}
+                  {"==": [{"var":M['PDC']}, "" ]}, 
+                  {"==": [{"var":"ODC1"}, ""]}, {"==": [{"var":"ODC2"}, ""]}, {"==": [{"var":"ODC3"}, ""]}, {"==": [{"var":"ODC4"}, ""]}, {"==": [{"var":"ODC5"}, ""]},
+                  {"==": [{"var":M['METHOD']}, "" ]}, {"==": [{"var":M['INJ_USE']}, "" ]}  
               ]},
               True
             ]}
   },
   {
-    "message": f"When {M['CLNT_TYP']} is 'Own AOD use', '{M['PDC']}' and '{M['METHOD']}' must NOT be empty.",
+    "message": f"When {M['CLNT_TYP']} is 'Own AOD use', '{M['PDC']}', '{M['METHOD']}' and '{M['INJ_USE']}' must NOT be empty.",
     "field": M['CLNT_TYP'],
     "type" :"Error",
     "rule": {"if": [  # rule 9
               {"==": [{"var":M['CLNT_TYP']}, "Own alcohol or other drug use"]},
               {"and": [
                   {"!==": [{"var":M['PDC']}, "" ]},
-                  {"!==": [{"var":M['METHOD']}, ""]},
+                  {"!==": [{"var":M['METHOD']}, "" ]}, {"!==": [{"var":M['INJ_USE']}, "" ]}  
               ]},
               True
             ]}
