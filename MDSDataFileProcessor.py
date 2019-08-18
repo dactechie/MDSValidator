@@ -48,7 +48,10 @@ def get_data_or_die(filename, data_header, hmap):
 
 def main(args):
     #data = setup_test_data('./data copy.csv')
-    FILENAME =  'AMDS Full unchecked 16.08.19.csv' #  'Arcadia-Resi-Jan-Jun.csv' #'AMDS Combined 12.08.19.csv' #
+    os.chdir("../..")   # when called from xwin (from excel), the python path is in the .\venv(mds)\Scripts folder,
+                        # this breaks the paths for loading the schema etc. which are here .\schema
+                        
+    FILENAME =  args #'TSS_AMDS_23.07.19.csv'
     MODE = 0
     closed_eps_only= False
     start_time = time()
@@ -68,8 +71,9 @@ def main(args):
     
     #print(f"\n\t\t Setup time {round(start_time - setup_time,2)}")
     print("\n\n \t\t ...Writing results to spreadsheet..\n")
-    write_data_to_book(data['episodes'], verrors ,'./book1')
+    result_book = write_data_to_book(data['episodes'], verrors ,'./result')
     print("\n \t\t ...End of Program...\n")
+    return result_book
 
     
 

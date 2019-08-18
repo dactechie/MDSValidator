@@ -44,8 +44,8 @@ def _process_chunks(ws, data_rows, starter, ender, chunk_size=10):
     _process_chunks(ws, data_rows, starter, ender, chunk_size)
     
 
-def write_data_to_book(data, errors, book_name):
-
+def write_data_to_book(data, errors, book_name) -> str:
+    result_book_name = 'result.xlsx'
     try:
         app = xw.App(visible=False)
         book = app.books.open("./MDSTemplate.xltx")
@@ -58,7 +58,7 @@ def write_data_to_book(data, errors, book_name):
         chunk_size = ceil(0.2 * endval) # chunksize 20% 
         print ( f"\t >>> endval {endval}  chunksize {chunk_size} <<< \n")
         _process_chunks(ws, rows, starter=0, ender=endval, chunk_size=chunk_size) #800)
-
+        result_book_name = f"{book_name}_{now_string()}.xlsx"
         book.save(f"{book_name}_{now_string()}.xlsx")
     #except Exception as e:
     #    print(e)
@@ -67,6 +67,7 @@ def write_data_to_book(data, errors, book_name):
         app.quit()
         print(" app pid : " , app.pid)
         app.kill()
+        return result_book_name
 
     
 
