@@ -1,3 +1,4 @@
 mds/*
 input/*
 ~*.xl*
+*.pyc
