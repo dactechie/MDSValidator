@@ -54,8 +54,10 @@ def read_header(filename: str) -> list:
         headers[-1] = headers[-1].strip('\n')
         return headers
 
+#def fix_headers(headers):
 
-def read_data(filename: str, data_header: dict, hmap: dict) -> dict:
+# TODO clean this up (use a generator)
+def read_data(filename: str, data_header: dict, hmap: dict, closed_eps_only=None) -> dict:
     """
     - Assumes that if a "FULL NAME" column exists, all rows will have a format of
         'LastName, FirstName'.
@@ -63,13 +65,20 @@ def read_data(filename: str, data_header: dict, hmap: dict) -> dict:
     - hmap is a map of the header fields with official MDS translations,
         where cleansing was required.
     """
+    #data_header = fix_headers(data_header)
     with open(filename, 'r') as csvfile:
         csvfile.readline()
+        
+        # translate headers
+        #  map data_header + clean  values into reader.fieldnames
         reader = csv.DictReader(csvfile, data_header)
+        #reader.fieldnames = data_header
         data_dicts = []
 
         if MDS['FNAME'] not in data_header and "FULL NAME" in data_header:
             for i, r in enumerate(reader):
+                if closed_eps_only and r[MDS['END_DATE']] == '':
+                    continue
                 if  "".join(r.values()) == '':
                     print(f"\n\tFound Blank row at {i}. Quitting...")
                     return None
@@ -83,19 +92,23 @@ def read_data(filename: str, data_header: dict, hmap: dict) -> dict:
             data_header.extend([MDS['FNAME'], MDS['LNAME']])
         
         clean_headers = {dh: remove_unicode(dh) for dh in data_header}
+        # [ch for ch in clean_headers.values() if ch in data_header] == data_header
+        # True
         tmp_k = None
         result = []
         for i, row in enumerate(reader):
+            if closed_eps_only and row[MDS['END_DATE']] == '':
+                continue
             if  "".join(row.values()) == '':
                 print(f"\n\tFound Blank row at {i}. Quitting...")
                 return None
             result.append({})
             for k, v in row.items():
                 tmp_k = clean_headers[k]
-                if tmp_k in hmap:
-                    result[i][hmap[tmp_k]] = v
-                else:
-                    result[i][tmp_k] = v
+                # if tmp_k in hmap:
+                #     result[i][hmap[tmp_k]] = v
+                # else:
+                result[i][tmp_k] = v
 
         #result = [ {k:v for k, v in row.items()} for row in reader if hmap[k]]
  
@@ -104,18 +117,21 @@ def read_data(filename: str, data_header: dict, hmap: dict) -> dict:
 
 # Note: this modifies the original data_row (not a pure function)
 def fix_check_dates(data_row, rec_idx, fn_date_converter,
-                    id_field, date_fields, expect_all=False) -> list:
+                    id_field, date_fields) -> list:
     k = None
     date_conversion_errors = []
     
     for d in date_fields:
         k = MDS[d]
         dt = data_row[k]
-        if not dt and not expect_all: # end date might be blank, nothing to convert : 
+        if not dt: #and not expect_all: # end date might be blank, nothing to convert : 
                                       # FIXME: above is not true, might have overlapping open episodes
             continue
-        
-        if len(dt) < 8 or dt.find('/') == 1 : #no leading zero in the case of 1_01_1981 or 1/01/1981
+        l = len(dt)
+        # if l < 7:
+        #     print(f"Warning : invalid date string {dt}. Not converting to Date.")
+        #     continue
+        if l == 7 or dt.find('/') == 1 : #no leading zero in the case of 1_01_1981 or 1/01/1981
             dt = '0' + dt
             data_row[k] = dt
         try:

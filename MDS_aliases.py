@@ -136,7 +136,7 @@ mds_aliases = {
                              "Rented public house or flat"  # TODO Check me !!
         ], 
 
-        "Friend(s)/parent(s)/relative(s) and chil(ren)" : ["Friend(s)/parent(s)/relative(s) and child(ren)"],
+        "Friend(s)/parent(s)/relative(s) and child(ren)" : ["Friend(s)/parent(s)/relative(s) and chil(ren)"],
         "Spouse/partner and child(ren)" : ["Spouse/partner and Child(ren)"],
         "Medical Practitioner": ["Medical practitioner"],
         "Withdrawal management (detoxification)" : ["Withdrawal Management (detoxification)"],        

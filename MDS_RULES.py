@@ -16,8 +16,11 @@ rule_definitions = [
     "field": M['METHOD'],
     "type" : "Error",
     "rule": {"if": [ # Rule #3
-              {"==": [{"var": M['PDC']}, "Alcohol" ]}, {"==": [{"var": M['METHOD']}, "Ingests"]},
-              {"==": [{"var": M['PDC']}, "Cannabis" ]}, {"==": [{"var": M['METHOD']}, "Smokes"]},
+                {"!": {"and": [ 
+                            {"==": [{"var": M['PDC']}, "Ethanol" ]},
+                            {"!==": [{"var": M['METHOD']}, "Ingests"]} 
+                          ] 
+                  }},
               True
             ]}
   },
@@ -98,30 +101,76 @@ rule_definitions = [
       }
   },
   {
-    "message": f"When {M['CLNT_TYP']} is 'Other's AOD use', '{M['PDC']}', '{M['METHOD']}', '{M['INJ_USE']}' and all ODCs must be empty.",
-    "field": M['CLNT_TYP'],
+    "message": f"When {M['CLNT_TYP']} is 'Other's AOD use', '{M['PDC']}' must be empty.",
+    "field": M['PDC'],
+    "type" : "Error",
+    "rule": {"if": [  # rule 9
+              {"==": [{"var":M['CLNT_TYP']}, "Other's alcohol or other drug use" ]},
+              {"==": [{"var":M['PDC']}, "" ]},
+              True
+            ]}
+  },
+  {
+    "message": f"When {M['CLNT_TYP']} is 'Other's AOD use', '{M['METHOD']}' must be empty.",
+    "field": M['METHOD'],
+    "type" : "Error",
+    "rule": {"if": [  # rule 9
+              {"==": [{"var":M['CLNT_TYP']}, "Other's alcohol or other drug use" ]},
+              {"==": [{"var":M['METHOD']}, "" ]},
+              True
+            ]}
+  },
+  {
+    "message": f"When {M['CLNT_TYP']} is 'Other's AOD use', '{M['INJ_USE']}' must be empty.",
+    "field": M['INJ_USE'],
+    "type" : "Error",
+    "rule": {"if": [  # rule 9
+              {"==": [{"var":M['CLNT_TYP']}, "Other's alcohol or other drug use" ]},
+              {"==": [{"var":M['INJ_USE']}, "" ]},
+              True
+            ]}
+  },
+  {
+    "message": f"When {M['CLNT_TYP']} is 'Other's AOD use', all ODCs must be empty.",
+    "field": 'ODC1',
     "type" : "Error",
     "rule": {"if": [  # rule 9
               {"==": [{"var":M['CLNT_TYP']}, "Other's alcohol or other drug use" ]},
               {"and": [
-                  {"==": [{"var":M['PDC']}, "" ]}, {"==": [{"var":"ODC1"}, ""]},
+                  {"==": [{"var":"ODC1"}, ""]},
                   {"==": [{"var":"ODC2"}, ""]}, {"==": [{"var":"ODC3"}, ""]},
-                  {"==": [{"var":"ODC4"}, ""]}, {"==": [{"var":"ODC5"}, ""]},
-                  {"==": [{"var":M['METHOD']}, "" ]}, {"==": [{"var":M['INJ_USE']}, ""]}  
+                  {"==": [{"var":"ODC4"}, ""]}, {"==": [{"var":"ODC5"}, ""]}
               ]},
               True
             ]}
   },
   {
-    "message": f"When {M['CLNT_TYP']} is 'Own AOD use', '{M['PDC']}', '{M['METHOD']}' and '{M['INJ_USE']}' must NOT be empty.",
-    "field": M['CLNT_TYP'],
+    "message": f"When {M['CLNT_TYP']} is 'Own AOD use', '{M['PDC']}' must NOT be empty.",
+    "field": M['PDC'],
     "type" : "Error",
     "rule": {"if": [  # rule 9
               {"==": [{"var":M['CLNT_TYP']}, "Own alcohol or other drug use"]},
-              {"and": [
-                  {"!==": [{"var":M['PDC']}, "" ]},
-                  {"!==": [{"var":M['METHOD']}, "" ]}, {"!==": [{"var":M['INJ_USE']}, "" ]}  
-              ]},
+              {"!==": [{"var":M['PDC']}, "" ]},              
+              True
+            ]}
+  },
+  {
+    "message": f"When {M['CLNT_TYP']} is 'Own AOD use', '{M['METHOD']}' must NOT be empty.",
+    "field": M['METHOD'],
+    "type" : "Error",
+    "rule": {"if": [  # rule 9
+              {"==": [{"var":M['CLNT_TYP']}, "Own alcohol or other drug use"]},
+              {"!==": [{"var":M['METHOD']}, "" ]},              
+              True
+            ]}
+  },
+  {
+    "message": f"When {M['CLNT_TYP']} is 'Own AOD use', '{M['INJ_USE']}' must NOT be empty.",
+    "field": M['INJ_USE'],
+    "type" : "Error",
+    "rule": {"if": [  # rule 9
+              {"==": [{"var":M['CLNT_TYP']}, "Own alcohol or other drug use"]},
+              {"!==": [{"var":M['INJ_USE']}, "" ]},              
               True
             ]}
   },

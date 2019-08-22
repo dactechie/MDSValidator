@@ -29,17 +29,18 @@ def get_json_validator(schema_dir_name, schema_file_name):
 def get_valid_header_or_die(filename, validator, mode=0):
 
     header = read_header(filename)
-    missing_headers, header_warnings = validator.validate_header(header,mode=mode)
+    missing_headers, fixed_header, header_warnings = validator.validate_header(header, mode=mode)
     if missing_headers:
         print ("Missing Headers ", missing_headers, "\n warnings ", header_warnings)
         sys.exit(0)
-        
-    return header,  header_warnings
+
+    return fixed_header, header_warnings   
+    #return header,  header_warnings
 
 
-def get_data_or_die(filename, data_header, hmap):
+def get_data_or_die(filename, data_header, hmap, closed_eps_only=None):
 
-    data = read_data(filename, data_header, hmap)
+    data = read_data(filename, data_header, hmap, closed_eps_only=closed_eps_only)
     if not data or not data['episodes'] or len(data['episodes']) < 1 :
         print("quitting...")
         sys.exit(0)
@@ -52,7 +53,7 @@ def main(args):
     # os.chdir("../..")   # when called from xwin (from excel), the python path is in the .\venv(mds)\Scripts folder,
     #                     # this breaks the paths for loading the schema etc. which are here .\schema
                         
-    FILENAME = r'input\Final-Resi-clean.csv' #  r'input\Arcadia-Day-Jan-Jun.csv' # r'input\Copy of 2019.08.20 TSS AMDS Full.csv' #r'input\Arcadia-Residential-Jan-Jun.csv' #
+    FILENAME = r'input\2019.08.22 TSS AMDS Full.csv' # r'input\Final-Resi-clean.csv' #  r'input\Arcadia-Day-Jan-Jun.csv' # r'input\Copy of 2019.08.20 TSS AMDS Full.csv' #r'input\Arcadia-Residential-Jan-Jun.csv' #
     MODE = 0
     closed_eps_only= False
     start_time = time()
@@ -61,10 +62,10 @@ def main(args):
                             schema_file_name='schema.json')
     
     data_header, header_warnings = get_valid_header_or_die(FILENAME, validator=jv, mode=MODE)
-    data = get_data_or_die(FILENAME, data_header,  header_warnings)
+    data = get_data_or_die(FILENAME, data_header,  header_warnings, closed_eps_only=closed_eps_only)
     
     #mode 0 : not strict - with warnings     #mode 1 : strict (no alias translations) - no warnings, all errors
-    verrors, warnings =  jv.validate(data, mode=MODE, closed_eps_only=closed_eps_only)
+    verrors, warnings =  jv.validate(data, mode=MODE)
     
     end_time = time()
     #log_results(verrors, warnings, header_warnings)

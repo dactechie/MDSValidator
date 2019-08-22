@@ -50,8 +50,8 @@ class JSONValidator(object):
     # TODO : schema validation may have already deduced that dates, etc may be invalid.
     #        those errors  would contain the rec_index of the error too
     @staticmethod
-    def validate_logic(errors, data_row, rec_idx, fn_date_converter, id_field,
-                                            client_eps, closed_eps_only=False):
+    def validate_logic(errors, data_row, rec_idx, fn_date_converter,
+                       id_field, client_eps):
         """
         1. Checks the date format and converts dates into integer ('ordinal's) for easy comparison.
         2. Checks MDS business logic defined in MDS_RULES.py (and imported in the global 'rule_definitions').
@@ -65,7 +65,7 @@ class JSONValidator(object):
             passed-in client's episodes. This allows us to calculate episode overlaps with the current data row.
         """
         date_conversion_errors = fix_check_dates(data_row, rec_idx, fn_date_converter,
-                                                 id_field, MDS_Dates, expect_all=closed_eps_only)
+                                                 id_field, MDS_Dates)
         temp_rd =  rule_definitions
         temp_rules = rules
         dce_fields = []
@@ -90,7 +90,9 @@ class JSONValidator(object):
         elif logic_errors:
             errors[rec_idx].extend(logic_errors)
 
-        if not ((st_fld[1:] in dce_fields) or (end_fld[1:] in dce_fields)):
+        # 'OCommencement Date' is a made-up field that contains the ordinal version of the date
+        #  to be used for easy comparison (overlap).
+        if not ((MDS['COMM_DATE'] in dce_fields) or (MDS['END_DATE'] in dce_fields)):
             cid = data_row[id_field]            
             ep_dates_obj = { st_fld: data_row[st_fld],
                              MDS['COMM_DATE']: data_row[MDS['COMM_DATE']], 
@@ -120,11 +122,11 @@ class JSONValidator(object):
         schema_headers = set(self.schema['definitions']['episode']['required'])
         missing_headers = schema_headers.difference(set(tr_header))
 
-        return [header_er_lam(field=mh, miss_extra='missing field') for mh in missing_headers], warnings
+        return [header_er_lam(field=mh, miss_extra='missing field') for mh in missing_headers], tr_header, warnings
 
 
     # TODO : convert everything to MDS codes first to check numeric values (faster). failed lookups are automatically errors
-    def validate(self, data, mode=0, closed_eps_only=False):
+    def validate(self, data, mode=0):
         """
             The main validator function.
             0. If column headers, dropdown values are not proper MDS values, 
@@ -152,7 +154,7 @@ class JSONValidator(object):
         client_eps = {}
         for i, ep_data in enumerate(episodes):
             JSONValidator.validate_logic(errors, ep_data, i, fn_date_converter,
-                                         id_field, client_eps, closed_eps_only)
+                                         id_field, client_eps)
         if self.slk_suggestions:
             fuse_suggestions_into_errors(errors, self.slk_suggestions)
 
