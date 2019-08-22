@@ -9,7 +9,6 @@ def fetch_validation_results(source_file):
 
     wb = xw.books.active
     currentBookSheet = wb.sheets['Data']
-
         
     result_file = os.path.realpath(os.path.join(os.getcwd(), result_file_name))
 

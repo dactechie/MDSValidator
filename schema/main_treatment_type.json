@@ -2,7 +2,7 @@
     "type": "string",
     "$id": "#treatment_type",
     "enum": [
-        "Withdrawl management (detoxification)",
+        "Withdrawal management (detoxification)",
         "Counselling",
         "Rehabilitation",
         "Pharmacotherapy",

@@ -19,7 +19,7 @@ MDS = {
     "MTT": "Main treatment type",
     "LIVAR": "Living arrangements",
     "USACC": "Usual accommodation",
-    "TRT_DELV_STG": "Treatment delivery setting",
+    "TRDLVSTG": "Treatment delivery setting",
     "SRC_REF": "Source of referral",
     "MENT_HEL": "Mental health",
     "PREV_AOD": "Previous alcohol and other drug treatment received", #Previous AOD treatment",

@@ -4,45 +4,48 @@ rule_definitions = [
   {
     "message": f"If {M['METHOD']} is 'Injects', '{M['INJ_USE']}' can't be 'Never injected'.",
     "field": M['INJ_USE'],
-    "type" :"Error",
+    "type" : "Error",
     "rule": {"if": [ # Rule #4
-              {"==": [{"var": M['INJ_USE']}, "Never injected" ]},
-              {"!==": [{"var":M['METHOD']}, "Injects" ]},
+              {"==": [{"var": M['INJ_USE']}, "Never injected"]},
+              {"!==": [{"var": M['METHOD']}, "Injects"]},
               True
             ]}
   },
   {
     "message": M['METHOD'] + " must make sense with PDC.",
     "field": M['METHOD'],
-    "type" :"Error",
+    "type" : "Error",
     "rule": {"if": [ # Rule #3
-              {"==": [{"var":M['PDC']}, "Alcohol" ]}, {"==": [{"var":M['METHOD']}, "Ingests"]},
-              {"==": [{"var":M['PDC']}, "Cannabis" ]}, {"==": [{"var":M['METHOD']}, "Smokes"]},
+              {"==": [{"var": M['PDC']}, "Alcohol" ]}, {"==": [{"var": M['METHOD']}, "Ingests"]},
+              {"==": [{"var": M['PDC']}, "Cannabis" ]}, {"==": [{"var": M['METHOD']}, "Smokes"]},
               True
             ]}
   },
   {
     "message": "Can't have duplicate PDC/ODCs.",
-    "field":'ODC5',
-    "type" :"Error",
-    "rule":{"!": 
-        {"has_duplicate_values":[{"var":'ODC5'},[{"var":"ODC4"},{"var":"ODC3"},{"var":"ODC3"},{"var":"ODC1"},{"var":M["PDC"]}]]}
+    "field": 'ODC5',
+    "type" : "Error",
+    "rule": {"!": 
+        {"has_duplicate_values": [{"var": 'ODC5'}, [{"var": 'ODC4'}, {"var": 'ODC3'},
+                                  {"var": 'ODC3'}, {"var": 'ODC1'}, {"var": M['PDC']}]]}
     }
   },
   {
     "message": "Can't have duplicate PDC/ODCs.",
     "field": 'ODC4',
-    "type" :"Error",
-    "rule":{"!": 
-        {"has_duplicate_values":[{"var":'ODC4'},[{"var":"ODC3"},{"var":"ODC2"},{"var":"ODC1"},{"var":M["PDC"]}]]}
+    "type" : "Error",
+    "rule": {"!": 
+        {"has_duplicate_values": [{"var":'ODC4'}, [{"var": 'ODC3'}, {"var": 'ODC2'},
+                                  {"var": 'ODC1'}, {"var": M['PDC']}]]}
     }
   },
   {
     "message": "Can't have duplicate PDC/ODCs.",
     "field": 'ODC3',
-    "type" :"Error",
-    "rule":{"!": 
-        {"has_duplicate_values":[{"var":"ODC3"},[{"var":"ODC2"},{"var":"ODC1"},{"var":M["PDC"]}]]}
+    "type" : "Error",
+    "rule": {"!": 
+        {"has_duplicate_values": [{"var": 'ODC3'}, [{"var": 'ODC2'},
+                                  {"var": 'ODC1'}, {"var": M['PDC']}]]}
     }
 },
   {
@@ -50,15 +53,15 @@ rule_definitions = [
     "field": 'ODC2',
     "type" :"Error",
     "rule":{"!": 
-        {"has_duplicate_values":[{"var":'ODC2'},[{"var":"ODC1"},{"var":M["PDC"]}]]}
+        {"has_duplicate_values": [{"var": 'ODC2'},[{"var": 'ODC1'},{"var": M['PDC']}]]}
     }
   },
   {
     "message": "Can't have duplicate PDC/ODCs.",
     "field": M['PDC'],
-    "type" :"Error",
-    "rule":{"!": 
-        {"has_duplicate_values":[{"var":M['PDC']},[{"var":"ODC1"}]]}
+    "type" : "Error",
+    "rule": {"!": 
+        {"has_duplicate_values": [{"var": M['PDC']}, [{"var": 'ODC1'}]]}
     }
   },
   {
@@ -66,7 +69,8 @@ rule_definitions = [
       "field": 'OTT4',
       "type" :"Error",
       "rule":{"!": 
-          {"has_duplicate_values":[{"var":'OTT4'},[{"var":"OTT1"},{"var":"OTT2"},{"var":"OTT3"},M['MTT']]]}
+          {"has_duplicate_values": [{"var": 'OTT4'}, [{"var": 'OTT1'}, {"var": 'OTT2'},
+                                    {"var": 'OTT3'}, M['MTT']]]}
       }
   },
   {
@@ -74,7 +78,7 @@ rule_definitions = [
       "field": 'OTT3',
       "type" :"Error",
       "rule":{"!": 
-          {"has_duplicate_values":[{"var":'OTT3'},[{"var":"OTT1"},{"var":"OTT2"},M['MTT']]]}
+          {"has_duplicate_values": [{"var": 'OTT3'}, [{"var": 'OTT1'}, {"var": 'OTT2'}, M['MTT']]]}
       }
   },
   {
@@ -82,27 +86,28 @@ rule_definitions = [
       "field": 'OTT2',
       "type" :"Error",
       "rule":{"!": 
-          {"has_duplicate_values":[{"var":'OTT2'},[{"var":"OTT1"},M['MTT']]]}
+          {"has_duplicate_values": [{"var": 'OTT2'}, [{"var": "OTT1"}, M['MTT']]]}
       }
   },
   {
       "message": "Can't have duplicate MTT/OTTs.",
       "field": M['MTT'],
-      "type" :"Error",
+      "type" : "Error",
       "rule":{"!": 
-          {"has_duplicate_values":[{"var":M['MTT']},[{"var":"OTT1"}]]}
+          {"has_duplicate_values": [{"var":M['MTT']}, [{"var":"OTT1"}]]}
       }
   },
   {
     "message": f"When {M['CLNT_TYP']} is 'Other's AOD use', '{M['PDC']}', '{M['METHOD']}', '{M['INJ_USE']}' and all ODCs must be empty.",
     "field": M['CLNT_TYP'],
-    "type" :"Error",
+    "type" : "Error",
     "rule": {"if": [  # rule 9
               {"==": [{"var":M['CLNT_TYP']}, "Other's alcohol or other drug use" ]},
               {"and": [
-                  {"==": [{"var":M['PDC']}, "" ]}, 
-                  {"==": [{"var":"ODC1"}, ""]}, {"==": [{"var":"ODC2"}, ""]}, {"==": [{"var":"ODC3"}, ""]}, {"==": [{"var":"ODC4"}, ""]}, {"==": [{"var":"ODC5"}, ""]},
-                  {"==": [{"var":M['METHOD']}, "" ]}, {"==": [{"var":M['INJ_USE']}, "" ]}  
+                  {"==": [{"var":M['PDC']}, "" ]}, {"==": [{"var":"ODC1"}, ""]},
+                  {"==": [{"var":"ODC2"}, ""]}, {"==": [{"var":"ODC3"}, ""]},
+                  {"==": [{"var":"ODC4"}, ""]}, {"==": [{"var":"ODC5"}, ""]},
+                  {"==": [{"var":M['METHOD']}, "" ]}, {"==": [{"var":M['INJ_USE']}, ""]}  
               ]},
               True
             ]}
@@ -110,7 +115,7 @@ rule_definitions = [
   {
     "message": f"When {M['CLNT_TYP']} is 'Own AOD use', '{M['PDC']}', '{M['METHOD']}' and '{M['INJ_USE']}' must NOT be empty.",
     "field": M['CLNT_TYP'],
-    "type" :"Error",
+    "type" : "Error",
     "rule": {"if": [  # rule 9
               {"==": [{"var":M['CLNT_TYP']}, "Own alcohol or other drug use"]},
               {"and": [
@@ -123,51 +128,50 @@ rule_definitions = [
   {
       "message": "Check SLK",
       "field": M['SLK'],
-      "involvedFields":[ M['DOB']], # TODO : not showing 'imva;od SLK for 33333 because dateformat is wrong.
-      "type" :"Error",
+      "involvedFields": [M['DOB']], # TODO : not showing 'imva;od SLK for 33333 because dateformat is wrong.
+      "type" : "Error",
       "rule":
-          {"check_slk":[{"var":M['ID']}, {"var":M['SLK']}, {"var":M['FNAME']},
-                        {"var":M["LNAME"]},{"var":M["DOB"]},{"var":M["SEX"]}
-                       ]
+          {"check_slk": [{"var":M['ID']}, {"var":M['SLK']}, {"var":M['FNAME']},
+                         {"var":M["LNAME"]},{"var":M["DOB"]},{"var":M["SEX"]}
+                        ]
           }
   },
   {
     "message": f"For Main Treatment Type: 'Assessment' or 'Info/Education only', the episode duration must be less than 90 days.",
     "field": M['END_DATE'],
-    "involvedFields":[ M['END_DATE'], M['COMM_DATE']],
-    "type" :"Warning",
-    "rule":{
+    "involvedFields": [M['END_DATE'], M['COMM_DATE']],
+    "type" : "Warning",
+    "rule": {
       "if": [  # rule 12 & 13
-            {"and": [
-              {"!=": [{"var":M['END_DATE']}, ""] } ,
-              {"in": [{"var":M['MTT']}, ["Assessment only","Information and education only"]]}
-            ]},
-        {"<":[
-              {"-":[{"var":'O'+M["END_DATE"]},{"var":'O'+M["COMM_DATE"]}]},
-              90
-            ]
-        }
-        ,True
-      ]}
+              {"and": [
+                {"!=": [{"var":M['END_DATE']}, ""] } ,
+                {"in": [{"var":M['MTT']}, ["Assessment only","Information and education only"]]}
+              ]},
+          {"<":[
+                {"-": [{"var":'O'+M["END_DATE"]},{"var":'O'+M["COMM_DATE"]}]},
+                90
+              ]
+          }
+          ,True
+        ]}
   },
   {
     "message": f"{M['DOB']} must be < {M['COMM_DATE']}",
     "field": M['DOB'],
-    "involvedFields":[ M['DOB'], M['COMM_DATE']],
-    "type" :"Error",
-    "rule" :{"<" : [{ "var" : 'O'+M['DOB'] }, { "var" : 'O'+M['COMM_DATE']}]},
+    "involvedFields": [M['DOB'], M['COMM_DATE']],
+    "type" : "Error",
+    "rule" : {"<" : [{"var": 'O'+M['DOB'] }, {"var": 'O'+M['COMM_DATE']}]},
   },
   {
     "message": f"{M['COMM_DATE']} must be <= {M['END_DATE']}",
     "field": M['COMM_DATE'],
-    "involvedFields":[ M['END_DATE'], M['COMM_DATE']],
+    "involvedFields": [M['END_DATE'], M['COMM_DATE']],
     "type" :"Error",
     "rule" : {"if": [  # rule 9
-              {"!=": [{"var":M['END_DATE']}, ""] } ,
-              {"<=" :  [{ "var" : 'O'+M['COMM_DATE'] }, { "var" : 'O'+M['END_DATE']} ]},
+              {"!=": [{"var": M['END_DATE']}, ""]},
+              {"<=": [{"var": 'O'+M['COMM_DATE'] }, {"var": 'O'+M['END_DATE']} ]},
               True
-            ]
-    }
+            ]}
   }
 ]
 

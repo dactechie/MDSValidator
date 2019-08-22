@@ -86,7 +86,9 @@ mds_aliases = {
         "Ethanol": [     "Alcohol"   ],
         "MDMA": [     "Ecstasy (MDMA)"   ],
         "Cannabinoids" : [   "Cannabis"    ],
-        "Nicotine" : [  "Nicotine/tobacco"  ],
+        "Diazepam": ["diazepam"],
+        "Nicotine" : [  "nicotine", "Nicotine/tobacco"  ],
+        "Codeine": ["codeine"],
         "Amphetamines nfd" : [ "Amphetamines" ],
         "Benzodiazepines nfd" : ["Benzodiazepines"],
         "Analgesics nfd" : ["Other analgesics"],
@@ -133,11 +135,14 @@ mds_aliases = {
         "Private residence" : ["Private Residence", "Rented private house or flat",
                              "Rented public house or flat"  # TODO Check me !!
         ], 
+
+        "Friend(s)/parent(s)/relative(s) and chil(ren)" : ["Friend(s)/parent(s)/relative(s) and child(ren)"],
         "Spouse/partner and child(ren)" : ["Spouse/partner and Child(ren)"],
         "Medical Practitioner": ["Medical practitioner"],
-        "Withdrawl management (detoxification)" : ["Withdrawal Management (detoxification)"],        
+        "Withdrawal management (detoxification)" : ["Withdrawal Management (detoxification)"],        
         "Alone" : ["alone"],
-        "Other relative(s)" : ["Family member/Friend", "Other Relative(s)"], # TODO check me Family memner/friend eqiuivalemtr
+        "Other relative(s)" : ["Other Relative(s)"], # TODO check me Family memner/friend eqiuivalemtr
+        "Family member/friend": ["Family member/Friend"],
         "Residential treatment facility" : ["Residential Treatment Facility"],
         #:["Sniffs (powder)"]
         "Correctional service" : ["Correctional Service"]
@@ -149,14 +154,14 @@ mds_aliases = {
 }
 
 
-mds_aliases['headers'][M['ID']]     = ["PAT ID", "PID"]
+mds_aliases['headers'][M['ID']]      = ["PAT ID", "PID"]
 mds_aliases['headers'][M['FNAME']]   = ["First Name"]
 mds_aliases['headers'][M['PDC']]     = ["PDC"]
 mds_aliases['headers'][M['SEX']]     = ["SEX"]
 mds_aliases['headers'][M['DOB']]     = ["Date of birth"]
 mds_aliases['headers'][M['DAI']]     = ["DOB ACCURACY", "Date accuracy indicator (for DoB)"]
 mds_aliases['headers'][M['PCODE']]   = ["POSTCODE", "Postcode - Australian"]
-mds_aliases['headers'][M['TRT_DELV_STG']] = ["SETTING"]
+mds_aliases['headers'][M['TRDLVSTG']] = ["SETTING"]
 mds_aliases['headers'][M['METHOD']]   = ["USE", "Method of use for principal drug of concern"]
 mds_aliases['headers'][M['INJ_USE']]  = ["INJECTION", "Injecting drug status"]
 mds_aliases['headers'][M['MTT']]      = ["TREAT", "Main treatment type (MTT)"]

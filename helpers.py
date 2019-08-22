@@ -1,9 +1,10 @@
-import csv
 import copy
-from MDS_constants import MDS
+import csv
+
 from MDS_aliases import mds_aliases
+from MDS_constants import MDS
 from MDS_RULES import rule_definitions
-from utils import cleanse_string , remove_unicode, get_datestring_from_ordinal
+from utils import cleanse_string, get_datestring_from_ordinal, remove_unicode
 
 '''
 Input data file may not have the exact spelling/case as the official MDS fields
@@ -45,36 +46,49 @@ involved_field_sets =  [set(rd['involvedFields']) for rd in rd_with_involved_fie
 
 headers_map = alias_map_lam(mds_aliases['headers'])
 fvalues_map = alias_map_lam(mds_aliases['fieldValues'])
-val_translation_excluded_fields = ["ENROLLING PROVIDER", "EID" ,MDS["ID"], MDS["DOB"], MDS["PCODE"], MDS["SLK"] ]
+val_translation_excluded_fields = ["ENROLLING PROVIDER", "EID", MDS["ID"], MDS["DOB"], MDS["PCODE"], MDS["SLK"] ]
 
-def read_header(filename:str)->list:
+def read_header(filename: str) -> list:
     with open(filename, 'r') as csvfile:
         headers = [header for header in csvfile.readline().split(',')]
         headers[-1] = headers[-1].strip('\n')
         return headers
 
 
-def read_data(filename, data_header, hmap)->dict:
+def read_data(filename: str, data_header: dict, hmap: dict) -> dict:
+    """
+    - Assumes that if a "FULL NAME" column exists, all rows will have a format of
+        'LastName, FirstName'.
+    - Sometimes the header may have unicode (special) characters, cleans before use.
+    - hmap is a map of the header fields with official MDS translations,
+        where cleansing was required.
+    """
     with open(filename, 'r') as csvfile:
-        csvfile.readline()       
-        reader = csv.DictReader(csvfile, data_header)        
+        csvfile.readline()
+        reader = csv.DictReader(csvfile, data_header)
         data_dicts = []
 
         if MDS['FNAME'] not in data_header and "FULL NAME" in data_header:
             for i, r in enumerate(reader):
+                if  "".join(r.values()) == '':
+                    print(f"\n\tFound Blank row at {i}. Quitting...")
+                    return None
                 row = copy.deepcopy(r)
-                if row.get("FULL NAME"):                
+                if row.get("FULL NAME"):              
                     row[MDS['LNAME']], row[MDS['FNAME']]  = str.split(row["FULL NAME"], ", ")
                     del row["FULL NAME"]
-                data_dicts.append(row)                
+                data_dicts.append(row)
             reader = data_dicts
             data_header.remove("FULL NAME")
             data_header.extend([MDS['FNAME'], MDS['LNAME']])
-            
-        clean_headers = {dh:remove_unicode(dh) for dh in data_header}
+        
+        clean_headers = {dh: remove_unicode(dh) for dh in data_header}
         tmp_k = None
         result = []
         for i, row in enumerate(reader):
+            if  "".join(row.values()) == '':
+                print(f"\n\tFound Blank row at {i}. Quitting...")
+                return None
             result.append({})
             for k, v in row.items():
                 tmp_k = clean_headers[k]
@@ -89,25 +103,27 @@ def read_data(filename, data_header, hmap)->dict:
 
 
 # Note: this modifies the original data_row (not a pure function)
-def fix_check_dates(data_row, rec_idx, fn_date_converter, id_field, date_fields, expect_all=False):
+def fix_check_dates(data_row, rec_idx, fn_date_converter,
+                    id_field, date_fields, expect_all=False) -> list:
     k = None
     date_conversion_errors = []
     
     for d in date_fields:
         k = MDS[d]
         dt = data_row[k]
-        if not dt and not expect_all: # end date might be blank, nothing to convert
+        if not dt and not expect_all: # end date might be blank, nothing to convert : 
+                                      # FIXME: above is not true, might have overlapping open episodes
             continue
-        l = len(dt)
-        if l < 8 or dt.find('/') == 1 : #no leading zero in the case of 1_01_1981 or 1/01/1981
-            data_row[k] = '0' + dt
+        
+        if len(dt) < 8 or dt.find('/') == 1 : #no leading zero in the case of 1_01_1981 or 1/01/1981
+            dt = '0' + dt
+            data_row[k] = dt
         try:
             data_row['O'+k] = fn_date_converter(dt)
         except ValueError :#as e:
             date_conversion_errors.append(v_er_date_lam(rec_idx, data_row[id_field], k, dt))
 
     return date_conversion_errors
-
 
 
 def translate_to_MDS_header(header):
@@ -121,9 +137,9 @@ def translate_to_MDS_header(header):
             warnings[h] = headers_map[hlow]
             #warnings[f"Header uses key:{h} instead of {headers_map[hlow]}"] = 1
 
-    #return warnings
     return converted_header, warnings
  
+
 #without the deep copy
 def translate_to_MDS_values(data):
     warnings = []
@@ -143,12 +159,14 @@ def translate_to_MDS_values(data):
 
     return warnings
     
-'''
-    Checking for fields that we already know have errors is pointless.
-    Can't (check logic) i.e. do date comparisons, when the dates are not even well-formatted.
-    So we remove rules that have dependencies on (involved with) those fields. For now this just means dates
-'''
+
 def remove_vrules(error_fields):
+    """
+        Validation for fields that we already know have errors is pointless.
+        Can't (check logic) i.e. do date comparisons, when the dates are not even well-formatted.
+        So we remove rules that have dependencies on (involved with) those fields. 
+        For now this just means dates.
+    """
     error_field_set = set(error_fields)
     new_rd = copy.deepcopy(rd_wo_involved_fields)
 
@@ -164,32 +182,39 @@ def remove_vrules(error_fields):
 def check_overlap(current_ep, client_eps, errors, rec_idx, st_fld=MDS["COMM_DATE"], end_fld=MDS["END_DATE"]):
 
     start_date = client_eps[-1] [st_fld]
-    end_date =client_eps[-1][end_fld ]   # current_ep[end_fld]
+    end_date = client_eps[-1][end_fld ]   # current_ep[end_fld]
 
     for ep in client_eps[:-1]:
         if min(end_date, ep[end_fld]) >= max(start_date, ep[st_fld]):
-            other_st = get_datestring_from_ordinal(ep[st_fld],dtformat="%d/%m/%Y")
-            other_end =  get_datestring_from_ordinal(ep[end_fld],dtformat="%d/%m/%Y")
+            other_st = get_datestring_from_ordinal(ep[st_fld], dtformat="%d/%m/%Y")
+            other_end =  get_datestring_from_ordinal(ep[end_fld], dtformat="%d/%m/%Y")
 
-            errors[rec_idx].append( { "index": rec_idx,
-                                    "cid":current_ep[MDS["ID"]],
-                                    "etype":"logic",
-                                    "field":MDS["END_DATE"],
-                                    "message": \
+            errors[rec_idx].append( { 'index': rec_idx,
+                                    'cid': current_ep[MDS['ID']],
+                                    'etype': 'logic',
+                                    'field': MDS['END_DATE'],
+                                    'message': \
                 f"Overlaps with other episode Start: {other_st} End: {other_end}"
+                                    })
+            errors[ep['idx']].append( { 'index': ep['idx'],
+                                    'cid': current_ep[MDS['ID']],
+                                    'etype': 'logic',
+                                    'field': MDS['END_DATE'],
+                                    'message': \
+                f"Overlaps with other episode Start: {ep[MDS['COMM_DATE']]} End: {ep[MDS['END_DATE']]}"
                                     })
 
 
 def add_error_obj(errors, e, dataObj, id_field):
     path = e.path
     row = path[1]
-    error_obj = {"index": row, "cid": dataObj['episodes'][row][id_field], "etype":e.validator}
+    error_obj = {"index": row, "cid": dataObj['episodes'][row][id_field], "etype": e.validator}
     
-    if len(path) >2:
+    if len(path) > 2:
         error_obj["field"]   = path[2]
         error_obj["message"] = f"invalid value/format: '{e.instance}'"
     else:
-        error_obj["field"]:'<>'
+        error_obj["field"]: '<>'
         error_obj["message"]: e.message
 
     ve_idx = error_obj['index']
@@ -211,11 +236,12 @@ def compile_errors(schema_validation_verrors, logic_errors):
 
     return errors
 
-'''
+
+def _check_row_errors(array_of_dicts, suggestions, slk_field):
+    """
     Note: there could be two rows with same client id, but one of them may have accurate SLK.
     This will added the error to both rows.
-'''
-def _check_row_errors(array_of_dicts, suggestions, slk_field):
+    """
     for d in array_of_dicts:
         if d['cid'] in suggestions and d['field'] == slk_field:
             d['message'] = suggestions[d['cid']]
@@ -223,7 +249,7 @@ def _check_row_errors(array_of_dicts, suggestions, slk_field):
 
 
 def fuse_suggestions_into_errors(errors, suggestions):
-    slk_field = MDS["SLK"]
+    slk_field = MDS['SLK']
     for array_of_dicts in errors.values():
         _check_row_errors(array_of_dicts, suggestions, slk_field)
 
@@ -245,28 +271,19 @@ def compile_logic_errors(result, rule_defs, data_row, rec_idx, id_field, date_co
 
 def _get_second_third(name):
     
-    length = len(name)
-    if length > 2:
-        return name[1]+ name[2]
-    elif length == 2:
-        return name[1] + '2'
-    else:
-        return '22'
+    return name.ljust(3, '2')[1:3]
 
 
-def _get_second_third_fifth(last_name):
-    
-    sec_third = _get_second_third(last_name)
-    if len(last_name) > 4:
-        return sec_third + last_name[4]
-    
-    return sec_third + '2'
+def _get_second_third_fifth(name):
+
+    five = name.ljust(5, '2')
+    return f"{five[1:3]}{five[4]}"
 
 
 def getSLK(firstname, lastname, DOB_str, sex_str):
     """
     Expects DOB_str to be in "ddmmyyyy" or "dd/mm/yyyy" format
-    sex_str must be 'Male' 'Female' , everything else is converted to 9
+    sex_str must be 'Male' or 'Female' , everything else is converted to 9
     """
     last = _get_second_third_fifth(cleanse_string(lastname))
     first = _get_second_third(cleanse_string(firstname))
