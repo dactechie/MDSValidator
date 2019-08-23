@@ -33,6 +33,10 @@ def get_formatted_sql(data, template, record_id):
 
     
 def has_duplicate_values(*arr):
+    """
+    Checks if the first value in the passed-in list, appears in the rest of the list
+    The 2nd item in the passed-in list is a list of items
+    """
     
     k, varr = arr[0],  list(filter(None,*arr[1:]))
     if not k:

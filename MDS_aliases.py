@@ -6,6 +6,7 @@ mds_aliases = {
         "ID": [ "PID", "Client ID"],
     },
     "fieldValues": {
+        # REASON FOR CESSATION ##############
         "Ceased to participate without notice" : [
             "Ceased without notice"
         ],
@@ -18,6 +19,8 @@ mds_aliases = {
         "Transferred to another service provider" : [
             "Transferred to other provider"
         ],
+        "Imprisoned, other than drug court sanctioned":["Imprisoned (not drug court)" ],
+
         # Mixed         
         "Other": ["Groups", "Other reason for cessation", "Shared Accommodation" ],
         
@@ -64,7 +67,8 @@ mds_aliases = {
         ],
 
         "Own alcohol or other drug use": ["Own drug use" ],
-        "Other's alcohol or other drug use": ["Other's drug use"],
+        "Other's alcohol or other drug use": ["Other's drug use", "Other's alcohol/other drug use"],
+        
         "Neither Aboriginal nor Torres Strait Islander origin": [
             "Neither Aboriginal nor TSI"
         ],
@@ -109,7 +113,7 @@ mds_aliases = {
             "Other specialised community residential"            
         ],
         
-        "Other's alcohol or other drug use" : ["Other's alcohol/other drug use"],
+      
 
         "Boarding house/private hotel" : ["Boarding house/private rental"],
         "None/homeless/public place" : ["None/homeless/public space"],
@@ -132,14 +136,14 @@ mds_aliases = {
 
         # CASE SENSITIVE STUFF 
         "Outreach setting" : ["Outreach Setting"],
-        "Private residence" : ["Private Residence", "Rented private house or flat",
+        "Private residence" : ["Private Residence", "Rented private house or flat", "Privately owned house or flat"
                              "Rented public house or flat"  # TODO Check me !!
         ], 
 
         "Friend(s)/parent(s)/relative(s) and child(ren)" : ["Friend(s)/parent(s)/relative(s) and chil(ren)"],
         "Spouse/partner and child(ren)" : ["Spouse/partner and Child(ren)"],
         "Medical Practitioner": ["Medical practitioner"],
-        "Withdrawal management (detoxification)" : ["Withdrawal Management (detoxification)"],        
+        "Withdrawal management (detoxification)" : ["Withdrawal Management (detoxification)", "Withdrawl management (detoxification)"],        
         "Alone" : ["alone"],
         "Other relative(s)" : ["Other Relative(s)"], # TODO check me Family memner/friend eqiuivalemtr
         "Family member/friend": ["Family member/Friend"],

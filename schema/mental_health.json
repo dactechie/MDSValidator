@@ -5,6 +5,7 @@
       "Diagnosed more than three months ago but less than or equal to twelve months ago",
       "Diagnosed more than twelve months ago",
       "Never been diagnosed",
-      "Not stated/inadequately described"
+      "Not stated/inadequately described",
+      ""
     ]
 }

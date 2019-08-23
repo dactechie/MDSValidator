@@ -20,9 +20,11 @@ def get_row(header, hlen, row_dict, errors):
 
     return row
 
-
+"""
+ if you only want error rows in the output, uncomment the # if errors_dict.get(i) part
+"""
 def get_rows_to_write(headers, hlen, data, errors_dict):    
-    return [get_row(headers, hlen, row_dict, errors_dict.get(i,[])) for i, row_dict in enumerate(data) if errors_dict.get(i)]
+    return [get_row(headers, hlen, row_dict, errors_dict.get(i,[])) for i, row_dict in enumerate(data) ] # if errors_dict.get(i)]
 
 
 def _process_chunks(ws, data_rows, starter, ender, chunk_size=10):
