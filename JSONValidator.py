@@ -3,20 +3,17 @@ from datetime import date
 
 import jsonschema as jsc
 from json_logic import add_operation, jsonLogic
-from helpers import (add_error_obj, check_overlap, compile_logic_errors,
+from helpers import (add_error_obj, prep_and_check_overlap, compile_logic_errors,
                      fix_check_dates, fuse_suggestions_into_errors, getSLK,
                      remove_vrules, translate_to_MDS_header,
                      translate_to_MDS_values)
-from MDS_constants import MDS, MDS_Dates
+from MDS_constants import MDS, MDS_Dates, st_fld, end_fld
 from MDS_RULES import rule_definitions
 from MJValidationError import MJValidationError
-from utils import NOW, cleanse_string, get_date_converter, has_duplicate_values
+from utils import cleanse_string, get_date_converter, has_duplicate_values
+from constants import MODE_LOOSE, NOW_ORD, NOW
 
 rules = [r['rule'] for r in rule_definitions]
-
-st_fld = 'O'+MDS['COMM_DATE']
-end_fld = 'O'+MDS['END_DATE']
-NOW_ORD = NOW.toordinal()
 
 '''
 Create a validation error object with the data row index, client id and error details.
@@ -89,34 +86,22 @@ class JSONValidator(object):
             errors[rec_idx] = logic_errors
         elif logic_errors:
             errors[rec_idx].extend(logic_errors)
+        
+        prep_and_check_overlap(data_row, client_eps, errors, rec_idx, dce_fields)
 
         # 'OCommencement Date' is a made-up field that contains the ordinal version of the date
         #  to be used for easy comparison (overlap).
-        if not ((MDS['COMM_DATE'] in dce_fields) or (MDS['END_DATE'] in dce_fields)):
-            cid = data_row[id_field]            
-            ep_dates_obj = { st_fld: data_row[st_fld],
-                             MDS['COMM_DATE']: data_row[MDS['COMM_DATE']], 
-                             'idx': rec_idx }
-            if end_fld in data_row:
-                ep_dates_obj[end_fld] = data_row[end_fld]
-                ep_dates_obj[MDS['END_DATE']] = data_row[MDS['END_DATE']]
 
-            else: #end date is blank, use current date  as end date to check overlap ?
-                ep_dates_obj[end_fld] = NOW_ORD
-                ep_dates_obj[MDS['END_DATE']] = NOW
+        # if there was no error in the commencement and end dates
+        # prep_overlap
 
-            if (cid in client_eps): # any(client_eps.get(cid, [])):
-                client_eps[cid].append(ep_dates_obj)
-                check_overlap(data_row, client_eps[cid], errors, rec_idx, st_fld=st_fld, end_fld=end_fld)
-            else:
-                client_eps[cid] = [ep_dates_obj]
 
 
         # return compile_logic_errors(result, data_row, rec_idx, id_field, date_conversion_errors) 
-    def validate_header(self, header, mode=0):
+    def validate_header(self, header, mode=MODE_LOOSE):
         warnings = None
         tr_header = [h for h in header]
-        if mode == 0:
+        if mode == MODE_LOOSE:
             tr_header, warnings = translate_to_MDS_header(tr_header)
 
         schema_headers = set(self.schema['definitions']['episode']['required'])
@@ -126,7 +111,7 @@ class JSONValidator(object):
 
 
     # TODO : convert everything to MDS codes first to check numeric values (faster). failed lookups are automatically errors
-    def validate(self, data, mode=0):
+    def validate(self, data, mode=MODE_LOOSE):
         """
             The main validator function.
             0. If column headers, dropdown values are not proper MDS values, 
@@ -140,7 +125,7 @@ class JSONValidator(object):
         errors = {}
         episodes = data['episodes']
         id_field = MDS['ID']
-        if mode == 0: # withouth the deep copy of episodes
+        if mode == MODE_LOOSE: # withouth the deep copy of episodes
             warnings = translate_to_MDS_values(episodes)# translate to official MDS values
             data = {'episodes': episodes}
 
@@ -150,7 +135,7 @@ class JSONValidator(object):
         fn_date_converter = get_date_converter(sample_date_str=episodes[0][MDS_Dates[0]])
         add_operation('has_duplicate_values', has_duplicate_values)
         add_operation('check_slk', self.check_slk)
-
+        
         client_eps = {}
         for i, ep_data in enumerate(episodes):
             JSONValidator.validate_logic(errors, ep_data, i, fn_date_converter,
@@ -169,3 +154,10 @@ class JSONValidator(object):
             return False
 
         return True
+
+
+    def check_age(self):
+        """
+            TODO : Make sure the age is not < 10
+        """
+        pass

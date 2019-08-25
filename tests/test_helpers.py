@@ -3,12 +3,12 @@ import pytest
 from ..helpers import getSLK, translate_to_MDS_header, translate_to_MDS_values
 
 
-# def test_getSLK():
-#     first_name ="Aftab"
-#     surname  = "Jalal"
-#     dob = "21/07/1981"
-#     sex  = "Male"
-#     assert getSLK(first_name,surname,dob,sex) == "ALLFT210719811"
+def test_getSLK():
+    first_name ="Aftab"
+    surname  = "Jalal"
+    dob = "21/07/1981" 
+    sex  = "Male"
+    assert getSLK(first_name,surname,dob,sex) == "ALLFT210719811"
 
 
 def test_translate_to_MDS_header():

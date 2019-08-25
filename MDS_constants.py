@@ -27,3 +27,6 @@ MDS = {
 }
 
 MDS_Dates = ["DOB", "COMM_DATE", "END_DATE"]
+
+st_fld = 'O'+MDS['COMM_DATE']
+end_fld = 'O'+MDS['END_DATE']

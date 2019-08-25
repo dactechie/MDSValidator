@@ -2,9 +2,10 @@ import copy
 import csv
 
 from MDS_aliases import mds_aliases
-from MDS_constants import MDS
+from MDS_constants import MDS, st_fld, end_fld
 from MDS_RULES import rule_definitions
 from utils import cleanse_string, get_datestring_from_ordinal, remove_unicode
+from constants import MODE_LOOSE, NOW_ORD, NOW
 
 '''
 Input data file may not have the exact spelling/case as the official MDS fields
@@ -57,7 +58,7 @@ def read_header(filename: str) -> list:
 #def fix_headers(headers):
 
 # TODO clean this up (use a generator)
-def read_data(filename: str, data_header: dict, hmap: dict, closed_eps_only=None) -> dict:
+def read_data(filename: str, data_header: dict, hmap: dict, all_eps=True) -> dict:
     """
     - Assumes that if a "FULL NAME" column exists, all rows will have a format of
         'LastName, FirstName'.
@@ -77,7 +78,7 @@ def read_data(filename: str, data_header: dict, hmap: dict, closed_eps_only=None
 
         if MDS['FNAME'] not in data_header and "FULL NAME" in data_header:
             for i, r in enumerate(reader):
-                if closed_eps_only and r[MDS['END_DATE']] == '':
+                if not all_eps and r[MDS['END_DATE']] == '':
                     continue
                 if  "".join(r.values()) == '':
                     print(f"\n\tFound Blank row at {i}. Quitting...")
@@ -96,19 +97,21 @@ def read_data(filename: str, data_header: dict, hmap: dict, closed_eps_only=None
         # True
         tmp_k = None
         result = []
+        ii = 0
         for i, row in enumerate(reader):
-            if closed_eps_only and row[MDS['END_DATE']] == '':
+            if not all_eps and row[MDS['END_DATE']] == '':
                 continue
             if  "".join(row.values()) == '':
                 print(f"\n\tFound Blank row at {i}. Quitting...")
                 return None
-            result.append({})
+            result.append({})            
             for k, v in row.items():
                 tmp_k = clean_headers[k]
                 # if tmp_k in hmap:
                 #     result[i][hmap[tmp_k]] = v
                 # else:
-                result[i][tmp_k] = v
+                result[ii][tmp_k] = v
+            ii = ii + 1
 
         #result = [ {k:v for k, v in row.items()} for row in reader if hmap[k]]
  
@@ -193,6 +196,27 @@ def remove_vrules(error_fields):
     new_rd.extend(rule_defs_wo_errors)
 
     return new_rd
+
+
+def prep_and_check_overlap(data_row, client_eps, errors, rec_idx, date_error_fields):
+    if not ((MDS['COMM_DATE'] in date_error_fields) or (MDS['END_DATE'] in date_error_fields)):
+        cid = data_row[MDS['ID']]
+        ep_dates_obj = { st_fld: data_row[st_fld],
+                            MDS['COMM_DATE']: data_row[MDS['COMM_DATE']], 
+                            'idx': rec_idx }
+        if end_fld in data_row:
+            ep_dates_obj[end_fld] = data_row[end_fld]
+            ep_dates_obj[MDS['END_DATE']] = data_row[MDS['END_DATE']]
+
+        else: #end date is blank, use current date  as end date to check overlap ?
+            ep_dates_obj[end_fld] = NOW_ORD
+            ep_dates_obj[MDS['END_DATE']] = NOW
+
+        if (cid in client_eps): # any(client_eps.get(cid, [])):
+            client_eps[cid].append(ep_dates_obj)
+            check_overlap(data_row, client_eps[cid], errors, rec_idx, st_fld=st_fld, end_fld=end_fld)
+        else:
+            client_eps[cid] = [ep_dates_obj]
 
 
 def check_overlap(current_ep, client_eps, errors, rec_idx, st_fld=MDS["COMM_DATE"], end_fld=MDS["END_DATE"]):

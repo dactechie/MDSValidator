@@ -136,8 +136,8 @@ mds_aliases = {
 
         # CASE SENSITIVE STUFF 
         "Outreach setting" : ["Outreach Setting"],
-        "Private residence" : ["Private Residence", "Rented private house or flat", "Privately owned house or flat"
-                             "Rented public house or flat"  # TODO Check me !!
+        "Private residence" : ["Private Residence", "Rented private house or flat", "Privately owned house or flat",
+                             "Rented public house or flat"
         ], 
 
         "Friend(s)/parent(s)/relative(s) and child(ren)" : ["Friend(s)/parent(s)/relative(s) and chil(ren)"],

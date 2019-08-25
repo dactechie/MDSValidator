@@ -1,3 +1,4 @@
+import os
 from collections import OrderedDict
 from datetime import datetime
 import re
@@ -8,7 +9,7 @@ cleanse_string = lambda string: alpha_pattern.sub('', string)
 no_unicode_pattern = re.compile(r'[^\x00-\x7F]+')
 remove_unicode = lambda string: no_unicode_pattern.sub('', string)
 
-NOW = datetime.now()
+
 
 def get_fields_value_string(data):
     data = OrderedDict(data)
@@ -44,19 +45,23 @@ def has_duplicate_values(*arr):
 
     return k in varr
 
-    
-'''
-Converts date strings to ordinal integers
-'''
+
+def str_to_date(str):
+    """
+        TODO : 431972 or 04031972 or 04/3/1972 or 4/3/1972 or 4/03/1972 -> Date (24,3,1972)
+             then compare dates.. dont have to get to-ordinal
+    """
+    pass
+
+
 def get_date_converter(sample_date_str):
-    
-    #date_format = None    datetime.fromordinal()
+    """
+    Converts date strings to ordinal integers
+    """
     if sample_date_str.find('/') == -1:
-        #date_format = "%d%m%Y"
         # if date_str.find('/') != -1: # 1/1/2019
         return lambda date_str: datetime.strptime(date_str,"%d%m%Y").toordinal()
     else:
-        #date_format = "%d/%m/%Y"
         return lambda date_str: datetime.strptime(date_str,"%d/%m/%Y").toordinal()
 
 # def get_datestring_from_date(date, dtformat='%d%m%Y'):
@@ -67,3 +72,21 @@ def get_datestring_from_ordinal(ordinal_date, dtformat='%d%m%Y'):
 
 def now_string():
     return datetime.now().strftime('%Y-%m-%d-%H-%M')
+
+
+def get_latest_data_file(dir='input'):
+    import glob
+    
+    list_of_files = glob.glob(os.path.join(dir,'*.csv')) # * means all if need specific format then *.csv
+    return max(list_of_files, key=os.path.getctime)
+
+
+def get_result_filename(fullname, all_eps=True):
+    if not all_eps:
+        output_fname_tags ='(closed_eps)'
+    else:
+        output_fname_tags = '(with_open_eps)'
+    
+    base = os.path.basename(fullname)
+    input_filename = os.path.splitext(base)[0]
+    return os.path.join("output", f"./{input_filename}_{output_fname_tags}")

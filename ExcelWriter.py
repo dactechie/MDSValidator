@@ -20,11 +20,14 @@ def get_row(header, hlen, row_dict, errors):
 
     return row
 
-"""
- if you only want error rows in the output, uncomment the # if errors_dict.get(i) part
-"""
-def get_rows_to_write(headers, hlen, data, errors_dict):    
-    return [get_row(headers, hlen, row_dict, errors_dict.get(i,[])) for i, row_dict in enumerate(data) ] # if errors_dict.get(i)]
+
+def get_rows_to_write(headers, hlen, data, errors_dict, errors_only=True):
+    if errors_only:
+        return [get_row(headers, hlen, row_dict, errors_dict.get(i,[])) 
+                for i, row_dict in enumerate(data) if errors_dict.get(i)]
+    else:
+        return [get_row(headers, hlen, row_dict, errors_dict.get(i,[]))
+                for i, row_dict in enumerate(data)]
 
 
 def _process_chunks(ws, data_rows, starter, ender, chunk_size=10):
@@ -46,15 +49,15 @@ def _process_chunks(ws, data_rows, starter, ender, chunk_size=10):
     _process_chunks(ws, data_rows, starter, ender, chunk_size)
     
 
-def write_data_to_book(data, errors, book_name) -> str:
+def write_data_to_book(data, errors, book_name, errors_only=True) -> str:
     result_book_name = 'result.xlsx'
     try:
         app = xw.App(visible=False)
         book = app.books.open("./MDSTemplate.xltx")
-        ws = book.sheets[0]
+        ws = book.sheets['loaded']
         headers = ws.range('A1:BT1').value
       
-        rows = get_rows_to_write(headers,  len(headers),  data, errors)
+        rows = get_rows_to_write(headers, len(headers), data, errors, errors_only)
 
         endval = len(rows)
         chunk_size = ceil(0.2 * endval) # chunksize 20% 
@@ -74,15 +77,15 @@ def write_data_to_book(data, errors, book_name) -> str:
     
 
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
 
-    from test_data import setup_test_data, test_errors
+#     from test_data import setup_test_data, test_errors
     
-    data = setup_test_data('./data copy.csv')
-    #print(data)
-    errors = test_errors()
+#     data = setup_test_data('./data copy.csv')
+#     #print(data)
+#     errors = test_errors()
 
-    write_data_to_book(data['episodes'] , errors,'./two')
+#     write_data_to_book(data['episodes'] , errors,'./two')
     
 
     
