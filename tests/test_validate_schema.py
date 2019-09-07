@@ -1,7 +1,7 @@
 import os
 import pytest
-from ..AOD_MDS.constants import MDS as M, MDS_Dates as D
-from ..rule_checker.JSONValidator import JSONValidator
+from AOD_MDS.constants import MDS as M, MDS_Dates as D
+from rule_checker.JSONValidator import JSONValidator
 
 # @pytest.fixture(scope='session')
 # def headers_map():

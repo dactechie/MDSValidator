@@ -1,6 +1,6 @@
 import os
 import pytest
-from ..AOD_MDS.helpers import getSLK, translate_to_MDS_header, translate_to_MDS_values
+from AOD_MDS.helpers import getSLK, translate_to_MDS_header, translate_to_MDS_values
 from logger import logger
 
 def test_getSLK():
@@ -22,7 +22,7 @@ def test_translate_to_MDS_values():
     data = [ { 'ID': '101010',  'Client type': "Own drug use" }]
     warnings = translate_to_MDS_values(data)
     logger.info(warnings)
-    
+
     assert data[0]['Client type'] == "Own alcohol or other drug use"
     
     assert warnings[0] == { "index": 0, "cid": '101010', 
