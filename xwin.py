@@ -1,11 +1,12 @@
 import os
 import xlwings as xw
-from MDSDataFileProcessor import main2
+from MDSDataFileProcessor import exe
 from logger import logger
 
 def fetch_validation_results(source_file):
 
-    result_file_name = main2(source_file)
+    result_file_name = exe(data_file=source_file, all_eps=True,
+                            nostrict=False, errors_only=True)
 
     wb = xw.books.active
     currentBookSheet = wb.sheets['Data']

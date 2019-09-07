@@ -1,24 +1,18 @@
 import json
 from datetime import date
-
 import jsonschema as jsc
+
 from json_logic import add_operation, jsonLogic
-from AOD_MDS.helpers import (add_error_obj, prep_and_check_overlap, compile_logic_errors,
-                     fix_check_dates, fuse_suggestions_into_errors, getSLK,
-                     remove_vrules, translate_to_MDS_header,
-                     translate_to_MDS_values)
+from AOD_MDS.helpers import (add_error_obj, prep_and_check_overlap, 
+                        compile_logic_errors, fix_check_dates, 
+                        fuse_suggestions_into_errors, getSLK,
+                        remove_vrules, translate_to_MDS_header,
+                        translate_to_MDS_values)
 from AOD_MDS.constants import MDS, MDS_Dates, st_fld, end_fld
 from AOD_MDS.logic_rules.common import rule_definitions
-from .MJValidationError import MJValidationError
 from utils import cleanse_string, get_date_converter, has_duplicate_values
-
+from .MJValidationError import MJValidationError
 from .constants import MODE_LOOSE, NOW_ORD, NOW
-
-rules = [r['rule'] for r in rule_definitions]
-
-"""
-    TODO: if TSS is being checked, include TSS rules as well
-"""
 
 '''
 Create a validation error object with the data row index, client id and error details.
@@ -31,11 +25,19 @@ header_er_lam = lambda field, miss_extra: MJValidationError(index='all',
 
 
 class JSONValidator(object):
+    
+    rule_definitions = rule_definitions
+    rules = [r['rule'] for r in rule_definitions]
 
-    def __init__(self, schema_dir, schema_file_name):
+    def __init__(self, schema_dir, schema_file_name, program):
         self.validator, self.schema = JSONValidator.setup_validator(
                                                     schema_dir, schema_file_name)
-        self.logic_rules = rules
+
+        if program =='TSS': # TODO if there are other specialized (program) rules, make this more dynamic
+            from AOD_MDS.logic_rules.TSS import rule_definitions as tss_rd
+            JSONValidator.rule_definitions.extend(tss_rd)
+            JSONValidator.rules.extend([r['rule'] for r in tss_rd])
+
         self.slk_suggestions = {}
 
 
@@ -69,8 +71,8 @@ class JSONValidator(object):
         """
         date_conversion_errors = fix_check_dates(data_row, rec_idx, fn_date_converter,
                                                  id_field, MDS_Dates)
-        temp_rd =  rule_definitions
-        temp_rules = rules
+        temp_rd =  JSONValidator.rule_definitions
+        temp_rules = JSONValidator.rules
         dce_fields = []
         if any(date_conversion_errors):
             dce_fields = [dce['field'] for dce in date_conversion_errors]
@@ -124,19 +126,20 @@ class JSONValidator(object):
         errors = {}
         episodes = data['episodes']
         id_field = MDS['ID']
+
         if mode == MODE_LOOSE: # withouth the deep copy of episodes
             warnings = translate_to_MDS_values(episodes)# translate to official MDS values
             data = {'episodes': episodes}
 
         for e in self.validator.iter_errors(data):
             add_error_obj(errors, e, data, id_field)
-        
+
         fn_date_converter = get_date_converter(sample_date_str=episodes[0][MDS_Dates[0]])
         add_operation('has_duplicate_values', has_duplicate_values)
         add_operation('check_slk', self.check_slk)
         
         client_eps = {}
-        for i, ep_data in enumerate(episodes):            
+        for i, ep_data in enumerate(episodes):
             JSONValidator.validate_logic(errors, ep_data, i, fn_date_converter,
                                          id_field, client_eps)
         if self.slk_suggestions:

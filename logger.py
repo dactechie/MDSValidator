@@ -4,7 +4,9 @@ import logging
 import logging.config
 
 
-
+# The CWD is the venv's PYTHONPATH when running from Excel VBA, 
+# so it looks for config/ etc at mds/Scripts/... If it doesn't find a config dir, 
+# we change the cwd to the root of the project and everything is just 'dandy'
 if not os.path.exists(os.path.join(os.getcwd(), "config")):
     os.chdir(f"..{os.sep}..")
 

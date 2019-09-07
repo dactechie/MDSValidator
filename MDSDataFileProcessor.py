@@ -22,10 +22,10 @@ from rule_checker.constants import MODE_LOOSE
         then return the path to the new .xlsx to the user.
 """
 
-def get_json_validator(schema_dir_name, schema_file_name):
+def get_json_validator(schema_dir_name, schema_file_name, program=''):
     schema_dir = os.path.join(os.getcwd(), schema_dir_name)
     schema_file = os.path.realpath(os.path.join(schema_dir, schema_file_name))
-    return JSONValidator(schema_dir, schema_file)
+    return JSONValidator(schema_dir, schema_file, program=program)
 
 
 def get_valid_header_or_die(filename, validator, mode):
@@ -62,19 +62,15 @@ def get_data_or_die(filename, mds_header, hmap, all_eps=None):
                    '\n1: reject (flag as errors)', show_default=True)
 @click.option('--errors_only', '-e', help='Output only the rows with errors.',
                 show_default=True)
-@click.option('--program', '-p',
+@click.option('--program', '-p', type=click.Choice(['TSS', 'Other']),
               help='Some logic rules are specific to a team.' + \
                     'Default setting is to just apply just MDS rules.',
-              default='', show_default=True)
+              default='TSS', show_default=True)
 def main(data_file, all_eps, nostrict, errors_only, program=''):
-    # os.chdir("../..")   # when called from xwin (from excel), the python path is in the .\venv(mds)\Scripts folder,
-    #                     # this breaks the paths for loading the schema etc. which are here .\schema
-               # 'input\Final-Day.csv' #r'input\Arcadia_Resi.csv' #
-    exe(data_file, all_eps, nostrict, errors_only, program='')
+    exe(data_file, all_eps, nostrict, errors_only, program=program)
 
 
 def exe(data_file, all_eps, nostrict, errors_only, program=''):
-    
     FILENAME = None
     if not data_file or data_file =='None':
         FILENAME = get_latest_data_file()
@@ -88,7 +84,8 @@ def exe(data_file, all_eps, nostrict, errors_only, program=''):
     start_time = time()
 
     jv = get_json_validator(schema_dir_name='AOD_MDS/schema/',
-                            schema_file_name='schema.json')
+                            schema_file_name='schema.json',
+                            program=program)
     
     mds_header, header_warnings = get_valid_header_or_die(FILENAME, validator=jv, mode=nostrict)
     data = get_data_or_die(FILENAME, mds_header,  header_warnings, all_eps=all_eps)
@@ -104,10 +101,6 @@ def exe(data_file, all_eps, nostrict, errors_only, program=''):
                                      get_result_filename(FILENAME, all_eps), errors_only)
     logger.info("\t ...End of Program...\n")
     return result_book
-
-
-def main2(source_file):
-    return exe(data_file=source_file,all_eps=True,nostrict=MODE_LOOSE,errors_only=True)
 
 
 if __name__ == '__main__':
