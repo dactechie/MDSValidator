@@ -132,35 +132,22 @@ def test_TSS(TSS_json_validator):
             }
           ]
         expected1 = [
-            {'cid': '9999',
-            'etype': 'logic',
-            'field': 'Main treatment type',
-            'index': 1,
+            {'cid': '9999', 'etype': 'logic', 'field': 'Main treatment type', 'index': 1,
             'message': 'TSS team only does the following treatment types: Counselling, '
                       'Support and case management and Information and education'},
-            {'cid': '9999',
-            'etype': 'logic',
-            'field': 'Treatment delivery setting',
-            'index': 1,
+            {'cid': '9999', 'etype': 'logic', 'field': 'Treatment delivery setting', 'index': 1,
             'message': "If Usual accommodation is 'Prison/remand centre/youth training "
-                      "centre', 'Treatment delivery setting' has to be 'Outreach "
-                      "setting'."}     
+                      "centre', 'Treatment delivery setting' has to be 'Outreach setting'."}     
         ]
         assert errors[0] == expected0
         assert errors[1] == expected1
 
         expected2 = [
-            {'cid': '1111',
-            'etype': 'logic',
-            'field': 'Treatment delivery setting',
-            'index': 2,
+            {'cid':'1111','etype':'logic','field':'Treatment delivery setting','index': 2,
             'message': "If Usual accommodation is 'Prison/remand centre/youth training "
                       "centre', 'Treatment delivery setting' has to be 'Outreach setting'."
             },
-            {'cid': '1111',
-            'etype': 'logic',
-            'field': 'Treatment delivery setting',
-            'index': 2,
+            {'cid': '1111','etype': 'logic','field': 'Treatment delivery setting','index': 2,
             'message': 'TSS team does not provide service (treatment delivery) in '
                         "Home/'Other' setting "
             },
