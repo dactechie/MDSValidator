@@ -3,27 +3,13 @@ import sys
 from time import time
 import click
 
-from . import logger
+from logger import logger
 from AOD_MDS.helpers import log_results, read_data, read_header
 from rule_checker.JSONValidator import JSONValidator
 from rule_checker.MJValidationError import MJValidationError
 from utils.ExcelWriter import write_data_to_book
 from utils.files import get_latest_data_file, get_result_filename
-
-# logger = None
-
-# def setup_logger(filename=__name__):
-#     global logger
-#     logger = logging.getLogger(filename)
-#     logger.setLevel(logging.INFO)
-
-#     formatter = logging.Formatter('%(asctime)s : %(levelname)s : %(name)s : %(message)s')
-#     file_handler = logging.FileHandler('mj.log')
-#     file_handler.setFormatter(formatter)
-#     logger.addHandler(file_handler)
-
-
-# logger = logging.getLogger("__main__")
+from rule_checker.constants import MODE_LOOSE
 
 """
     This module is to be made responsible for being the engine for orchestrating, the processing of incoming JSON data.
@@ -51,7 +37,6 @@ def get_valid_header_or_die(filename, validator, mode):
         sys.exit(0)
 
     return fixed_header, header_warnings
-    #return header,  header_warnings
 
 
 def get_data_or_die(filename, mds_header, hmap, all_eps=None):
@@ -62,6 +47,7 @@ def get_data_or_die(filename, mds_header, hmap, all_eps=None):
         sys.exit(0)
     
     return data
+
 
 
 @click.command()
@@ -81,20 +67,23 @@ def get_data_or_die(filename, mds_header, hmap, all_eps=None):
                     'Default setting is to just apply just MDS rules.',
               default='', show_default=True)
 def main(data_file, all_eps, nostrict, errors_only, program=''):
-    # data = setup_test_data('./data copy.csv')
     # os.chdir("../..")   # when called from xwin (from excel), the python path is in the .\venv(mds)\Scripts folder,
     #                     # this breaks the paths for loading the schema etc. which are here .\schema
                # 'input\Final-Day.csv' #r'input\Arcadia_Resi.csv' #
+    exe(data_file, all_eps, nostrict, errors_only, program='')
+
+
+def exe(data_file, all_eps, nostrict, errors_only, program=''):
     
     FILENAME = None
-    if not data_file:
+    if not data_file or data_file =='None':
         FILENAME = get_latest_data_file()
     else:
-        FILENAME =  os.path.join('input', data_file) #r'input\Final-Day.csv' # r'input\2019.08.23 TSS AMDS Full unchecked.csv' #  r'input\Arcadia-Day-Jan-Jun.csv'
+        FILENAME =  os.path.join('input', data_file)
     
-    # setup_logger(FILENAME)
-    # global logger
-    # logger.info(f"Strict Mode: {nostrict}")
+    if not FILENAME:
+        logger.error("No input file. Quitting.")
+        sys.exit()
 
     start_time = time()
 
@@ -117,7 +106,10 @@ def main(data_file, all_eps, nostrict, errors_only, program=''):
     return result_book
 
 
+def main2(source_file):
+    return exe(data_file=source_file,all_eps=True,nostrict=MODE_LOOSE,errors_only=True)
+
+
 if __name__ == '__main__':
     main()
     #sys.exit(main(sys.argv))
-    # #data = setup_test_data('./data copy.csv')

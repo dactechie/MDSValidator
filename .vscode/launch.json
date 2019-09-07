@@ -9,7 +9,7 @@
             "type": "python",
             "request": "launch",
             "program": "${file}",
-            "args": ["-d", "Ali-NoNamesRemoved.csv", "-c"],
+            "args": [ "-c"], //"-d", "Ali-NoNamesRemoved.csv",
             "console": "internalConsole"
         },
         {

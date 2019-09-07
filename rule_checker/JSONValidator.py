@@ -2,15 +2,15 @@ import json
 from datetime import date
 
 import jsonschema as jsc
-from ..json_logic import add_operation, jsonLogic
-from ..AOD_MDS.helpers import (add_error_obj, prep_and_check_overlap, compile_logic_errors,
+from json_logic import add_operation, jsonLogic
+from AOD_MDS.helpers import (add_error_obj, prep_and_check_overlap, compile_logic_errors,
                      fix_check_dates, fuse_suggestions_into_errors, getSLK,
                      remove_vrules, translate_to_MDS_header,
                      translate_to_MDS_values)
-from ..AOD_MDS.constants import MDS, MDS_Dates, st_fld, end_fld
-from ..AOD_MDS.logic_rules.common import rule_definitions
+from AOD_MDS.constants import MDS, MDS_Dates, st_fld, end_fld
+from AOD_MDS.logic_rules.common import rule_definitions
 from .MJValidationError import MJValidationError
-from ..utils import cleanse_string, get_date_converter, has_duplicate_values
+from utils import cleanse_string, get_date_converter, has_duplicate_values
 
 from .constants import MODE_LOOSE, NOW_ORD, NOW
 
@@ -77,15 +77,7 @@ class JSONValidator(object):
             temp_rd = remove_vrules(dce_fields)
             temp_rules = [rd['rule'] for rd in temp_rd]
         
-        #try: 
-        # result = [] 
-        # for r in temp_rules :
-        #     rr = jsonLogic(r, data_row)
-        #     result.append(rr)
-        result = [jsonLogic(r, data_row) for r in temp_rules] 
-        
-        #except TypeError:
-        #    print(f"type erropr index: {rec_idx}  \t", data_row)
+        result = (jsonLogic(r, data_row) for r in temp_rules)
         
         logic_errors = compile_logic_errors(result, temp_rd, data_row,
                                              rec_idx, id_field, date_conversion_errors) 

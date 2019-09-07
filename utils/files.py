@@ -1,10 +1,12 @@
 import os
+from logger import logger
 
-def get_latest_data_file(dir='../input'):
+def get_latest_data_file(dir='input'):
     import glob
     
     list_of_files = glob.glob(os.path.join(dir,'*.csv')) # * means all if need specific format then *.csv
     if not any(list_of_files):
+        logger.error("no input csv file in the input folder !")
         return None
 
     return max(list_of_files, key=os.path.getctime)

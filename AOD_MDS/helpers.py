@@ -3,14 +3,13 @@ import csv
 
 from .aliases import mds_aliases
 from .constants import MDS, end_fld, st_fld
-from ..rule_checker.constants import MODE_LOOSE, NOW, NOW_ORD
-from ..rule_checker.field_lists import (involved_field_sets,
+from rule_checker.constants import MODE_LOOSE, NOW, NOW_ORD
+from rule_checker.field_lists import (involved_field_sets,
                                       rd_with_involved_fields,
                                       rd_wo_involved_fields)
-from ..utils import (get_23, get_235, cleanse_string,
+from utils import (get_23, get_235, cleanse_string,
                          get_datestring_from_ordinal, remove_unicode)
-# from utils.strings import _get_23, _get_235
-
+from logger import logger
 
 '''
 Input data file may not have the exact spelling/case as the official MDS fields
@@ -83,7 +82,7 @@ def read_data(filename: str, data_header: dict, hmap: dict, all_eps=True) -> dic
                 if not all_eps and r[MDS['END_DATE']] == '':
                     continue
                 if  "".join(r.values()) == '':
-                    print(f"\n\tFound Blank row at {i}. Quitting...")
+                    logger.error(f"\n\tFound Blank row at {i}. Quitting...")
                     return None
                 row = copy.deepcopy(r)
                 if row.get("FULL NAME"):              
@@ -104,7 +103,7 @@ def read_data(filename: str, data_header: dict, hmap: dict, all_eps=True) -> dic
             if not all_eps and row[MDS['END_DATE']] == '':
                 continue
             if  "".join(row.values()) == '':
-                print(f"\n\tFound Blank row at {i}. Quitting...")
+                logger.error(f"\n\tFound Blank row at {i}. Quitting...")
                 return None
             result.append({})            
             for k, v in row.items():
@@ -134,7 +133,7 @@ def fix_check_dates(data_row, rec_idx, fn_date_converter,
             continue
         l = len(dt)
         # if l < 7:
-        #     print(f"Warning : invalid date string {dt}. Not converting to Date.")
+        #     logger.warn(f"Warning : invalid date string {dt}. Not converting to Date.")
         #     continue
         if l == 7 or dt.find('/') == 1 : #no leading zero in the case of 1_01_1981 or 1/01/1981
             dt = '0' + dt
@@ -270,8 +269,8 @@ def add_error_obj(errors, e, dataObj, id_field):
 def compile_errors(schema_validation_verrors, logic_errors):
     errors = []
     if logic_errors:
-        logic_errors = [l for l in logic_errors if l]
-        errors =  [item for sublist in logic_errors for item in sublist]
+        logic_errors = (l for l in logic_errors if l)
+        errors =  (item for sublist in logic_errors for item in sublist)
         
     if schema_validation_verrors:
         errors.extend(schema_validation_verrors)
@@ -299,7 +298,7 @@ def fuse_suggestions_into_errors(errors, suggestions):
 def compile_logic_errors(result, rule_defs, data_row, rec_idx, id_field, date_conversion_errors):
     # false values means that rule was violated. So we only want the indices of falses :
 
-    idxes = [i for i, r in enumerate(result) if not r]
+    idxes = (i for i, r in enumerate(result) if not r)
     
     rule_errors = [v_er_lam(rule_i, rule_defs, rec_idx, data_row[id_field]) for rule_i in idxes]
     if rule_errors: 
@@ -332,15 +331,14 @@ def getSLK(firstname, lastname, DOB_str, sex_str):
 
 def log_results(verrors, warnings, header_warnings):
     
-    print("\n", 10*'-', "  Errors ",10*'-')
+    logger.info(f"\n {10*'-'}   Errors {10*'-'}")
     for k, v in verrors.items():
-        print(v)
-        print()
-    #print(verrors)
-    
+        logger.info(v)
+        logger.info("")
+
     if any(warnings):
-        print("\n", 10*'-', "  Warnings ",10*'-')
-        print(warnings)
+        logger.info(f"\n {10*'-'},  Warnings ,{10*'-'}")
+        logger.info(warnings)
 
     if (header_warnings):
-        print("\n header warnings ", header_warnings)
+        logger.info(f"\n header warnings {header_warnings}")

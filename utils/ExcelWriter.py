@@ -1,11 +1,11 @@
 from math import ceil
 import xlwings as xw
 from utils.dates import now_string
+from logger import logger
 
 
 def get_row(header, hlen, row_dict, errors):
     row = []
-
     errfield_mesg = {er['field']: er['message'] for er in errors }
     
     for i in range(0,hlen-1,2):
@@ -34,20 +34,19 @@ def _process_chunks(ws, data_rows, starter, ender, chunk_size=10):
 
     line_num = starter
     for line_num in range(starter, ender-chunk_size+1, chunk_size):
-                            #2- > 682  +200 =  882
         st_row_num = line_num + 2
         ed_row_num = st_row_num + chunk_size
         ws.range(f'A{str(st_row_num)}:A{str(ed_row_num)}').value = \
-                    data_rows[line_num:line_num+chunk_size]  # 0:5  -> 0,1,2,3,4
-        print(f"end row number : {ed_row_num} " )
+                    data_rows[line_num:line_num+chunk_size]
+        logger.info(f"end row number : {ed_row_num} " )
     
     starter = line_num+chunk_size
     chunk_size = ceil(0.2 * (ender - starter))
     if chunk_size < 1 : #or ((starter+chunk_size) > (ender - starter)):
         return
-    print(f"calling process chunks agagin start {starter }  chunksize {chunk_size}  ")
+    logger.debug(f"calling process chunks again start {starter }:: chunksize {chunk_size}")
     _process_chunks(ws, data_rows, starter, ender, chunk_size)
-    
+
 
 def write_data_to_book(data, errors, book_name, errors_only=True) -> str:
     result_book_name = 'result.xlsx'
@@ -55,37 +54,29 @@ def write_data_to_book(data, errors, book_name, errors_only=True) -> str:
         app = xw.App(visible=False)
         book = app.books.open("./MDSTemplate.xltx")
         ws = book.sheets['loaded']
-        headers = ws.range('A1:BT1').value
-      
+        headers = ws.range('A1:BT1').value # TODO: remove the column hard-coding
+
         rows = get_rows_to_write(headers, len(headers), data, errors, errors_only)
 
         endval = len(rows)
         chunk_size = ceil(0.2 * endval) # chunksize 20% 
-        print ( f"\t >>> endval {endval}  chunksize {chunk_size} <<< \n")
-        _process_chunks(ws, rows, starter=0, ender=endval, chunk_size=chunk_size) #800)
+
+        logger.info(f"\t >>> endval {endval}  chunksize {chunk_size} <<< \n")
+
+        _process_chunks(ws, rows, starter=0, ender=endval, chunk_size=chunk_size)
         result_book_name = f"{book_name}_{now_string()}.xlsx"
+
+        logger.info(f"results book name : {result_book_name}")
+
         book.save(f"{book_name}_{now_string()}.xlsx")
-    #except Exception as e:
-    #    print(e)
+
+    except Exception as e:
+       logger.exception(e)
+
     finally:
         book.close()
         app.quit()
-        print(" app pid : " , app.pid)
+        logger.debug(f" app pid : app.pid")
         app.kill()
         return result_book_name
 
-    
-
-
-# if __name__ == '__main__':
-
-#     from test_data import setup_test_data, test_errors
-    
-#     data = setup_test_data('./data copy.csv')
-#     #print(data)
-#     errors = test_errors()
-
-#     write_data_to_book(data['episodes'] , errors,'./two')
-    
-
-    

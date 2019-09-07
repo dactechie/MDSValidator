@@ -1,4 +1,8 @@
 mds/*
 input/*
+output/*
+final/*
 ~*.xl*
 *.pyc
+*.docx
+\.**

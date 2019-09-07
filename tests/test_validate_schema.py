@@ -68,7 +68,3 @@ def test_sample(json_validator):
             {'index': 0, 'cid': '11525', 'etype': 'logic', 'field': 'SLK 581', 'message': 'ILYAY030520109'}
           ]        
         assert errors[0] == expected
-        
-        #print()
-        # print()
-

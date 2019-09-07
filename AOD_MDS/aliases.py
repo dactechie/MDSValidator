@@ -1,4 +1,4 @@
-from ..AOD_MDS.constants import MDS as M
+from .constants import MDS as M
 
 mds_aliases = {
     # k (official name) : v [] -> array of aliases or accepted values
