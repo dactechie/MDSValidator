@@ -1,11 +1,16 @@
 import copy
 import csv
 
-from MDS_aliases import mds_aliases
-from MDS_constants import MDS, st_fld, end_fld
-from MDS_RULES import rule_definitions
-from utils import cleanse_string, get_datestring_from_ordinal, remove_unicode
-from constants import MODE_LOOSE, NOW_ORD, NOW
+from .aliases import mds_aliases
+from .constants import MDS, end_fld, st_fld
+from ..rule_checker.constants import MODE_LOOSE, NOW, NOW_ORD
+from ..rule_checker.field_lists import (involved_field_sets,
+                                      rd_with_involved_fields,
+                                      rd_wo_involved_fields)
+from ..utils import (get_23, get_235, cleanse_string,
+                         get_datestring_from_ordinal, remove_unicode)
+# from utils.strings import _get_23, _get_235
+
 
 '''
 Input data file may not have the exact spelling/case as the official MDS fields
@@ -41,13 +46,10 @@ v_warn_lam = lambda rec_idx, cid, required, got: {
                     }
 
 
-rd_wo_involved_fields = [rd for rd in rule_definitions if 'involvedFields' not in rd]
-rd_with_involved_fields = [rd for rd in rule_definitions if 'involvedFields' in rd]
-involved_field_sets =  [set(rd['involvedFields']) for rd in rd_with_involved_fields]
-
 headers_map = alias_map_lam(mds_aliases['headers'])
 fvalues_map = alias_map_lam(mds_aliases['fieldValues'])
 val_translation_excluded_fields = ["ENROLLING PROVIDER", "EID", MDS["ID"], MDS["DOB"], MDS["PCODE"], MDS["SLK"] ]
+
 
 def read_header(filename: str) -> list:
     with open(filename, 'r') as csvfile:
@@ -167,7 +169,7 @@ def translate_to_MDS_values(data):
     for i, ddict in enumerate(data):# each row                          [ {row1}, {row2}  {ID: 2}]
         #for data_key, v in ddict.items(): # each field within a row     row1->  { k1:v1 , k2:v2} 
         for data_key in fields_to_check:
-            v =  ddict[data_key]            
+            v =  ddict[data_key]
             conv_data_val = v.strip()
             if conv_data_val in fvalues_map:
                 conv_data_val = fvalues_map[conv_data_val]
@@ -222,12 +224,12 @@ def prep_and_check_overlap(data_row, client_eps, errors, rec_idx, date_error_fie
 def check_overlap(current_ep, client_eps, errors, rec_idx, st_fld=MDS["COMM_DATE"], end_fld=MDS["END_DATE"]):
 
     start_date = client_eps[-1] [st_fld]
-    end_date = client_eps[-1][end_fld ]   # current_ep[end_fld]
+    end_date = client_eps[-1][end_fld]   # current_ep[end_fld]
 
     for ep in client_eps[:-1]:
         if min(end_date, ep[end_fld]) >= max(start_date, ep[st_fld]):
             other_st = get_datestring_from_ordinal(ep[st_fld], dtformat="%d/%m/%Y")
-            other_end =  get_datestring_from_ordinal(ep[end_fld], dtformat="%d/%m/%Y")
+            other_end = get_datestring_from_ordinal(ep[end_fld], dtformat="%d/%m/%Y")
 
             errors[rec_idx].append( { 'index': rec_idx,
                                     'cid': current_ep[MDS['ID']],
@@ -254,8 +256,8 @@ def add_error_obj(errors, e, dataObj, id_field):
         error_obj["field"]   = path[2]
         error_obj["message"] = f"invalid value/format: '{e.instance}'"
     else:
-        error_obj["field"]: '<>'
-        error_obj["message"]: e.message
+        error_obj["field"]= '<>'
+        error_obj["message"]= e.message
 
     ve_idx = error_obj['index']
     if ve_idx in errors:
@@ -308,25 +310,13 @@ def compile_logic_errors(result, rule_defs, data_row, rec_idx, id_field, date_co
     return date_conversion_errors
 
 
-
-def _get_second_third(name):
-    
-    return name.ljust(3, '2')[1:3]
-
-
-def _get_second_third_fifth(name):
-
-    five = name.ljust(5, '2')
-    return f"{five[1:3]}{five[4]}"
-
-
 def getSLK(firstname, lastname, DOB_str, sex_str):
     """
     Expects DOB_str to be in "ddmmyyyy" or "dd/mm/yyyy" format
     sex_str must be 'Male' or 'Female' , everything else is converted to 9
     """
-    last = _get_second_third_fifth(cleanse_string(lastname))
-    first = _get_second_third(cleanse_string(firstname))
+    last = get_235(cleanse_string(lastname))
+    first = get_23(cleanse_string(firstname))
     
     name_part = (last + first).upper()
     

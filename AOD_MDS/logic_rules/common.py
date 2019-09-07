@@ -1,4 +1,4 @@
-from MDS_constants import MDS as M
+from ..constants import MDS as M
 
 rule_definitions = [
   {
@@ -16,7 +16,7 @@ rule_definitions = [
     "field": M['METHOD'],
     "type" : "Error",
     "rule": {"if": [ # Rule #3
-                {"!": {"and": [ 
+                {"!": {"and": [
                             {"==": [{"var": M['PDC']}, "Ethanol" ]},
                             {"!==": [{"var": M['METHOD']}, "Ingests"]} 
                           ] 

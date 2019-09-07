@@ -1,6 +1,6 @@
 from math import ceil
 import xlwings as xw
-from utils import now_string
+from utils.dates import now_string
 
 
 def get_row(header, hlen, row_dict, errors):

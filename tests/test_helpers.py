@@ -1,6 +1,6 @@
 import os
 import pytest
-from ..helpers import getSLK, translate_to_MDS_header, translate_to_MDS_values
+from ..AOD_MDS.helpers import getSLK, translate_to_MDS_header, translate_to_MDS_values
 
 
 def test_getSLK():

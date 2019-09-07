@@ -1,4 +1,4 @@
-from MDS_constants import MDS as M
+from ..AOD_MDS.constants import MDS as M
 
 mds_aliases = {
     # k (official name) : v [] -> array of aliases or accepted values
@@ -93,7 +93,7 @@ mds_aliases = {
         "Diazepam": ["diazepam"],
         "Nicotine" : [  "nicotine", "Nicotine/tobacco"  ],
         "Codeine": ["codeine"],
-        "Amphetamines nfd" : [ "Amphetamines" ],
+        "Amphetamines nfd" : [ "Amphetamines", "Amphetamines, nfd" ],
         "Benzodiazepines nfd" : ["Benzodiazepines"],
         "Analgesics nfd" : ["Other analgesics"],
         "Stimulants and Hallucinogens nfd" : [
@@ -113,8 +113,6 @@ mds_aliases = {
             "Other specialised community residential"            
         ],
         
-      
-
         "Boarding house/private hotel" : ["Boarding house/private rental"],
         "None/homeless/public place" : ["None/homeless/public space"],
         
@@ -159,7 +157,7 @@ mds_aliases = {
 
 
 mds_aliases['headers'][M['ID']]      = ["PAT ID", "PID"]
-mds_aliases['headers'][M['FNAME']]   = ["First Name"]
+mds_aliases['headers'][M['FNAME']]   = ["First Name", "Firstname"]
 mds_aliases['headers'][M['PDC']]     = ["PDC"]
 mds_aliases['headers'][M['SEX']]     = ["SEX"]
 mds_aliases['headers'][M['DOB']]     = ["Date of birth"]

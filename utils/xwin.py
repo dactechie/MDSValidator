@@ -1,6 +1,6 @@
 import os
 import xlwings as xw
-from MDSDataFileProcessor import main
+from ..MDSDataFileProcessor import main
 
 
 def fetch_validation_results(source_file):

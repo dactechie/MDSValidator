@@ -2,18 +2,23 @@ import json
 from datetime import date
 
 import jsonschema as jsc
-from json_logic import add_operation, jsonLogic
-from helpers import (add_error_obj, prep_and_check_overlap, compile_logic_errors,
+from ..json_logic import add_operation, jsonLogic
+from ..AOD_MDS.helpers import (add_error_obj, prep_and_check_overlap, compile_logic_errors,
                      fix_check_dates, fuse_suggestions_into_errors, getSLK,
                      remove_vrules, translate_to_MDS_header,
                      translate_to_MDS_values)
-from MDS_constants import MDS, MDS_Dates, st_fld, end_fld
-from MDS_RULES import rule_definitions
-from MJValidationError import MJValidationError
-from utils import cleanse_string, get_date_converter, has_duplicate_values
-from constants import MODE_LOOSE, NOW_ORD, NOW
+from ..AOD_MDS.constants import MDS, MDS_Dates, st_fld, end_fld
+from ..AOD_MDS.logic_rules.common import rule_definitions
+from .MJValidationError import MJValidationError
+from ..utils import cleanse_string, get_date_converter, has_duplicate_values
+
+from .constants import MODE_LOOSE, NOW_ORD, NOW
 
 rules = [r['rule'] for r in rule_definitions]
+
+"""
+    TODO: if TSS is being checked, include TSS rules as well
+"""
 
 '''
 Create a validation error object with the data row index, client id and error details.
@@ -27,9 +32,10 @@ header_er_lam = lambda field, miss_extra: MJValidationError(index='all',
 
 class JSONValidator(object):
 
-    def __init__(self, schema_dir, schema_file_name):        
+    def __init__(self, schema_dir, schema_file_name):
         self.validator, self.schema = JSONValidator.setup_validator(
                                                     schema_dir, schema_file_name)
+        self.logic_rules = rules
         self.slk_suggestions = {}
 
 
@@ -72,10 +78,11 @@ class JSONValidator(object):
             temp_rules = [rd['rule'] for rd in temp_rd]
         
         #try: 
-        result = [] 
-        for r in temp_rules :
-            rr = jsonLogic(r, data_row)
-            result.append(rr)
+        # result = [] 
+        # for r in temp_rules :
+        #     rr = jsonLogic(r, data_row)
+        #     result.append(rr)
+        result = [jsonLogic(r, data_row) for r in temp_rules] 
         
         #except TypeError:
         #    print(f"type erropr index: {rec_idx}  \t", data_row)
@@ -137,7 +144,7 @@ class JSONValidator(object):
         add_operation('check_slk', self.check_slk)
         
         client_eps = {}
-        for i, ep_data in enumerate(episodes):
+        for i, ep_data in enumerate(episodes):            
             JSONValidator.validate_logic(errors, ep_data, i, fn_date_converter,
                                          id_field, client_eps)
         if self.slk_suggestions:

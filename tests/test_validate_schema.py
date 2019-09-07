@@ -1,7 +1,7 @@
 import os
 import pytest
-from ..MDS_constants import MDS as M, MDS_Dates as D
-from  ..JSONValidator import JSONValidator
+from ..AOD_MDS.constants import MDS as M, MDS_Dates as D
+from ..rule_checker.JSONValidator import JSONValidator
 
 # @pytest.fixture(scope='session')
 # def headers_map():
@@ -16,7 +16,7 @@ from  ..JSONValidator import JSONValidator
 
 @pytest.fixture(scope='session')
 def json_validator():
-    schema_dir = os.path.join(os.path.dirname( __file__ ), os.pardir , 'schema/')
+    schema_dir = os.path.join(os.path.dirname( __file__ ), os.pardir , 'AOD_MDS/schema/')
     schema_file_name = os.path.realpath(os.path.join(schema_dir, 'schema.json'))
     return JSONValidator(schema_dir, schema_file_name)
 
@@ -33,14 +33,14 @@ def test_sample(json_validator):
         input = [{'ENROLLING PROVIDER': 'Tim Ireson' , 'ID':'11525','FULL NAME':'SILBY, JAYDEN','EID':'820002000','SLK581':'ILYAY111219961',
                 'DOB':'3052010','SEX':'Male','AGE':'22',
                 'Date accuracy indicator': 'AAA - Day, month and year are accurate', 'Country of birth': 'Australia',
-              'Indigenous status': 'Neither Aboriginal nor Torres Strait Islander origin', 
-              'Preferred language': 'English', 'Client type': 'Own alcohol or other drug use', 'Source of referral':'Self', 'Commencement date': '4022019', 
-              'End date': '', 'DAYS ENROLLED': '', 'Reason for cessation': '', 'Treatment delivery setting': 'Non-residential treatment facility', 
-              'Method of use for PDC': 'Sniffs (powder)', 'Injecting drug use status': 'Never injected', 'Principle drug of concern': 'Cocaine', 
-              'ODC1': '', 'ODC2': '', 'ODC3': '', 'ODC4': '', 'ODC5': '', 'Main treatment type': 'Counselling', 'OTT1': '', 'OTT2': '', 'OTT3': '',
-              'OTT4': '', 'OTT5': '', 'Postcode (Australian)': '2906', 'Living arrangements': 'Alone', 'Usual accommodation': 'Private residence', 
-              'Previous alcohol and other drug treatment received': 'No previous treatment received', 'Mental health': 'Never been diagnosed', 'DIAGNOSIS': '', 'ARCADIA': '',
-             'TREATED IN': '', 'PROGRAM': 'Counselling and Case Management', 'Surname': 'SILBY', 'First name': 'JAYDEN'}]
+                'Indigenous status': 'Neither Aboriginal nor Torres Strait Islander origin', 
+                'Preferred language': 'English', 'Client type': 'Own alcohol or other drug use', 'Source of referral':'Self', 'Commencement date': '4022019', 
+                'End date': '', 'DAYS ENROLLED': '', 'Reason for cessation': '', 'Treatment delivery setting': 'Non-residential treatment facility', 
+                'Method of use for PDC': 'Sniffs (powder)', 'Injecting drug use status': 'Never injected', 'Principle drug of concern': 'Cocaine', 
+                'ODC1': '', 'ODC2': '', 'ODC3': '', 'ODC4': '', 'ODC5': '', 'Main treatment type': 'Counselling', 'OTT1': '', 'OTT2': '', 'OTT3': '',
+                'OTT4': '', 'OTT5': '', 'Postcode (Australian)': '2906', 'Living arrangements': 'Alone', 'Usual accommodation': 'Private residence', 
+                'Previous alcohol and other drug treatment received': 'No previous treatment received', 'Mental health': 'Never been diagnosed', 'DIAGNOSIS': '', 'ARCADIA': '',
+                'TREATED IN': '', 'PROGRAM': 'Counselling and Case Management', 'Surname': 'SILBY', 'First name': 'JAYDEN'}]
     
         # input = [{'ENROLLING PROVIDER':'Tim Ireson',M['ID']:'11525',M['FNAME']:'JAYDEN', M['LNAME']: 'SILBY','EID':'820002000',M['SLK']:'ILYAY111219961',
         #     'DOB':'35410',M['SEX']:'Male','AGE':'22','DAI':'AAA',M['COB']:'Australia',M['ATSI']:'Neither Aboriginal nor TSI',
@@ -62,7 +62,13 @@ def test_sample(json_validator):
         #         {'index': 0, 'cid': '11525', 'required': 'Private residence', 'got': 'Private Residence'}, 
         #         {'index': 0, 'cid': '11525', 'required': 'No previous treatment received', 'got': 'No treatment'}]
                 
-                
-        print(errors)
+        expected = [
+            {'index': 0, 'cid': '11525', 'etype': 'required', 'field': '<>', 'message': "'SLK 581' is a required property"},
+            {'index': 0, 'cid': '11525', 'etype': 'required', 'field': '<>', 'message': "'Sex' is a required property"},
+            {'index': 0, 'cid': '11525', 'etype': 'logic', 'field': 'SLK 581', 'message': 'ILYAY030520109'}
+          ]        
+        assert errors[0] == expected
+        
         #print()
         # print()
+

@@ -1,0 +1,310 @@
+INFO:__main__:
+ 		 ...End of validation... 
+		 Processing time 0.29 seconds. 
+INFO:__main__:
+
+ 		 ...Writing results to spreadsheet..
+
+INFO:__main__:
+ 		 ...End of Program...
+
+2019-08-25 20:00:15,301 : INFO : __main__ : 
+	 ...End of validation... 
+	 Processing time 0.28 seconds. 
+2019-08-25 20:00:15,301 : INFO : __main__ : 	 ...Writing results to spreadsheet..
+
+2019-08-25 20:00:18,777 : INFO : __main__ : 	 ...End of Program...
+
+2019-08-25 20:07:46,543 : INFO : input\Final-Day.csv : 
+	 ...End of validation... 
+	 Processing time 0.36 seconds. 
+2019-08-25 20:07:46,544 : INFO : input\Final-Day.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-25 20:07:51,299 : INFO : input\Final-Day.csv : 	 ...End of Program...
+
+2019-08-25 20:35:50,531 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 
+	 ...End of validation... 
+	 Processing time 1.27 seconds. 
+2019-08-25 20:35:50,533 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-25 20:35:57,675 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 	 ...End of Program...
+
+2019-08-25 20:36:46,259 : INFO : input\Final-Day.csv : 
+	 ...End of validation... 
+	 Processing time 0.3 seconds. 
+2019-08-25 20:36:46,260 : INFO : input\Final-Day.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-25 20:36:49,721 : INFO : input\Final-Day.csv : 	 ...End of Program...
+
+2019-08-25 20:39:28,579 : INFO : input\Final-Day.csv : 
+	 ...End of validation... 
+	 Processing time 0.29 seconds. 
+2019-08-25 20:39:28,579 : INFO : input\Final-Day.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-25 20:39:31,228 : INFO : input\Final-Day.csv : 	 ...End of Program...
+
+2019-08-25 20:54:36,477 : INFO : input\Final-Day.csv : 
+	 ...End of validation... 
+	 Processing time 0.29 seconds. 
+2019-08-25 20:54:36,477 : INFO : input\Final-Day.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-25 20:54:39,378 : INFO : input\Final-Day.csv : 	 ...End of Program...
+
+2019-08-25 20:58:38,723 : INFO : input\Final-Day.csv : 
+	 ...End of validation... 
+	 Processing time 0.3 seconds. 
+2019-08-25 20:58:38,724 : INFO : input\Final-Day.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-25 20:58:41,506 : INFO : input\Final-Day.csv : 	 ...End of Program...
+
+2019-08-25 21:05:00,065 : INFO : input\Final-Day.csv : 
+	 ...End of validation... 
+	 Processing time 0.3 seconds. 
+2019-08-25 21:05:00,066 : INFO : input\Final-Day.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-25 21:05:02,757 : INFO : input\Final-Day.csv : 	 ...End of Program...
+
+2019-08-25 21:06:47,647 : INFO : input\Final-Day.csv : 
+	 ...End of validation... 
+	 Processing time 0.29 seconds. 
+2019-08-25 21:06:47,647 : INFO : input\Final-Day.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-25 21:06:50,395 : INFO : input\Final-Day.csv : 	 ...End of Program...
+
+2019-08-25 21:10:20,788 : INFO : input\Final-Day.csv : 
+	 ...End of validation... 
+	 Processing time 0.29 seconds. 
+2019-08-25 21:10:20,788 : INFO : input\Final-Day.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-25 21:10:23,440 : INFO : input\Final-Day.csv : 	 ...End of Program...
+
+2019-08-25 21:13:49,566 : INFO : input\Final-Day.csv : 
+	 ...End of validation... 
+	 Processing time 0.29 seconds. 
+2019-08-25 21:13:49,566 : INFO : input\Final-Day.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-25 21:13:52,256 : INFO : input\Final-Day.csv : 	 ...End of Program...
+
+2019-08-25 21:20:04,006 : INFO : input\Final-Day.csv : 
+	 ...End of validation... 
+	 Processing time 0.28 seconds. 
+2019-08-25 21:20:04,006 : INFO : input\Final-Day.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-25 21:20:06,618 : INFO : input\Final-Day.csv : 	 ...End of Program...
+
+2019-08-25 21:38:19,548 : INFO : input\Final-Day.csv : 
+	 ...End of validation... 
+	 Processing time 0.29 seconds. 
+2019-08-25 21:38:19,548 : INFO : input\Final-Day.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-25 21:38:22,391 : INFO : input\Final-Day.csv : 	 ...End of Program...
+
+2019-08-25 21:42:21,139 : INFO : input\Final-Day.csv : 
+	 ...End of validation... 
+	 Processing time 0.29 seconds. 
+2019-08-25 21:42:21,139 : INFO : input\Final-Day.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-25 21:42:23,975 : INFO : input\Final-Day.csv : 	 ...End of Program...
+
+2019-08-25 21:42:34,109 : INFO : input\Final-Day.csv : 
+	 ...End of validation... 
+	 Processing time 0.28 seconds. 
+2019-08-25 21:42:34,109 : INFO : input\Final-Day.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-25 21:42:36,793 : INFO : input\Final-Day.csv : 	 ...End of Program...
+
+2019-08-25 22:03:30,629 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : mode >>>>>>>>>>>>>>>>>>>>>>  False
+2019-08-25 22:03:31,796 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 
+	 ...End of validation... 
+	 Processing time 1.17 seconds. 
+2019-08-25 22:03:31,797 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-25 22:03:36,808 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 	 ...End of Program...
+
+2019-08-25 22:13:25,813 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : mode >>>>>>>>>>>>>>>>>>>>>>  False
+2019-08-25 22:13:27,010 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 
+	 ...End of validation... 
+	 Processing time 1.2 seconds. 
+2019-08-25 22:13:27,010 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-25 22:13:52,128 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : mode >>>>>>>>>>>>>>>>>>>>>>  False
+2019-08-25 22:13:53,366 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 
+	 ...End of validation... 
+	 Processing time 1.24 seconds. 
+2019-08-25 22:13:53,366 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-25 22:13:59,925 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 	 ...End of Program...
+
+2019-08-25 22:14:40,014 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : mode >>>>>>>>>>>>>>>>>>>>>>  False
+2019-08-25 22:14:40,845 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 
+	 ...End of validation... 
+	 Processing time 0.83 seconds. 
+2019-08-25 22:14:40,845 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-25 22:14:45,807 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 	 ...End of Program...
+
+2019-08-25 22:21:51,225 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : mode >>>>>>>>>>>>>>>>>>>>>>  False
+2019-08-25 22:21:52,064 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 
+	 ...End of validation... 
+	 Processing time 0.84 seconds. 
+2019-08-25 22:21:52,064 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-25 22:21:57,061 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 	 ...End of Program...
+
+2019-08-25 22:27:06,476 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 
+	 ...End of validation... 
+	 Processing time 0.85 seconds. 
+2019-08-25 22:27:06,476 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-25 22:27:11,300 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 	 ...End of Program...
+
+2019-08-25 22:50:58,429 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 
+	 ...End of validation... 
+	 Processing time 0.83 seconds. 
+2019-08-25 22:50:58,429 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-25 22:51:03,251 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 	 ...End of Program...
+
+2019-08-25 22:52:13,707 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 
+	 ...End of validation... 
+	 Processing time 0.82 seconds. 
+2019-08-25 22:52:13,707 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-25 22:52:18,613 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 	 ...End of Program...
+
+2019-08-25 23:39:27,845 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 
+	 ...End of validation... 
+	 Processing time 0.83 seconds. 
+2019-08-25 23:39:27,845 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-25 23:39:31,708 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 	 ...End of Program...
+
+2019-08-25 23:46:29,252 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 
+	 ...End of validation... 
+	 Processing time 1.17 seconds. 
+2019-08-25 23:46:29,252 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-25 23:46:34,414 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 	 ...End of Program...
+
+2019-08-25 23:48:48,905 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 
+	 ...End of validation... 
+	 Processing time 1.16 seconds. 
+2019-08-25 23:48:48,905 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-25 23:48:53,776 : INFO : input\2019.08.23 TSS AMDS Full unchecked.csv : 	 ...End of Program...
+
+2019-08-27 10:38:12,432 : CRITICAL : input\Tara-Jan-June2019.csv : Missing Headers  [ index:all  id:all  type:field  field:Usual accommodation  message:missing field,  index:all  id:all  type:field  field:Living arrangements  message:missing field,  index:all  id:all  type:field  field:Reason for cessation  message:missing field,  index:all  id:all  type:field  field:OTT5  message:missing field] 
+ warnings {'PID': 'ID', 'Date of birth': 'DOB', 'Date accuracy indicator (for DoB)': 'Date accuracy indicator', 'Postcode - Australian': 'Postcode (Australian)', 'Commencement Date': 'Commencement date', 'Method of use for principal drug of concern': 'Method of use for PDC', 'Injecting drug status': 'Injecting drug use status', 'PDC': 'Principle drug of concern', 'Main treatment type (MTT)': 'Main treatment type', 'Previous AOD treatment': 'Previous alcohol and other drug treatment received', 'Mental health (Diagnosed with a mental illness)': 'Mental health'}
+2019-08-27 10:52:26,659 : INFO : input\Tara-Jan-June2019.csv : 
+	 ...End of validation... 
+	 Processing time 0.32 seconds. 
+2019-08-27 10:52:26,659 : INFO : input\Tara-Jan-June2019.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-27 10:52:30,795 : INFO : input\Tara-Jan-June2019.csv : 	 ...End of Program...
+
+2019-08-27 11:16:00,595 : INFO : input\Tara-Jan-June2019.csv : 
+	 ...End of validation... 
+	 Processing time 0.32 seconds. 
+2019-08-27 11:16:00,595 : INFO : input\Tara-Jan-June2019.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-27 11:16:04,031 : INFO : input\Tara-Jan-June2019.csv : 	 ...End of Program...
+
+2019-08-27 11:18:43,920 : INFO : input\Tara-Jan-June2019.csv : 
+	 ...End of validation... 
+	 Processing time 0.32 seconds. 
+2019-08-27 11:18:43,920 : INFO : input\Tara-Jan-June2019.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-27 11:18:47,363 : INFO : input\Tara-Jan-June2019.csv : 	 ...End of Program...
+
+2019-08-27 14:35:23,835 : INFO : input\Ali-NoNamesRemoved.csv : 
+	 ...End of validation... 
+	 Processing time 0.47 seconds. 
+2019-08-27 14:35:23,835 : INFO : input\Ali-NoNamesRemoved.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-27 14:35:27,399 : INFO : input\Ali-NoNamesRemoved.csv : 	 ...End of Program...
+
+2019-08-27 14:46:45,853 : INFO : input\Ali-NoNamesRemoved.csv : 
+	 ...End of validation... 
+	 Processing time 0.47 seconds. 
+2019-08-27 14:46:45,853 : INFO : input\Ali-NoNamesRemoved.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-27 14:46:49,463 : INFO : input\Ali-NoNamesRemoved.csv : 	 ...End of Program...
+
+2019-08-27 14:58:04,503 : INFO : input\Ali-NoNamesRemoved.csv : 
+	 ...End of validation... 
+	 Processing time 0.47 seconds. 
+2019-08-27 14:58:04,503 : INFO : input\Ali-NoNamesRemoved.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-27 14:58:08,348 : INFO : input\Ali-NoNamesRemoved.csv : 	 ...End of Program...
+
+2019-08-27 15:16:39,110 : INFO : input\Ali-NoNamesRemoved.csv : 
+	 ...End of validation... 
+	 Processing time 0.47 seconds. 
+2019-08-27 15:16:39,110 : INFO : input\Ali-NoNamesRemoved.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-27 15:16:42,987 : INFO : input\Ali-NoNamesRemoved.csv : 	 ...End of Program...
+
+2019-08-27 15:25:28,176 : INFO : input\Ali-NoNamesRemoved.csv : 
+	 ...End of validation... 
+	 Processing time 0.47 seconds. 
+2019-08-27 15:25:28,176 : INFO : input\Ali-NoNamesRemoved.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-27 15:25:32,126 : INFO : input\Ali-NoNamesRemoved.csv : 	 ...End of Program...
+
+2019-08-27 15:28:34,071 : INFO : input\Ali-NoNamesRemoved.csv : 
+	 ...End of validation... 
+	 Processing time 0.46 seconds. 
+2019-08-27 15:28:34,071 : INFO : input\Ali-NoNamesRemoved.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-27 15:28:38,010 : INFO : input\Ali-NoNamesRemoved.csv : 	 ...End of Program...
+
+2019-08-27 15:31:14,503 : INFO : input\Ali-NoNamesRemoved.csv : 
+	 ...End of validation... 
+	 Processing time 0.46 seconds. 
+2019-08-27 15:31:14,503 : INFO : input\Ali-NoNamesRemoved.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-27 15:31:18,351 : INFO : input\Ali-NoNamesRemoved.csv : 	 ...End of Program...
+
+2019-08-27 16:17:36,059 : CRITICAL : input\althea-noname.csv : Missing Headers  [ index:all  id:all  type:field  field:OTT5  message:missing field] 
+ warnings {'PID': 'ID', 'Firstname': 'First name', 'Date of birth': 'DOB', 'Date accuracy indicator (for DoB)': 'Date accuracy indicator', 'Postcode - Australian': 'Postcode (Australian)', 'Usual accommodation type': 'Usual accommodation', 'Commencement Date': 'Commencement date', 'Method of use for principal drug of concern': 'Method of use for PDC', 'Injecting drug status': 'Injecting drug use status', 'PDC': 'Principle drug of concern', 'Main treatment type (MTT)': 'Main treatment type', 'Previous AOD treatment': 'Previous alcohol and other drug treatment received', 'Mental health (Diagnosed with a mental illness)': 'Mental health'}
+2019-08-27 16:18:08,803 : INFO : input\althea-noname.csv : 
+	 ...End of validation... 
+	 Processing time 0.29 seconds. 
+2019-08-27 16:18:08,803 : INFO : input\althea-noname.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-27 16:18:12,461 : INFO : input\althea-noname.csv : 	 ...End of Program...
+
+2019-08-27 16:37:18,006 : INFO : input\arcadia-resi-3new-rows.csv : 
+	 ...End of validation... 
+	 Processing time 0.3 seconds. 
+2019-08-27 16:37:18,006 : INFO : input\arcadia-resi-3new-rows.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-27 16:37:20,805 : INFO : input\arcadia-resi-3new-rows.csv : 	 ...End of Program...
+
+2019-08-28 13:37:29,495 : CRITICAL : input\2019.08.28 TSS AMDS Full unchecked.csv : Missing Headers  [ index:all  id:all  type:field  field:OTT5  message:missing field] 
+ warnings {'PAT ID': 'ID', 'SLK581': 'SLK 581', 'SEX': 'Sex', 'DOB ACCURACY': 'Date accuracy indicator', 'COUNTRY': 'Country of birth', 'INDIG STATUS': 'Indigenous status', 'LANGUAGE': 'Preferred language', 'CLIENT': 'Client type', 'SOURCE': 'Source of referral', 'ENROLMENT': 'Commencement date', 'DISCHARGE': 'End date', 'CESSATION': 'Reason for cessation', 'SETTING': 'Treatment delivery setting', 'USE': 'Method of use for PDC', 'INJECTION': 'Injecting drug use status', 'DRUG': 'Principle drug of concern', 'TREAT': 'Main treatment type', 'POSTCODE': 'Postcode (Australian)', 'LIVING': 'Living arrangements', 'ACCOM': 'Usual accommodation', 'PREVIOUS TREATMENT': 'Previous alcohol and other drug treatment received', 'MENTAL HEALTH': 'Mental health'}
+2019-08-28 13:41:56,639 : INFO : input\2019.08.28 TSS AMDS Full unchecked.csv : 
+	 ...End of validation... 
+	 Processing time 0.84 seconds. 
+2019-08-28 13:41:56,639 : INFO : input\2019.08.28 TSS AMDS Full unchecked.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-28 13:42:01,636 : INFO : input\2019.08.28 TSS AMDS Full unchecked.csv : 	 ...End of Program...
+
+2019-08-28 14:08:05,586 : CRITICAL : input\2019.08.28 TSS AMDS Full.csv : Missing Headers  [ index:all  id:all  type:field  field:OTT5  message:missing field] 
+ warnings {'PAT ID': 'ID', 'SLK581': 'SLK 581', 'SEX': 'Sex', 'DOB ACCURACY': 'Date accuracy indicator', 'COUNTRY': 'Country of birth', 'INDIG STATUS': 'Indigenous status', 'LANGUAGE': 'Preferred language', 'CLIENT': 'Client type', 'SOURCE': 'Source of referral', 'ENROLMENT': 'Commencement date', 'DISCHARGE': 'End date', 'CESSATION': 'Reason for cessation', 'SETTING': 'Treatment delivery setting', 'USE': 'Method of use for PDC', 'INJECTION': 'Injecting drug use status', 'DRUG': 'Principle drug of concern', 'TREAT': 'Main treatment type', 'POSTCODE': 'Postcode (Australian)', 'LIVING': 'Living arrangements', 'ACCOM': 'Usual accommodation', 'PREVIOUS TREATMENT': 'Previous alcohol and other drug treatment received', 'MENTAL HEALTH': 'Mental health'}
+2019-08-28 14:08:14,045 : CRITICAL : input\2019.08.28 TSS AMDS Full.csv : Missing Headers  [ index:all  id:all  type:field  field:OTT5  message:missing field] 
+ warnings {'PAT ID': 'ID', 'SLK581': 'SLK 581', 'SEX': 'Sex', 'DOB ACCURACY': 'Date accuracy indicator', 'COUNTRY': 'Country of birth', 'INDIG STATUS': 'Indigenous status', 'LANGUAGE': 'Preferred language', 'CLIENT': 'Client type', 'SOURCE': 'Source of referral', 'ENROLMENT': 'Commencement date', 'DISCHARGE': 'End date', 'CESSATION': 'Reason for cessation', 'SETTING': 'Treatment delivery setting', 'USE': 'Method of use for PDC', 'INJECTION': 'Injecting drug use status', 'DRUG': 'Principle drug of concern', 'TREAT': 'Main treatment type', 'POSTCODE': 'Postcode (Australian)', 'LIVING': 'Living arrangements', 'ACCOM': 'Usual accommodation', 'PREVIOUS TREATMENT': 'Previous alcohol and other drug treatment received', 'MENTAL HEALTH': 'Mental health'}
+2019-08-28 14:08:41,773 : INFO : input\2019.08.28 TSS AMDS Full.csv : 
+	 ...End of validation... 
+	 Processing time 1.09 seconds. 
+2019-08-28 14:08:41,773 : INFO : input\2019.08.28 TSS AMDS Full.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-28 14:08:49,228 : INFO : input\2019.08.28 TSS AMDS Full.csv : 	 ...End of Program...
+
+2019-08-28 14:09:46,814 : INFO : input\2019.08.28 TSS AMDS Full.csv : 
+	 ...End of validation... 
+	 Processing time 0.79 seconds. 
+2019-08-28 14:09:46,814 : INFO : input\2019.08.28 TSS AMDS Full.csv : 	 ...Writing results to spreadsheet..
+
+2019-08-28 14:09:52,816 : INFO : input\2019.08.28 TSS AMDS Full.csv : 	 ...End of Program...
+
