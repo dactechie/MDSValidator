@@ -1,4 +1,19 @@
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
+
+
+def in_period_date(period: dict, ep_start: datetime) -> bool:
+  return ep_start <=  period['end']
+
+
+def inperiod(period: dict, ep_start: datetime, ep_end: datetime) -> bool:
+  return period['start'] <= ep_start <=  ep_end <=  period['end']
+
+
+def get_period_dict(start_date: datetime, period_months=3) -> datetime :
+  end_date =  start_date + relativedelta(months=+period_months) - relativedelta(days=+1)
+  return  {'start': start_date, 'end': end_date }
+
 
 def str_to_date(str):
     """
@@ -7,13 +22,13 @@ def str_to_date(str):
     """
     pass
 
-
+## 
+#  MJ  4/11/2019  - Ordinal date conversion for jsonLogic ??
 def get_date_converter(sample_date_str):
     """
     Converts date strings to ordinal integers
     """
     if sample_date_str.find('/') == -1:
-        # if date_str.find('/') != -1: # 1/1/2019
         return lambda date_str: datetime.strptime(date_str,"%d%m%Y").toordinal()
     else:
         return lambda date_str: datetime.strptime(date_str,"%d/%m/%Y").toordinal()
@@ -25,4 +40,4 @@ def get_datestring_from_ordinal(ordinal_date, dtformat='%d%m%Y'):
     return datetime.fromordinal(ordinal_date).strftime(dtformat)
 
 def now_string():
-    return datetime.now().strftime('%Y-%m-%d-%H-%M')
+    return datetime.now().strftime('_%d-%H-%M')

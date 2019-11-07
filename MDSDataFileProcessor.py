@@ -1,6 +1,7 @@
 import os
 import sys
 from time import time
+from datetime import datetime
 import click
 
 from logger import logger
@@ -9,7 +10,9 @@ from rule_checker.JSONValidator import JSONValidator
 from rule_checker.MJValidationError import MJValidationError
 from utils.ExcelWriter import write_data_to_book
 from utils.files import get_latest_data_file, get_result_filename
+from utils.dates import get_period_dict
 from rule_checker.constants import MODE_LOOSE
+#import pprint
 
 """
     This module is to be made responsible for being the engine for orchestrating, the processing of incoming JSON data.
@@ -22,10 +25,10 @@ from rule_checker.constants import MODE_LOOSE
         then return the path to the new .xlsx to the user.
 """
 
-def get_json_validator(schema_dir_name, schema_file_name, program=''):
+def get_json_validator(start_end, schema_dir_name, schema_file_name, program=''):
     schema_dir = os.path.join(os.getcwd(), schema_dir_name)
     schema_file = os.path.realpath(os.path.join(schema_dir, schema_file_name))
-    return JSONValidator(schema_dir, schema_file, program=program)
+    return JSONValidator(schema_dir, schema_file, start_end, program=program) 
 
 
 def get_valid_header_or_die(filename, validator, mode):
@@ -39,9 +42,9 @@ def get_valid_header_or_die(filename, validator, mode):
     return fixed_header, header_warnings
 
 
-def get_data_or_die(filename, mds_header, hmap, all_eps=None):
+def get_data_or_die(filename, mds_header, hmap, start_end, all_eps=None):
 
-    data = read_data(filename, mds_header, hmap, all_eps=all_eps)
+    data = read_data(filename, mds_header, hmap, start_end, all_eps=all_eps)
     if not data or not data['episodes'] or len(data['episodes']) < 1 :
         logger.critical("No data. Quitting...")
         sys.exit(0)
@@ -52,57 +55,77 @@ def get_data_or_die(filename, mds_header, hmap, all_eps=None):
 
 @click.command()
 @click.option('--data_file', '-d',
-              help='Default: use the latest .csv file in the input folder.',
-              show_default=True)
+              help='Default: use the latest .csv file in the input folder.')
 @click.option('--all_eps/--closed_only', '-a/-c', default=True,
               help='Validate only closed episodes. Default is to validate all episodes',
               show_default=True)
 @click.option('--nostrict/--strict', '-s/-S', default=False,
               help='Accept/Reject imperfect data files with known aliases.' +
                    '\n1: reject (flag as errors)', show_default=True)
-@click.option('--errors_only', '-e', help='Output only the rows with errors.',
-                show_default=True)
-@click.option('--program', '-p', type=click.Choice(['TSS', 'Other']),
+@click.option('--errors_only', '-e', help='Output only the rows with errors.', default=True,
+                show_default=True, type=click.BOOL)
+@click.option('--start_date', '-t', type=click.DateTime(formats=["%Y-%m-%d"]),
+              help='The number of the starting month of the reporting period . Eg.: 2019-07-01',
+              required=False)
+@click.option('--program', '-p', type=click.Choice(['TSS', 'Arcadia-Resi', 'Other']),
               help='Some logic rules are specific to a team.' + \
                     'Default setting is to just apply just MDS rules.',
               default='TSS', show_default=True)
-def main(data_file, all_eps, nostrict, errors_only, program=''):
-    exe(data_file, all_eps, nostrict, errors_only, program=program)
+@click.option('--reporting_period', '-r', type=click.Choice(["12", "6", "3", "1"]),
+              help='reporting period window.',
+              default="3", show_default=True)
+def main(data_file, all_eps, nostrict, errors_only, start_date, program='', reporting_period="3"):
+  if not start_date:
+    logger.error("Start Date is required. Quitting")
+    sys.exit()
+
+  FILENAME = None
+  if not data_file or data_file =='None':
+      FILENAME = get_latest_data_file()
+  else:
+      FILENAME =  os.path.join('input', data_file)
+  
+  if not FILENAME:
+      logger.error("No input file. Quitting.")
+      sys.exit()
+  
+  print(f"\t ***** Going to process {FILENAME} \n")
+
+  exe(FILENAME, all_eps, nostrict, errors_only, start_date, program=program, period=reporting_period)
+  
+  logger.info("\t ...End of Program...\n")
 
 
-def exe(data_file, all_eps, nostrict, errors_only, program=''):
-    FILENAME = None
-    if not data_file or data_file =='None':
-        FILENAME = get_latest_data_file()
-    else:
-        FILENAME =  os.path.join('input', data_file)
-    
-    if not FILENAME:
-        logger.error("No input file. Quitting.")
-        sys.exit()
 
-    start_time = time()
+def exe(data_file, all_eps, nostrict, errors_only, start_date, program='', period="3"):
+  
+  start_time = time()
+ 
+  st_ed = get_period_dict(start_date, period_months=int(period))
 
-    jv = get_json_validator(schema_dir_name='AOD_MDS/schema/',
-                            schema_file_name='schema.json',
-                            program=program)
-    
-    mds_header, header_warnings = get_valid_header_or_die(FILENAME, validator=jv, mode=nostrict)
-    data = get_data_or_die(FILENAME, mds_header,  header_warnings, all_eps=all_eps)
-    
-    verrors, warnings =  jv.validate(data, mode=nostrict)
-    
-    end_time = time()
-    #log_results(verrors, warnings, header_warnings)
-    logger.info(f"\n\t ...End of validation... \n\t Processing time {round(end_time - start_time,2)} seconds. ")
-    
-    logger.info("\t ...Writing results to spreadsheet..\n")    
-    result_book = write_data_to_book(data['episodes'], verrors,
-                                     get_result_filename(FILENAME, all_eps), errors_only)
-    logger.info("\t ...End of Program...\n")
-    return result_book
+  jv = get_json_validator(st_ed, schema_dir_name='AOD_MDS/schema/',
+                          schema_file_name='schema.json',                          
+                          program=program)
+  
+  mds_header, header_warnings = get_valid_header_or_die(data_file, validator=jv, mode=nostrict)
+  
+  
+  data = get_data_or_die(data_file, mds_header, header_warnings, st_ed, all_eps=all_eps)
+  
+  verrors, warnings =  jv.validate(data, mode=nostrict)
+  
+  end_time = time()
+  #log_results(verrors, warnings, header_warnings)
+  logger.info(f"\n\t ...End of validation... \n\t Processing time {round(end_time - start_time,2)} seconds. ")
+  
+  #pprint.pprint (verrors)
+  logger.info("\t ...Writing results to spreadsheet..\n")    
+  result_book = write_data_to_book(data['episodes'], verrors,
+                                    get_result_filename(data_file, all_eps, st_ed, program), errors_only)
+  
+  return result_book
 
 
 if __name__ == '__main__':
-    main()
-    #sys.exit(main(sys.argv))
+    #main()
+    sys.exit(main(sys.argv[1:]))

@@ -2,14 +2,17 @@ import copy
 import csv
 
 from .aliases import mds_aliases
-from .constants import MDS, end_fld, st_fld
+from .constants import MDS, MDS_END_FLD, MDS_ST_FLD, MDS_Dates
 from rule_checker.constants import MODE_LOOSE, NOW, NOW_ORD
 from rule_checker.field_lists import (involved_field_sets,
                                       rd_with_involved_fields,
                                       rd_wo_involved_fields)
 from utils import (get_23, get_235, cleanse_string,
-                         get_datestring_from_ordinal, remove_unicode)
+                         get_datestring_from_ordinal, remove_unicode,
+                         isin_dicts_array)
+from utils.dates import inperiod, in_period_date
 from logger import logger
+from AOD_MDS.logic_rules.method_of_use_matrix import drug_usage
 
 '''
 Input data file may not have the exact spelling/case as the official MDS fields
@@ -47,7 +50,8 @@ v_warn_lam = lambda rec_idx, cid, required, got: {
 
 headers_map = alias_map_lam(mds_aliases['headers'])
 fvalues_map = alias_map_lam(mds_aliases['fieldValues'])
-val_translation_excluded_fields = ["ENROLLING PROVIDER", "EID", MDS["ID"], MDS["DOB"], MDS["PCODE"], MDS["SLK"] ]
+val_translation_excluded_fields = ["ENROLLING PROVIDER", "EID", 
+                                   MDS["ID"], MDS["DOB"], MDS["PCODE"], MDS["SLK"] ]
 
 
 def read_header(filename: str) -> list:
@@ -56,42 +60,66 @@ def read_header(filename: str) -> list:
         headers[-1] = headers[-1].strip('\n')
         return headers
 
-#def fix_headers(headers):
+
+def is_valid_drug_use(drug_name:str, method_of_use:str) -> bool:
+  return isin_dicts_array(drug_usage, drug_name, method_of_use)
+  
+
+def can_process_withdates(period_st_ed, ep_start, ep_end, 
+                          date_conversion_errors, open_and_closed_eps=False):
+  
+  error_field = next((dce for dce in date_conversion_errors 
+                      if dce['field'] in (MDS_ST_FLD, MDS_END_FLD)), None)
+  if error_field:
+    logger.error("error in a date field, skipping row  " + error_field)
+    return False
+
+  if open_and_closed_eps:
+    if not ep_end :
+      return in_period_date(period_st_ed, ep_start)
+  elif not ep_end: # closed episodes only, but passed-in data had no closed date
+    logger.error(f"End date was blank, skipping row . Ep start date: {ep_start}")
+    return False
+  
+  return inperiod(period_st_ed, ep_start, ep_end)
+    
+
+def _split_fullname(reader) -> list:
+  data_dicts = []
+  for i, r in enumerate(reader):
+    if  "".join(r.values()) == '':
+        logger.error(f"\n\tFound Blank row at {i}. Quitting...")
+        return None
+    row = copy.deepcopy(r)
+    if row.get("FULL NAME"):              
+        row[MDS['LNAME']], row[MDS['FNAME']]  = str.split(row["FULL NAME"], ", ")
+        del row["FULL NAME"]
+    
+    data_dicts.append(row)
+
+  return data_dicts
 
 # TODO clean this up (use a generator)
-def read_data(filename: str, data_header: dict, hmap: dict, all_eps=True) -> dict:
+def read_data(filename: str, data_header: dict, hmap: dict, 
+                             start_end: dict, all_eps=True) -> dict:
     """
     - Assumes that if a "FULL NAME" column exists, all rows will have a format of
         'LastName, FirstName'.
     - Sometimes the header may have unicode (special) characters, cleans before use.
     - hmap is a map of the header fields with official MDS translations,
         where cleansing was required.
+    - all_eps == False => Closed eps only
     """
     #data_header = fix_headers(data_header)
     with open(filename, 'r') as csvfile:
         csvfile.readline()
-        
-        # translate headers
-        #  map data_header + clean  values into reader.fieldnames
         reader = csv.DictReader(csvfile, data_header)
-        #reader.fieldnames = data_header
-        data_dicts = []
-
+        
         if MDS['FNAME'] not in data_header and "FULL NAME" in data_header:
-            for i, r in enumerate(reader):
-                if not all_eps and r[MDS['END_DATE']] == '':
-                    continue
-                if  "".join(r.values()) == '':
-                    logger.error(f"\n\tFound Blank row at {i}. Quitting...")
-                    return None
-                row = copy.deepcopy(r)
-                if row.get("FULL NAME"):              
-                    row[MDS['LNAME']], row[MDS['FNAME']]  = str.split(row["FULL NAME"], ", ")
-                    del row["FULL NAME"]
-                data_dicts.append(row)
-            reader = data_dicts
-            data_header.remove("FULL NAME")
-            data_header.extend([MDS['FNAME'], MDS['LNAME']])
+          rows = _split_fullname(reader)           
+          reader = rows
+          data_header.remove("FULL NAME")
+          data_header.extend([MDS['FNAME'], MDS['LNAME']])
         
         clean_headers = {dh: remove_unicode(dh) for dh in data_header}
         # [ch for ch in clean_headers.values() if ch in data_header] == data_header
@@ -100,12 +128,14 @@ def read_data(filename: str, data_header: dict, hmap: dict, all_eps=True) -> dic
         result = []
         ii = 0
         for i, row in enumerate(reader):
-            if not all_eps and row[MDS['END_DATE']] == '':
-                continue
             if  "".join(row.values()) == '':
-                logger.error(f"\n\tFound Blank row at {i}. Quitting...")
-                return None
-            result.append({})            
+              logger.error(f"\n\tFound Blank row at {i}. skipping to next row...")
+              continue
+
+            if not all_eps and not row[MDS['END_DATE']]:
+              continue
+
+            result.append({})
             for k, v in row.items():
                 tmp_k = clean_headers[k]
                 # if tmp_k in hmap:
@@ -200,27 +230,30 @@ def remove_vrules(error_fields):
 
 
 def prep_and_check_overlap(data_row, client_eps, errors, rec_idx, date_error_fields):
-    if not ((MDS['COMM_DATE'] in date_error_fields) or (MDS['END_DATE'] in date_error_fields)):
+    if not ((MDS['COMM_DATE'] in date_error_fields) 
+                              or (MDS['END_DATE'] in date_error_fields)):
         cid = data_row[MDS['ID']]
-        ep_dates_obj = { st_fld: data_row[st_fld],
+        ep_dates_obj = { MDS_ST_FLD: data_row[MDS_ST_FLD],
                             MDS['COMM_DATE']: data_row[MDS['COMM_DATE']], 
                             'idx': rec_idx }
-        if end_fld in data_row:
-            ep_dates_obj[end_fld] = data_row[end_fld]
+        if MDS_END_FLD in data_row:
+            ep_dates_obj[MDS_END_FLD] = data_row[MDS_END_FLD]
             ep_dates_obj[MDS['END_DATE']] = data_row[MDS['END_DATE']]
 
         else: #end date is blank, use current date  as end date to check overlap ?
-            ep_dates_obj[end_fld] = NOW_ORD
+            ep_dates_obj[MDS_END_FLD] = NOW_ORD
             ep_dates_obj[MDS['END_DATE']] = NOW
 
         if (cid in client_eps): # any(client_eps.get(cid, [])):
             client_eps[cid].append(ep_dates_obj)
-            check_overlap(data_row, client_eps[cid], errors, rec_idx, st_fld=st_fld, end_fld=end_fld)
+            check_overlap(data_row, client_eps[cid], errors, rec_idx, 
+                          st_fld=MDS_ST_FLD, end_fld=MDS_END_FLD)
         else:
             client_eps[cid] = [ep_dates_obj]
 
 
-def check_overlap(current_ep, client_eps, errors, rec_idx, st_fld=MDS["COMM_DATE"], end_fld=MDS["END_DATE"]):
+def check_overlap(current_ep, client_eps, errors, rec_idx,
+                  st_fld=MDS["COMM_DATE"], end_fld=MDS["END_DATE"]):
 
     start_date = client_eps[-1] [st_fld]
     end_date = client_eps[-1][end_fld]   # current_ep[end_fld]
@@ -249,7 +282,8 @@ def check_overlap(current_ep, client_eps, errors, rec_idx, st_fld=MDS["COMM_DATE
 def add_error_obj(errors, e, dataObj, id_field):
     path = e.path
     row = path[1]
-    error_obj = {"index": row, "cid": dataObj['episodes'][row][id_field], "etype": e.validator}
+    error_obj = {"index": row, "cid": dataObj['episodes'][row][id_field],
+                               "etype": e.validator}
     
     if len(path) > 2:
         error_obj["field"]   = path[2]
@@ -303,7 +337,7 @@ def compile_logic_errors(result, rule_defs, data_row, rec_idx, id_field, date_co
     rule_errors = [v_er_lam(rule_i, rule_defs, rec_idx, data_row[id_field]) for rule_i in idxes]
     if rule_errors: 
         if date_conversion_errors:
-            rule_errors.extend(date_conversion_errors) #return [*rule_errors, *date_conversion_errors]
+            rule_errors.extend(date_conversion_errors)
         return rule_errors
 
     return date_conversion_errors
@@ -326,13 +360,13 @@ def getSLK(firstname, lastname, DOB_str, sex_str):
     else:
         sex_str = '9'   # TODO    'if not unknown, add a Warning ?'
     
-    return name_part + DOB_str.replace("/","") + sex_str
+    return name_part + DOB_str.replace("/","") + sex_str # .replace("/","")
 
 
 def log_results(verrors, warnings, header_warnings):
     
     logger.info(f"\n {10*'-'}   Errors {10*'-'}")
-    for k, v in verrors.items():
+    for v in verrors.values():
         logger.info(v)
         logger.info("")
 

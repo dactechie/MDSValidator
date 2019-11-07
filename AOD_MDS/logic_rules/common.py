@@ -12,18 +12,26 @@ rule_definitions = [
             ]}
   },
   {
-    "message": M['METHOD'] + " must make sense with PDC.",
-    "field": M['METHOD'],
+    "message": f"{M['METHOD']}  must make sense with PDC.",
+    "field":  M['METHOD'],
     "type" : "Error",
-    "rule": {"if": [ # Rule #3
-                {"!": {"and": [
-                            {"==": [{"var": M['PDC']}, "Ethanol" ]},
-                            {"!==": [{"var": M['METHOD']}, "Ingests"]} 
-                          ] 
-                  }},
-              True
-            ]}
+    "rule": #{"!": 
+        {"is_valid_drug_use": [{"var":M['PDC']} , {"var":M['METHOD']} ]}
+    #}
   },
+  # {
+  #   "message": M['METHOD'] + " must make sense with PDC.",
+  #   "field": M['METHOD'],
+  #   "type" : "Error",
+  #   "rule": {"if": [ # Rule #3
+  #               {"!": {"and": [
+  #                           {"==": [{"var": M['PDC']}, "Ethanol" ]},
+  #                           {"!==": [{"var": M['METHOD']}, "Ingests"]} 
+  #                         ] 
+  #                 }},
+  #             True
+  #           ]}
+  # },
   {
     "message": "Can't have duplicate PDC/ODCs.",
     "field": 'ODC5',
@@ -144,6 +152,18 @@ rule_definitions = [
               True
             ]}
   },
+
+  {
+    "message": f"ODCs of higher number can't be present when a lower number ODC is absent.",
+    "field": 'ODC1',
+    "type" : "Error",
+    "rule":{"!": 
+            {"has_blanks_in_otherdrugs": [{"var": M['PDC']}, {"var": "ODC1"}, {"var": 'ODC2'},
+                                          {"var": "ODC3"}, {"var": 'ODC4'}, {"var": "ODC5"}
+            ]}
+        }
+  },
+
   {
     "message": f"When {M['CLNT_TYP']} is 'Own AOD use', '{M['PDC']}' must NOT be empty.",
     "field": M['PDC'],
@@ -185,6 +205,7 @@ rule_definitions = [
                         ]
           }
   },
+
   {
     "message": f"For Main Treatment Type: 'Assessment' or 'Info/Education only', the episode duration must be less than 90 days.",
     "field": M['END_DATE'],
@@ -196,13 +217,14 @@ rule_definitions = [
                 {"!=": [{"var":M['END_DATE']}, ""] } ,
                 {"in": [{"var":M['MTT']}, ["Assessment only","Information and education only"]]}
               ]},
-          {"<":[
-                {"-": [{"var":'O'+M["END_DATE"]},{"var":'O'+M["COMM_DATE"]}]},
-                90
-              ]
-          }
-          ,True
-        ]}
+              {"<":[
+                    {"-": [{"var":'O'+M["END_DATE"]},{"var":'O'+M["COMM_DATE"]}]},
+                    90
+                  ]
+              }
+              ,True
+            ]
+        }
   },
   {
     "message": f"{M['DOB']} must be < {M['COMM_DATE']}",

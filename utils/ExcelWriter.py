@@ -68,7 +68,7 @@ def write_data_to_book(data, errors, book_name, errors_only=True) -> str:
 
         logger.info(f"results book name : {result_book_name}")
 
-        book.save(f"{book_name}_{now_string()}.xlsx")
+        book.save(result_book_name)
 
     except Exception as e:
        logger.exception(e)

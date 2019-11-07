@@ -81,16 +81,21 @@ mds_aliases = {
         "Both Aboriginal and Torres Strait Islander origin": [
             "Both Aboriginal and TSI"
         ],
+
+        "Domestic-scale supported living facility" : ["Supported/Domestic-scale living facility"],
                 
         "Counselling" : [ "DATS Counselling" ],
         "Support and case management only": [
             "Support & case management only"
         ],
+
+        "Methamphetamine" : ["Crystal(meth) / Ice / Methamphetamine /Speed"],   # Coordinare Sep 2019 ; MJ's common Drugs translation
         "Lysergic acid diethylamide": ["LSD"],
-        "Ethanol": [     "Alcohol"   ],
+        "Alcohol": [     "Ethanol"  , "Alcohol /Ethanol" ],
         "MDMA": [     "Ecstasy (MDMA)"   ],
         "Cannabinoids" : [   "Cannabis"    ],
         "Diazepam": ["diazepam"],
+        
         "Nicotine" : [  "nicotine", "Nicotine/tobacco"  ],
         "Codeine": ["codeine"],
         "Amphetamines nfd" : [ "Amphetamines", "Amphetamines, nfd" ],
@@ -104,6 +109,9 @@ mds_aliases = {
         ],
         "AAA - Day, month and year are accurate":[ "AAA" ],
         "EEE - Day, month and year are estimated":[ "EEE" ],
+        "UUE - Day and month are unknown, year is estimated": ["UUE"],
+        "UUU - Day, month and year are unknown":      ["UUU"],        
+        "EEA - Day and month are estimated, year is accurate" : ["EEA"],
 
         "Short term crisis, emergency or transitional accommodation facility" : [
             "Short term crisis, emergency or transitional accommodation f"
@@ -158,6 +166,7 @@ mds_aliases = {
 
 mds_aliases['headers'][M['ID']]      = ["PAT ID", "PID"]
 mds_aliases['headers'][M['FNAME']]   = ["First Name", "Firstname"]
+mds_aliases['headers'][M['LNAME']]   = ["Last Name"]
 mds_aliases['headers'][M['PDC']]     = ["PDC"]
 mds_aliases['headers'][M['SEX']]     = ["SEX"]
 mds_aliases['headers'][M['DOB']]     = ["Date of birth"]
