@@ -95,7 +95,6 @@ mds_aliases = {
         "MDMA": [     "Ecstasy (MDMA)"   ],
         "Cannabinoids" : [   "Cannabis"    ],
         "Diazepam": ["diazepam"],
-        
         "Nicotine" : [  "nicotine", "Nicotine/tobacco"  ],
         "Codeine": ["codeine"],
         "Amphetamines nfd" : [ "Amphetamines", "Amphetamines, nfd" ],
@@ -164,9 +163,9 @@ mds_aliases = {
 }
 
 
-mds_aliases['headers'][M['ID']]      = ["PAT ID", "PID"]
+mds_aliases['headers'][M['ID']]      = ["PAT ID", "PID", "Client ID"]
 mds_aliases['headers'][M['FNAME']]   = ["First Name", "Firstname"]
-mds_aliases['headers'][M['LNAME']]   = ["Last Name"]
+mds_aliases['headers'][M['LNAME']]   = ["Last Name", "Last name"]
 mds_aliases['headers'][M['PDC']]     = ["PDC"]
 mds_aliases['headers'][M['SEX']]     = ["SEX"]
 mds_aliases['headers'][M['DOB']]     = ["Date of birth"]

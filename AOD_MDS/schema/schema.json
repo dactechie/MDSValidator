@@ -21,13 +21,16 @@
           "Injecting drug use status", "Treatment delivery setting", "Source of referral", 
           "Mental health", "Previous alcohol and other drug treatment received"
         ],
-        
+        "anyOf" : [
+          {"required" : ["First name","Surname"]},
+          {"required" : ["FULL NAME"]}
+        ],
         "properties": {
             "ENROLLING PROVIDER": { "type": "string" },
-            "ID":   { "type": "string" },
-            "FULL NAME":  { "type": "string" },
-            "First name":  { "type": "string" },
+            "First name":  { "type": "string" } ,
             "Surname":  { "type": "string" },
+            "FULL NAME":  { "type": "string" },
+            "ID":   { "type": "string" },           
             "Sex":  { "type": "string", "enum": [ "Male", "Female", "Other", "Not stated"] },
             "DOB":  { "type": "string" },
             "Date accuracy indicator": {"$ref": "date_accuracy_indicator.json"},

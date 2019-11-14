@@ -31,6 +31,7 @@ rule_definitions = [
               {"or" : [
                   {"==": [{"var": M['TRDLVSTG']}, "Home"]},
                   {"==": [{"var": M['TRDLVSTG']}, "Other"]},
+                  {"==": [{"var": M['TRDLVSTG']}, "Residential treatment facility"]},
               ]}
             }
   },

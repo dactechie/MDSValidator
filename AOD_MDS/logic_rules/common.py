@@ -1,4 +1,5 @@
 from ..constants import MDS as M
+from ..constants import MDS_ST_FLD, MDS_END_FLD
 
 rule_definitions = [
   {
@@ -15,23 +16,12 @@ rule_definitions = [
     "message": f"{M['METHOD']}  must make sense with PDC.",
     "field":  M['METHOD'],
     "type" : "Error",
-    "rule": #{"!": 
-        {"is_valid_drug_use": [{"var":M['PDC']} , {"var":M['METHOD']} ]}
-    #}
+    "rule": {"if": [
+        {"!=": [{"var":M['PDC']}, "" ]},
+        {"is_valid_drug_use": [{"var":M['PDC']} , {"var":M['METHOD']} ]},
+        True
+    ]}
   },
-  # {
-  #   "message": M['METHOD'] + " must make sense with PDC.",
-  #   "field": M['METHOD'],
-  #   "type" : "Error",
-  #   "rule": {"if": [ # Rule #3
-  #               {"!": {"and": [
-  #                           {"==": [{"var": M['PDC']}, "Ethanol" ]},
-  #                           {"!==": [{"var": M['METHOD']}, "Ingests"]} 
-  #                         ] 
-  #                 }},
-  #             True
-  #           ]}
-  # },
   {
     "message": "Can't have duplicate PDC/ODCs.",
     "field": 'ODC5',
@@ -218,7 +208,7 @@ rule_definitions = [
                 {"in": [{"var":M['MTT']}, ["Assessment only","Information and education only"]]}
               ]},
               {"<":[
-                    {"-": [{"var":'O'+M["END_DATE"]},{"var":'O'+M["COMM_DATE"]}]},
+                    {"-": [{"var":MDS_END_FLD},{"var":MDS_ST_FLD}]},
                     90
                   ]
               }
@@ -231,7 +221,7 @@ rule_definitions = [
     "field": M['DOB'],
     "involvedFields": [M['DOB'], M['COMM_DATE']],
     "type" : "Error",
-    "rule" : {"<" : [{"var": 'O'+M['DOB'] }, {"var": 'O'+M['COMM_DATE']}]},
+    "rule" : {"<" : [{"var": 'O'+M['DOB'] }, {"var": MDS_ST_FLD}]},
   },
   {
     "message": f"{M['COMM_DATE']} must be <= {M['END_DATE']}",
@@ -240,7 +230,7 @@ rule_definitions = [
     "type" :"Error",
     "rule" : {"if": [  # rule 9
               {"!=": [{"var": M['END_DATE']}, ""]},
-              {"<=": [{"var": 'O'+M['COMM_DATE'] }, {"var": 'O'+M['END_DATE']} ]},
+              {"<=": [{"var": MDS_ST_FLD }, {"var": MDS_END_FLD} ]},
               True
             ]}
   }

@@ -252,11 +252,15 @@ def prep_and_check_overlap(data_row, client_eps, errors, rec_idx, date_error_fie
             client_eps[cid] = [ep_dates_obj]
 
 
+"""
+  check if the current episode client_eps, overlaps with any previously seen 
+  episode for this client.
+"""
 def check_overlap(current_ep, client_eps, errors, rec_idx,
                   st_fld=MDS["COMM_DATE"], end_fld=MDS["END_DATE"]):
 
     start_date = client_eps[-1] [st_fld]
-    end_date = client_eps[-1][end_fld]   # current_ep[end_fld]
+    end_date = client_eps[-1][end_fld]
 
     for ep in client_eps[:-1]:
         if min(end_date, ep[end_fld]) >= max(start_date, ep[st_fld]):
@@ -279,6 +283,14 @@ def check_overlap(current_ep, client_eps, errors, rec_idx,
                                     })
 
 
+def add_error_to_list(error_obj, errors):
+    ve_idx = error_obj['index']
+    if ve_idx in errors:
+        errors[ve_idx].append(error_obj)
+    else:
+        errors[ve_idx] = [error_obj]
+
+
 def add_error_obj(errors, e, dataObj, id_field):
     path = e.path
     row = path[1]
@@ -290,14 +302,30 @@ def add_error_obj(errors, e, dataObj, id_field):
         error_obj["message"] = f"invalid value/format: '{e.instance}'"
     else:
         error_obj["field"]= '<>'
-        error_obj["message"]= e.message
+        if len(e.message) > 50:   # oneOf fields are missing . Not checked as part of header checks
+          if len(e.validator_value) > 0 and 'required' in e.validator_value[0]:
+            st = e.validator_value[0]['required']        
+            error_obj["message"]= f"Missing fields {st}.  row: {error_obj['index']} cid: {error_obj['cid']}"
+            add_error_to_list(error_obj, errors)
+            return -1
+        else:
+          error_obj["message"]= e.message
 
-    ve_idx = error_obj['index']
-    if ve_idx in errors:
-        errors[ve_idx].append(error_obj)
-    else:
-        errors[ve_idx] = [error_obj]
+    add_error_to_list(error_obj, errors)
+    return 0
 
+        # "oneOf": [
+        #   {
+        #     "properties": {
+        #       "First name":  { "type": "string" }              
+        #       }
+        #   },
+        #   {
+        #     "properties": {
+        #       "FULL NAME":  { "type": "string" }
+        #     }
+        #   }
+        # ],
 
 
 def compile_errors(schema_validation_verrors, logic_errors):
@@ -348,6 +376,8 @@ def getSLK(firstname, lastname, DOB_str, sex_str):
     Expects DOB_str to be in "ddmmyyyy" or "dd/mm/yyyy" format
     sex_str must be 'Male' or 'Female' , everything else is converted to 9
     """
+    if not lastname or not firstname:
+      return ""
     last = get_235(cleanse_string(lastname))
     first = get_23(cleanse_string(firstname))
     

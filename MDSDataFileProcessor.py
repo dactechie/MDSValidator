@@ -59,10 +59,7 @@ def get_data_or_die(filename, mds_header, hmap, start_end, all_eps=None):
 @click.option('--all_eps/--closed_only', '-a/-c', default=True,
               help='Validate only closed episodes. Default is to validate all episodes',
               show_default=True)
-@click.option('--nostrict/--strict', '-s/-S', default=False,
-              help='Accept/Reject imperfect data files with known aliases.' +
-                   '\n1: reject (flag as errors)', show_default=True)
-@click.option('--errors_only', '-e', help='Output only the rows with errors.', default=True,
+@click.option('--errors_only', '-e', help='Output only the rows with errors.', default=False,
                 show_default=True, type=click.BOOL)
 @click.option('--start_date', '-t', type=click.DateTime(formats=["%Y-%m-%d"]),
               help='The number of the starting month of the reporting period . Eg.: 2019-07-01',
@@ -74,10 +71,14 @@ def get_data_or_die(filename, mds_header, hmap, start_end, all_eps=None):
 @click.option('--reporting_period', '-r', type=click.Choice(["12", "6", "3", "1"]),
               help='reporting period window.',
               default="3", show_default=True)
-def main(data_file, all_eps, nostrict, errors_only, start_date, program='', reporting_period="3"):
+@click.option('--nostrict/--strict', '-s/-S', default=False,
+              help='Accept/Reject imperfect data files with known aliases.' +
+                   '\n1: reject (flag as errors)', show_default=True)
+def main(data_file, all_eps, errors_only, start_date, program='', reporting_period="3", nostrict=False):
   if not start_date:
-    logger.error("Start Date is required. Quitting")
-    sys.exit()
+    start_date = datetime(2019,7,1)
+    # logger.error("Start Date is required. Quitting")
+    # sys.exit()
 
   FILENAME = None
   if not data_file or data_file =='None':
@@ -91,13 +92,13 @@ def main(data_file, all_eps, nostrict, errors_only, start_date, program='', repo
   
   print(f"\t ***** Going to process {FILENAME} \n")
 
-  exe(FILENAME, all_eps, nostrict, errors_only, start_date, program=program, period=reporting_period)
+  exe(FILENAME, all_eps, errors_only, start_date, program=program, period=reporting_period, nostrict=nostrict)
   
   logger.info("\t ...End of Program...\n")
 
 
 
-def exe(data_file, all_eps, nostrict, errors_only, start_date, program='', period="3"):
+def exe(data_file, all_eps, errors_only, start_date, program='', period="3", nostrict=False):
   
   start_time = time()
  
@@ -115,8 +116,19 @@ def exe(data_file, all_eps, nostrict, errors_only, start_date, program='', perio
   verrors, warnings =  jv.validate(data, mode=nostrict)
   
   end_time = time()
+
+  if warnings == -1:
+    logger.error('Exiting....')
+    sys.exit()
+
+  # if any(v['field'] for k, v in verrors.items() if 'field' in v[0] and v[0]['field'] == '<>'):
+  #   sys.exit(-1)
+
+  
   #log_results(verrors, warnings, header_warnings)
   logger.info(f"\n\t ...End of validation... \n\t Processing time {round(end_time - start_time,2)} seconds. ")
+
+
   
   #pprint.pprint (verrors)
   logger.info("\t ...Writing results to spreadsheet..\n")    
@@ -126,6 +138,6 @@ def exe(data_file, all_eps, nostrict, errors_only, start_date, program='', perio
   return result_book
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':   
     #main()
     sys.exit(main(sys.argv[1:]))

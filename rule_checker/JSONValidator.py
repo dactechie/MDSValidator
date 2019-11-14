@@ -13,6 +13,7 @@ from AOD_MDS.logic_rules.common import rule_definitions as common_rules
 from utils import cleanse_string, get_date_converter, has_duplicate_values, has_gaps
 from .MJValidationError import MJValidationError
 from .constants import MODE_LOOSE, NOW_ORD, NOW
+from logger import logger
 
 '''
 Create a validation error object with the data row index, client id and error details.
@@ -34,13 +35,14 @@ class JSONValidator(object):
                                                     schema_dir, schema_file_name)
         self.start_end = start_end                                                      
         
-        if program != '':
+        if program:
           if program =='TSS': # TODO if there are other specialized (program) rules, make this more dynamic
             from AOD_MDS.logic_rules.TSS import rule_definitions as addnl_def
           elif program ==  'Arcadia-Resi':
             from AOD_MDS.logic_rules.Arcadia_Resi import rule_definitions as addnl_def
-          JSONValidator.rule_definitions.extend(addnl_def)
-          JSONValidator.rules.extend([r['rule'] for r in addnl_def])
+          if addnl_def:
+            JSONValidator.rule_definitions.extend(addnl_def)
+            JSONValidator.rules.extend([r['rule'] for r in addnl_def])
 
         self.slk_suggestions = {}
 
@@ -52,6 +54,7 @@ class JSONValidator(object):
             schemaObj = json.load(schemaFile)
             resolver = jsc.RefResolver('file:///' + schema_dir, schemaObj)
             validator = jsc.Draft4Validator(schemaObj, resolver=resolver)
+            
 
         return validator, schemaObj
 
@@ -115,6 +118,19 @@ class JSONValidator(object):
                 for mh in missing_headers], tr_header, warnings
 
 
+    def check_schema_errors(self, data, id_field):
+      errors = {}
+      for e in self.validator.iter_errors(data):
+        error_code = add_error_obj(errors, e, data, id_field)
+
+        if error_code < 0: # oneOf fields are missing . Not checked as part of header checks
+          if errors and errors[e.path[1]][0]['field'] =='<>':
+            logger.error(f"{errors[e.path[1]][0]['message']}")
+          return errors, -1
+      return errors, 0
+
+
+
     # TODO : convert everything to MDS codes first to check numeric values (faster). failed lookups are automatically errors
     def validate(self, data, mode=MODE_LOOSE):
         """
@@ -127,7 +143,6 @@ class JSONValidator(object):
             3. Does MDS Logic validation using MDS_RULES.py (jsonLogic)
         """
         warnings = {}
-        errors = {}
         episodes = data['episodes']
         id_field = MDS['ID']
 
@@ -135,19 +150,15 @@ class JSONValidator(object):
             warnings = translate_to_MDS_values(episodes)# translate to official MDS values
             data = {'episodes': episodes}
 
-        for e in self.validator.iter_errors(data):
-            add_error_obj(errors, e, data, id_field)
-
-        fn_date_converter = get_date_converter(sample_date_str=episodes[0][MDS_Dates[0]])
+        errors, ercode = self.check_schema_errors(data, id_field)
+        if ercode == -1:
+          return errors, -1
 
         add_operation('has_duplicate_values', has_duplicate_values)
         add_operation('check_slk', self.check_slk)
         add_operation('has_blanks_in_otherdrugs', has_gaps)
         add_operation('is_valid_drug_use', is_valid_drug_use)
-        #add_operation('is_outside_period', )
-        # if not can_process_withdates(period_st_ed, ep_data[MDS_ST_FLD], ep_data[MDS_END_FLD]
-        #                       ,date_conversion_errors, open_and_closed_eps=False): # all_eps              
-            
+        #add_operation('is_outside_period', )            
         client_eps = {}
         # stdate = MDS['COMM_DATE']
         # enddate = MDS['END_DATE']
@@ -155,6 +166,7 @@ class JSONValidator(object):
         # period_st_ed = { 'start': self.start_end['start'].toordinal(),
         #                  'end' :  self.start_end['end'].toordinal()
         #                 }
+        fn_date_converter = get_date_converter(sample_date_str=episodes[0][MDS_Dates[0]])
      
         for i, ep_data in enumerate(episodes):
             date_conversion_errors = fix_check_dates(ep_data, i, fn_date_converter,
