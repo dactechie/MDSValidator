@@ -64,7 +64,7 @@ def get_data_or_die(filename, mds_header, hmap, start_end, all_eps=None):
 @click.option('--start_date', '-t', type=click.DateTime(formats=["%Y-%m-%d"]),
               help='The number of the starting month of the reporting period . Eg.: 2019-07-01',
               required=False)
-@click.option('--program', '-p', type=click.Choice(['TSS', 'Arcadia-Resi', 'Other']),
+@click.option('--program', '-p', type=click.Choice(['TSS', 'Arcadia-Resi', 'Althea', 'Other']),
               help='Some logic rules are specific to a team.' + \
                     'Default setting is to just apply just MDS rules.',
               default='TSS', show_default=True)

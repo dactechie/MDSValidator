@@ -14,17 +14,7 @@ rule_definitions = [
             }
   },
   {
-    "message": f"If {M['USACC']} is 'Prison/remand centre/youth training centre', '{M['TRDLVSTG']}' has to be 'Outreach setting'.",
-    "field": M['TRDLVSTG'],
-    "type" : "Error",
-    "rule": {"if": [ 
-              {"==": [{"var": M['USACC']}, "Prison/remand centre/youth training centre"]},
-              {"==": [{"var": M['TRDLVSTG']}, "Outreach setting"]},
-              True
-            ]}
-  },
-  {
-    "message": f"TSS team does not provide service (treatment delivery) in Home/'Other' setting ",
+    "message": f"TSS team does not provide service (treatment delivery) in Home/'Other'/Resi setting ",
     "field": M['TRDLVSTG'],
     "type" : "Error",
     "rule": {"!": 

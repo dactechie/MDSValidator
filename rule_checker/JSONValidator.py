@@ -40,6 +40,8 @@ class JSONValidator(object):
             from AOD_MDS.logic_rules.TSS import rule_definitions as addnl_def
           elif program ==  'Arcadia-Resi':
             from AOD_MDS.logic_rules.Arcadia_Resi import rule_definitions as addnl_def
+          elif program ==  'Althea':
+            from AOD_MDS.logic_rules.Althea import rule_definitions as addnl_def
           if addnl_def:
             JSONValidator.rule_definitions.extend(addnl_def)
             JSONValidator.rules.extend([r['rule'] for r in addnl_def])
