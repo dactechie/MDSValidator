@@ -1,0 +1,16 @@
+
+
+1. Validity (correctness)  - are they properly testing the code in question
+2. Quality of tests - coverage , -main cases, edge cases
+3. Robustness
+   - Read file Robustness, CLI args interpretation and handling
+4. error reporting - accuracy 
+5. Sanity - number of rows should not be more than input, no duplicates, etc
+
+
+- Business logic - common and per program
+  - Overlap
+  - SLK
+
+- AMDS coding
+- logging

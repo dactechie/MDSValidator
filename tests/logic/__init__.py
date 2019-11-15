@@ -1,4 +1,4 @@
-from rule_checker.JSONValidator import JSONValidator
+from MDSValidator.rule_checker.JSONValidator import JSONValidator
 from datetime import datetime as dt
 from collections import OrderedDict
 

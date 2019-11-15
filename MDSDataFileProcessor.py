@@ -5,12 +5,13 @@ from datetime import datetime
 import click
 
 from logger import logger
-from AOD_MDS.helpers import log_results, read_data, read_header
+from AOD_MDS.helpers import read_data, read_header 
 from rule_checker.JSONValidator import JSONValidator
 from rule_checker.MJValidationError import MJValidationError
 from utils.ExcelWriter import write_data_to_book
 from utils.files import get_latest_data_file, get_result_filename
 from utils.dates import get_period_dict
+#from utils.log import log_results
 from rule_checker.constants import MODE_LOOSE
 #import pprint
 
@@ -103,16 +104,12 @@ def exe(data_file, all_eps, errors_only, start_date, program='', period="3", nos
   start_time = time()
  
   st_ed = get_period_dict(start_date, period_months=int(period))
-
   jv = get_json_validator(st_ed, schema_dir_name='AOD_MDS/schema/',
-                          schema_file_name='schema.json',                          
-                          program=program)
-  
+                          schema_file_name='schema.json', program=program)
   mds_header, header_warnings = get_valid_header_or_die(data_file, validator=jv, mode=nostrict)
-  
-  
+    
   data = get_data_or_die(data_file, mds_header, header_warnings, st_ed, all_eps=all_eps)
-  
+
   verrors, warnings =  jv.validate(data, mode=nostrict)
   
   end_time = time()
@@ -122,14 +119,9 @@ def exe(data_file, all_eps, errors_only, start_date, program='', period="3", nos
     sys.exit()
 
   # if any(v['field'] for k, v in verrors.items() if 'field' in v[0] and v[0]['field'] == '<>'):
-  #   sys.exit(-1)
-
-  
+  #   sys.exit(-1) 
   #log_results(verrors, warnings, header_warnings)
   logger.info(f"\n\t ...End of validation... \n\t Processing time {round(end_time - start_time,2)} seconds. ")
-
-
-  
   #pprint.pprint (verrors)
   logger.info("\t ...Writing results to spreadsheet..\n")    
   result_book = write_data_to_book(data['episodes'], verrors,

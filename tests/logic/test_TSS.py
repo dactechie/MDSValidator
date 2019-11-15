@@ -4,7 +4,8 @@
 import pytest
 import copy
 #from  ...AOD_MDS.constants import MDS as M, MDS_Dates as D
-from ... import schema_dir, schema_file_name
+from MDSValidator import schema_dir, schema_file_name
+#from ... import schema_dir, schema_file_name
 from . import start_period, end_period, JSONValidator, noerrors_base, noerrors_base_translated
 
 
@@ -49,16 +50,14 @@ def test_TSS(TSS_json_validator):
             'field': 'Treatment delivery setting',
             'index': 0,
             'message': 'TSS team does not provide service (treatment delivery) in '
-                      "Home/'Other' setting "
+                      "Home/'Other'/Resi setting "
             }
           ]
         expected1 = [
-            {'cid': '9999', 'etype': 'logic', 'field': 'Main treatment type', 'index': 1,
-            'message': 'TSS team only does the following treatment types: Counselling, '
-                      'Support and case management and Information and education'},
-            {'cid': '9999', 'etype': 'logic', 'field': 'Treatment delivery setting', 'index': 1,
-            'message': "If Usual accommodation is 'Prison/remand centre/youth training "
-                      "centre', 'Treatment delivery setting' has to be 'Outreach setting'."}     
+          {'cid': '9999', 'etype': 'logic', 'field': 'Treatment delivery setting', 'index': 1, 
+            'message': "If Usual accommodation is 'Prison/remand centre/youth training centre', 'Treatment delivery setting' has to be 'Outreach setting'."}, 
+          {'cid': '9999', 'etype': 'logic', 'field': 'Main treatment type', 'index': 1, 
+            'message': 'TSS team only does the following treatment types: Counselling, Support and case management and Information and education'}     
         ]
         assert errors[0] == expected0
         assert errors[1] == expected1
@@ -70,14 +69,24 @@ def test_TSS(TSS_json_validator):
             },
             {'cid': '1111','etype': 'logic','field': 'Treatment delivery setting','index': 2,
             'message': 'TSS team does not provide service (treatment delivery) in '
-                        "Home/'Other' setting "
+                        "Home/'Other'/Resi setting "
             },
         ]
         assert errors[2] == expected2
 
         expected3 = [
             {'cid':'4353','etype':'logic','field':'Treatment delivery setting','index': 3,
-            'message': "TSS team does not provide service (treatment delivery) in Home/'Other' setting "
+            'message': "TSS team does not provide service (treatment delivery) in Home/'Other'/Resi setting "
             }
         ]
         assert errors[3] == expected3
+
+
+
+
+# 0: [{'cid': '11525', 'etype': 'logic', 'field': 'Treatment delivery setting', 'index': 0, 'message': "TSS team does not provide service (treatment delivery) in Home/'Other'/Resi setting "}]
+# 1: [{'cid': '9999', 'etype': 'logic', 'field': 'Treatment delivery setting', 'index': 1, 'message': "If Usual accommodation is 'Prison/remand centre/youth training centre', 'Treatment delivery setting' has to be 'Outreach setting'."}, 
+#     {'cid': '9999', 'etype': 'logic', 'field': 'Main treatment type', 'index': 1, 'message': 'TSS team only does the following treatment types: Counselling, Support and case management and Information and education'}]
+# 2: [{'cid': '1111', 'etype': 'logic', 'field': 'Treatment delivery setting', 'index': 2, 'message': "If Usual accommodation is 'Prison/remand centre/youth training centre', 'Treatment delivery setting' has to be 'Outreach setting'."}, 
+#   {'cid': '1111', 'etype': 'logic', 'field': 'Treatment delivery setting', 'index': 2, 'message': "TSS team does not provide service (treatment delivery) in Home/'Other'/Resi setting "}]
+# 3: [{'cid': '4353', 'etype': 'logic', 'field': 'Treatment delivery setting', 'index': 3, 'message': "TSS team does not provide service (treatment delivery) in Home/'Other'/Resi setting "}]

@@ -2,18 +2,20 @@ import json
 from datetime import date
 import jsonschema as jsc
 
-from json_logic import add_operation, jsonLogic
-from AOD_MDS.helpers import (add_error_obj, prep_and_check_overlap, 
-                        compile_logic_errors, fix_check_dates, 
+from MDSValidator.json_logic import add_operation, jsonLogic
+from MDSValidator.AOD_MDS.helpers import (prep_and_check_overlap, 
+                         fix_check_dates, 
                         fuse_suggestions_into_errors, getSLK,
-                        remove_vrules, translate_to_MDS_header,
+                        translate_to_MDS_header,
                         translate_to_MDS_values, is_valid_drug_use)#, can_process_withdates)
-from AOD_MDS.constants import MDS, MDS_Dates, MDS_ST_FLD, MDS_END_FLD
-from AOD_MDS.logic_rules.common import rule_definitions as common_rules
-from utils import cleanse_string, get_date_converter, has_duplicate_values, has_gaps
+from MDSValidator.AOD_MDS.constants import MDS, MDS_Dates, MDS_ST_FLD, MDS_END_FLD
+from MDSValidator.AOD_MDS.logic_rules.common import rule_definitions as common_rules
+from MDSValidator.utils import (cleanse_string, get_date_converter, has_duplicate_values, 
+                    has_gaps, compile_logic_errors, remove_vrules, add_error_obj)
+from MDSValidator.logger import logger
 from .MJValidationError import MJValidationError
 from .constants import MODE_LOOSE, NOW_ORD, NOW
-from logger import logger
+
 
 '''
 Create a validation error object with the data row index, client id and error details.
@@ -37,11 +39,11 @@ class JSONValidator(object):
         
         if program:
           if program =='TSS': # TODO if there are other specialized (program) rules, make this more dynamic
-            from AOD_MDS.logic_rules.TSS import rule_definitions as addnl_def
+            from MDSValidator.AOD_MDS.logic_rules.TSS import rule_definitions as addnl_def
           elif program ==  'Arcadia-Resi':
-            from AOD_MDS.logic_rules.Arcadia_Resi import rule_definitions as addnl_def
+            from MDSValidator.AOD_MDS.logic_rules.Arcadia_Resi import rule_definitions as addnl_def
           elif program ==  'Althea':
-            from AOD_MDS.logic_rules.Althea import rule_definitions as addnl_def
+            from MDSValidator.AOD_MDS.logic_rules.Althea import rule_definitions as addnl_def
           if addnl_def:
             JSONValidator.rule_definitions.extend(addnl_def)
             JSONValidator.rules.extend([r['rule'] for r in addnl_def])

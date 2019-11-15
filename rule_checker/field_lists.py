@@ -1,4 +1,4 @@
-from AOD_MDS.logic_rules.common import rule_definitions
+from MDSValidator.AOD_MDS.logic_rules.common import rule_definitions
 
 """
 TODO: if checking TSS data, include TSS rules
