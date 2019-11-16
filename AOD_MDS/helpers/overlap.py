@@ -1,8 +1,8 @@
 
 
-from MDSValidator.AOD_MDS.constants import MDS, MDS_END_FLD, MDS_ST_FLD, MDS_Dates
-from MDSValidator.rule_checker.constants import MODE_LOOSE, NOW, NOW_ORD
-from MDSValidator.utils import get_datestring_from_ordinal
+from AOD_MDS.constants import MDS, MDS_END_FLD, MDS_ST_FLD, MDS_Dates
+from rule_checker.constants import MODE_LOOSE, NOW, NOW_ORD
+from utils import get_datestring_from_ordinal
 
 
 def prep_and_check_overlap(data_row, client_eps, errors, rec_idx, date_error_fields):

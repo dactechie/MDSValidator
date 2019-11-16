@@ -1,9 +1,9 @@
 
 import copy
-from MDSValidator.AOD_MDS.constants import MDS
+from AOD_MDS.constants import MDS
 #                                       rd_wo_involved_fields)
-from MDSValidator.utils import v_warn_lam
-from MDSValidator.AOD_MDS.aliases import mds_aliases
+from utils import v_warn_lam
+from AOD_MDS.aliases import mds_aliases
 
 '''
 Input data file may not have the exact spelling/case as the official MDS fields

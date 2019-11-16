@@ -5,19 +5,18 @@ import pytest
 import copy
 #from  ...AOD_MDS.constants import MDS as M, MDS_Dates as D
 from ... import schema_dir, schema_file_name
-from . import start_period, end_period, JSONValidator, noerrors_base, noerrors_base_translated
+from . import  start_end, JSONValidator, noerrors_base, noerrors_base_translated
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def Arcadia_Resi_json_validator():
-    start_end = {'start': start_period, 'end': end_period }
     return JSONValidator(schema_dir, schema_file_name, start_end, program='Arcadia-Resi')
 
 
 def test_Arcadia_Resi(Arcadia_Resi_json_validator):
   #f"If {M['TRDLVSTG']} is Residential treatment', '{M['MTT']}' has to be Withdrawal Mgmt.(Detox) / Rehab."
           # Team-based logic: Treatment Delivery Setting
-
+  
   base5error = copy.deepcopy(noerrors_base_translated)
   base5error['Treatment delivery setting'] ='Residential treatment facility'
   base5error['ID'] ='7777'

@@ -1,5 +1,5 @@
 
-from MDSValidator.utils import (get_23, get_235, cleanse_string)
+from utils import (get_23, get_235, cleanse_string)
 
 
 def getSLK(firstname, lastname, DOB_str, sex_str):

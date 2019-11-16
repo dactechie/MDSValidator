@@ -1,9 +1,9 @@
 
 import copy
 import csv
-from MDSValidator.logger import logger
-from MDSValidator.AOD_MDS.constants import MDS
-from MDSValidator.utils import remove_unicode
+from logger import logger
+from AOD_MDS.constants import MDS
+from utils import remove_unicode
 
 
 def read_header(filename: str) -> list:
@@ -11,7 +11,6 @@ def read_header(filename: str) -> list:
         headers = [header for header in csvfile.readline().split(',')]
         headers[-1] = headers[-1].strip('\n')
         return headers
-
 
 
 def _split_fullname(reader) -> list:

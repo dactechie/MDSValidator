@@ -1,7 +1,8 @@
 import os
 import pytest
-from AOD_MDS.helpers import getSLK, translate_to_MDS_header, translate_to_MDS_values
-from logger import logger
+from MDSValidator.AOD_MDS.helpers import getSLK, translate_to_MDS_header, translate_to_MDS_values
+from MDSValidator.logger import logger
+
 
 def test_getSLK():
     first_name ="Aftab"

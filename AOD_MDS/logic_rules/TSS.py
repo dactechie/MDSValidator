@@ -1,4 +1,4 @@
-from MDSValidator.AOD_MDS.constants import MDS as M
+from AOD_MDS.constants import MDS as M
 
 rule_definitions = [
   {

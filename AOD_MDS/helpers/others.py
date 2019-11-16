@@ -1,12 +1,12 @@
-from MDSValidator.AOD_MDS.constants import MDS
+from AOD_MDS.constants import MDS
 
 # from rule_checker.field_lists import (involved_field_sets,
 #                                       rd_with_involved_fields,
 #                                       rd_wo_involved_fields)
-from MDSValidator.utils import isin_dicts_array
+from utils import isin_dicts_array
 #from utils.dates import inperiod, in_period_date
-from MDSValidator.logger import logger
-from MDSValidator.AOD_MDS.logic_rules.method_of_use_matrix import drug_usage
+from logger import logger
+from AOD_MDS.logic_rules.method_of_use_matrix import drug_usage
 
 
 def is_valid_drug_use(drug_name:str, method_of_use:str) -> bool:

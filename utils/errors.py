@@ -1,5 +1,5 @@
 import copy
-from MDSValidator.rule_checker.field_lists import (involved_field_sets,
+from rule_checker.field_lists import (involved_field_sets,
                                       rd_with_involved_fields,
                                       rd_wo_involved_fields)
 

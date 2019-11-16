@@ -1,6 +1,6 @@
 
-from MDSValidator.AOD_MDS.constants import MDS
-from MDSValidator.utils import v_er_date_lam
+from AOD_MDS.constants import MDS
+from utils import v_er_date_lam
 
 
 # Note: this modifies the original data_row (not a pure function)

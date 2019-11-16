@@ -3,22 +3,17 @@
 #from datetime import datetime as dt
 import pytest
 import copy
-#from  ...AOD_MDS.constants import MDS as M, MDS_Dates as D
 from MDSValidator import schema_dir, schema_file_name
-#from ... import schema_dir, schema_file_name
-from . import start_period, end_period, JSONValidator, noerrors_base, noerrors_base_translated
+from . import start_end, JSONValidator, noerrors_base, noerrors_base_translated
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def TSS_json_validator():
-
-    start_end = {'start': start_period, 'end': end_period }
     return JSONValidator(schema_dir, schema_file_name, start_end, program='TSS')
 
 
-
 def test_TSS(TSS_json_validator):
-        
+                
         base1error = copy.deepcopy(noerrors_base_translated)
         base1error['Treatment delivery setting'] = 'Home'
         base1error['ID'] ='11525'
@@ -39,7 +34,7 @@ def test_TSS(TSS_json_validator):
         base4error = copy.deepcopy(noerrors_base_translated)
         base4error['Treatment delivery setting'] ='Residential treatment facility'
         base4error['ID'] ='4353'
-        input = [base1error, base2error, base3error, base4error]
+        input = [base1error , base2error, base3error, base4error]
 
         errors, _ = TSS_json_validator.validate({'episodes' :input})
                 

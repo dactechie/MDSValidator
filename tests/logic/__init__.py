@@ -2,9 +2,10 @@ from MDSValidator.rule_checker.JSONValidator import JSONValidator
 from datetime import datetime as dt
 from collections import OrderedDict
 
-start_period = dt(2018, 7, 1)
-end_period = dt(2018, 9, 30)
-
+start_end = {
+  'start' : dt(2018, 7, 1),
+  'end'   : dt(2018, 9, 30)
+}
 
 noerrors_base = OrderedDict(
   {

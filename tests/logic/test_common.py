@@ -3,14 +3,13 @@ import pytest
 import pytest_dependency
 #import copy
 #from AOD_MDS.constants import MDS as M, MDS_Dates as D
-from ... import schema_dir, schema_file_name
-from . import start_period, end_period, JSONValidator, noerrors_base, noerrors_base_translated
+from  MDSValidator import schema_dir, schema_file_name
+from . import start_end, JSONValidator, noerrors_base, noerrors_base_translated
 from collections import OrderedDict
 
 
-@pytest.fixture(scope='module')
-def json_validator():   
-    start_end = {'start': start_period, 'end': end_period }
+@pytest.fixture(scope="module")
+def json_validator():
     return JSONValidator(schema_dir, schema_file_name, start_end=start_end, program=None)
 
 

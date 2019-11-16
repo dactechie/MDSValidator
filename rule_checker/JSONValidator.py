@@ -1,18 +1,19 @@
 import json
+import copy
 from datetime import date
 import jsonschema as jsc
 
-from MDSValidator.json_logic import add_operation, jsonLogic
-from MDSValidator.AOD_MDS.helpers import (prep_and_check_overlap, 
+from json_logic import add_operation, jsonLogic
+from AOD_MDS.helpers import (prep_and_check_overlap, 
                          fix_check_dates, 
                         fuse_suggestions_into_errors, getSLK,
                         translate_to_MDS_header,
                         translate_to_MDS_values, is_valid_drug_use)#, can_process_withdates)
-from MDSValidator.AOD_MDS.constants import MDS, MDS_Dates, MDS_ST_FLD, MDS_END_FLD
-from MDSValidator.AOD_MDS.logic_rules.common import rule_definitions as common_rules
-from MDSValidator.utils import (cleanse_string, get_date_converter, has_duplicate_values, 
+from AOD_MDS.constants import MDS, MDS_Dates, MDS_ST_FLD, MDS_END_FLD
+from AOD_MDS.logic_rules.common import rule_definitions as common_rules
+from utils import (cleanse_string, get_date_converter, has_duplicate_values, 
                     has_gaps, compile_logic_errors, remove_vrules, add_error_obj)
-from MDSValidator.logger import logger
+from logger import logger
 from .MJValidationError import MJValidationError
 from .constants import MODE_LOOSE, NOW_ORD, NOW
 
@@ -29,24 +30,24 @@ header_er_lam = lambda field, miss_extra: MJValidationError(index='all',
 
 class JSONValidator(object):
     
-    rule_definitions = common_rules
-    rules = [r['rule'] for r in rule_definitions]
-
     def __init__(self, schema_dir, schema_file_name, start_end, program):
         self.validator, self.schema = JSONValidator.setup_validator(
                                                     schema_dir, schema_file_name)
         self.start_end = start_end                                                      
         
+        self.rule_definitions = copy.deepcopy(common_rules)
+        self.rules = [r['rule'] for r in self.rule_definitions]
+
         if program:
           if program =='TSS': # TODO if there are other specialized (program) rules, make this more dynamic
-            from MDSValidator.AOD_MDS.logic_rules.TSS import rule_definitions as addnl_def
+            from AOD_MDS.logic_rules.TSS import rule_definitions as addnl_def
           elif program ==  'Arcadia-Resi':
-            from MDSValidator.AOD_MDS.logic_rules.Arcadia_Resi import rule_definitions as addnl_def
+            from AOD_MDS.logic_rules.Arcadia_Resi import rule_definitions as addnl_def
           elif program ==  'Althea':
-            from MDSValidator.AOD_MDS.logic_rules.Althea import rule_definitions as addnl_def
+            from AOD_MDS.logic_rules.Althea import rule_definitions as addnl_def
           if addnl_def:
-            JSONValidator.rule_definitions.extend(addnl_def)
-            JSONValidator.rules.extend([r['rule'] for r in addnl_def])
+            self.rule_definitions.extend(addnl_def)
+            self.rules.extend([r['rule'] for r in addnl_def])
 
         self.slk_suggestions = {}
 
@@ -65,8 +66,8 @@ class JSONValidator(object):
 
     # TODO : schema validation may have already deduced that dates, etc may be invalid.
     #        those errors  would contain the rec_index of the error too
-    @staticmethod
-    def validate_logic(errors, data_row, rec_idx, date_conversion_errors,
+    
+    def validate_logic(self, errors, data_row, rec_idx, date_conversion_errors,
                        id_field, client_eps):
         """
         1. Checks the date format and converts dates into integer ('ordinal's) for easy comparison.
@@ -81,8 +82,8 @@ class JSONValidator(object):
             passed-in client's episodes. This allows us to calculate episode overlaps with the current data row.
         """
 
-        temp_rd =  JSONValidator.rule_definitions
-        temp_rules = JSONValidator.rules
+        temp_rd =  self.rule_definitions
+        temp_rules = self.rules
         dce_fields = []
         if any(date_conversion_errors):
             dce_fields = [dce['field'] for dce in date_conversion_errors]
@@ -180,7 +181,7 @@ class JSONValidator(object):
             # ep_data[enddate] =str(ep_data[enddate])
             # ep_data[MDS['DOB']] =str(ep_data[MDS['DOB']])
             #print(ep_data)
-            JSONValidator.validate_logic(errors, ep_data, i, date_conversion_errors,
+            self.validate_logic(errors, ep_data, i, date_conversion_errors,
                                          id_field, client_eps)
         if self.slk_suggestions:
             fuse_suggestions_into_errors(errors, self.slk_suggestions)
@@ -200,6 +201,6 @@ class JSONValidator(object):
 
     def check_age(self):
         """
-            TODO : Make sure the age is not < 10
+            TODO : Make sure the age is:   10 > age > 100
         """
         pass

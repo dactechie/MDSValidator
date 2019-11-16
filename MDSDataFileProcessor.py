@@ -29,7 +29,7 @@ from rule_checker.constants import MODE_LOOSE
 def get_json_validator(start_end, schema_dir_name, schema_file_name, program=''):
     schema_dir = os.path.join(os.getcwd(), schema_dir_name)
     schema_file = os.path.realpath(os.path.join(schema_dir, schema_file_name))
-    return JSONValidator(schema_dir, schema_file, start_end, program=program) 
+    return JSONValidator(schema_dir, schema_file, start_end, program=program)
 
 
 def get_valid_header_or_die(filename, validator, mode):
@@ -76,8 +76,9 @@ def get_data_or_die(filename, mds_header, hmap, start_end, all_eps=None):
               help='Accept/Reject imperfect data files with known aliases.' +
                    '\n1: reject (flag as errors)', show_default=True)
 def main(data_file, all_eps, errors_only, start_date, program='', reporting_period="3", nostrict=False):
-  if not start_date:
+  if not start_date:    
     start_date = datetime(2019,7,1)
+    logger.warn(f"No start date was passed in - defaulting to 1 July 2019 {start_date}")
     # logger.error("Start Date is required. Quitting")
     # sys.exit()
 
