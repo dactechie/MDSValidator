@@ -2,6 +2,9 @@ from MDSValidator.rule_checker.JSONValidator import JSONValidator
 from datetime import datetime as dt
 from collections import OrderedDict
 
+
+S_PRISON_OUTR = "If Usual accommodation is 'Prison/remand centre/youth training centre', 'Treatment delivery setting' has to be 'Outreach setting'."
+
 start_end = {
   'start' : dt(2018, 7, 1),
   'end'   : dt(2018, 9, 30)
