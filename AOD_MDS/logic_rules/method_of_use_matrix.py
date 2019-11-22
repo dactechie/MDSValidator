@@ -21,7 +21,7 @@ drug_usage = {
 'Diazepam'        : 	['Ingests'],
 
 'GHB type Drugs and Analogues, n.e.c.': ['Ingests', 'Inhales (vapour)'],
-'Heroin' : 	['Ingests',	'Injects', 'Smokes', 'Not stated/inadequately described'],
+'Heroin' : 	['Ingests',	'Injects', 'Smokes', 'Inhales (vapour)', 'Not stated/inadequately described'],
 'Ketamine'        : 	['Ingests', 'Sniffs (powder)'],
 
 'Methamphetamine' : 	['Ingests',	'Inhales (vapour)',	'Injects',	'Not stated/inadequately described', 'Smokes',	'Sniffs (powder)'],
@@ -32,8 +32,12 @@ drug_usage = {
 
 'Nicotine': ['Ingests',	'Inhales (vapour)', 'Smokes'],
 'Not Stated / Inadequately Described' : 	['Ingests',	'Not stated/inadequately described'],
+'Not stated/inadequately described' : ['Not stated/inadequately described'],            # TODO cleanup with the above
 
+'Opioid analgesics nfd' : ['Ingests'],
 'Other Antidepressants and Antipsychotics, n.e.c.': ['Ingests'],
+
+
 'Other Drugs of Concern' : 	['Not stated/inadequately described', 'Sniffs (powder)'],
 'Oxycodone'       : 	['Ingests'],
 

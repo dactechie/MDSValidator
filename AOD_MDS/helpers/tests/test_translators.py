@@ -1,7 +1,8 @@
 
 import pytest
 #from AOD_MDS.helpers import  translate_to_MDS_header, translate_to_MDS_values
-from AOD_MDS.helpers.translators import (fvalues_map, headers_map, 
+from AOD_MDS.constants import MDS as M
+from AOD_MDS.helpers.translators import (fields_map, headers_map, 
             translate_to_MDS_header, translate_to_MDS_values)
 from logger import logger
 
@@ -25,7 +26,8 @@ def test_translate_to_MDS_header(header, expected):
                           ),
                           ( [{ 'ID': '12354',  'Client type': "Other's drug use" }], 
                             {'Client type':"Other's alcohol or other drug use", 'ID': '12354'}, 
-                            { "index": 0, "cid": '12354', "required": fvalues_map["Other's drug use"], "got": "Other's drug use"}
+                            { "index": 0, "cid": '12354', "required": fields_map[M['CLNT_TYP']]["Other's drug use"],
+                              "got": "Other's drug use"}
                           )
                         ])
 def test_translate_to_MDS_values(data, expected, expected_warnings):

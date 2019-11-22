@@ -132,5 +132,4 @@ def exe(data_file, all_eps, errors_only, start_date, program='', period="3", nos
 
 
 if __name__ == '__main__':   
-    #main()
     sys.exit(main(sys.argv[1:]))

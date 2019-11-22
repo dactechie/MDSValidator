@@ -6,9 +6,9 @@
         "Counselling",
         "Rehabilitation",
         "Pharmacotherapy",
-        "Support and case management only",
-        "Information and education only",
-        "Assessment only",
+        "Support and case management",
+        "Information and education",
+        "Assessment",
         "Other",
         "No previous treatment received",
         ""

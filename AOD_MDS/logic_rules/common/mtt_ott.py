@@ -7,23 +7,23 @@ rule_definitions = [
   # Records were found where Main treatment type was '5' (Support and case management only), '6' (Information and education only) or 
   # '7' (Assessment only) and an additional treatment was recorded. 
   # Records where that Main treatment type specifies that it is the 'only' treatment cannot have additional treatment types.
-  {
-    "message": "Incorrect additional treatment type (when MTT has the word 'only')",
-    "field": M['MTT'],
-    "type" : "Error",
-    "rule": {"!":
-        {"if": [
-            {"==" : ["only", 
-                          {"substr": [ {"var": M['MTT'] },-4] }
-                    ] },
-            {"!=":  [ {"cat": [
-                        {"var":'OTT1'}, {"var":'OTT2'}, {"var":'OTT3'}, {"var":'OTT4'},{"var":'OTT5'} 
-                        ]},
-                    "" ]}
-          ]
-        }
-      }
-  },
+  # {   # old rule  1 July 2018 onwards no "only"
+  #   "message": "Incorrect additional treatment type (when MTT has the word 'only')",
+  #   "field": M['MTT'],
+  #   "type" : "Error",
+  #   "rule": {"!":
+  #       {"if": [
+  #           {"==" : ["only", 
+  #                         {"substr": [ {"var": M['MTT'] },-4] }
+  #                   ] },
+  #           {"!=":  [ {"cat": [
+  #                       {"var":'OTT1'}, {"var":'OTT2'}, {"var":'OTT3'}, {"var":'OTT4'},{"var":'OTT5'} 
+  #                       ]},
+  #                   "" ]}
+  #         ]
+  #       }
+  #     }
+  # },
 
  {
       "message": "Can't have duplicate MTT/OTTs.",
