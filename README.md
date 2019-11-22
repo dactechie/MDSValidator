@@ -14,9 +14,12 @@ After cloning, cd into the project directory and run
 
 This will pick up the latest file in the input folder. 
 
-Alternatively you can specify commandline options. (can see the help menu by typing > python MDSDataFileProcessor.py --help)
+Alternatively you can specify commandline options. 
+You can see the help menu by typing 
+` > python MDSDataFileProcessor.py --help `
 
-Usage: MDSDataFileProcessor.py [OPTIONS]
+```
+Usage: MDSDataFileProcessor.py [OPTIONS]`
 
 Options:
   -d, --data_file TEXT            Default: use the latest .csv file in the
@@ -39,3 +42,4 @@ Options:
                                   1: reject (flag as errors)
                                   [default: False]
   --help                          Show this message and exit.
+```
