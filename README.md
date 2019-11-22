@@ -4,13 +4,15 @@ Schema and Logic validation for AOD MDS dataset (based on National Minimum Datas
 ## Setup
 
 After cloning, cd into the project directory and run
+```
 > python -m venv .venv        (to create the virtual environment)
 > pip install -r requirements.txt  (to install the dependencies within the environment)
+```
 
 ## Running the validator
 1. Drop your input .csv MDS file to be checked into the ./input folder
-2. Then to do basic MDS checks run
-> python MDSDataFileProcessor.py
+2. Then to do basic MDS checks run :
+`> python MDSDataFileProcessor.py`
 
 This will pick up the latest file in the input folder. 
 
