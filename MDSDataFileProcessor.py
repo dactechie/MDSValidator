@@ -5,7 +5,7 @@ from datetime import datetime
 import click
 
 from logger import logger
-from AOD_MDS.helpers import read_data, read_header 
+from AOD_MDS.helpers import read_data, read_header
 from rule_checker.JSONValidator import JSONValidator
 from rule_checker.MJValidationError import MJValidationError
 from utils.ExcelWriter import write_data_to_book
@@ -124,10 +124,11 @@ def exe(data_file, all_eps, errors_only, start_date, program='', period="3", nos
   #log_results(verrors, warnings, header_warnings)
   logger.info(f"\n\t ...End of validation... \n\t Processing time {round(end_time - start_time,2)} seconds. ")
   #pprint.pprint (verrors)
+
   logger.info("\t ...Writing results to spreadsheet..\n")    
   result_book = write_data_to_book(data['episodes'], verrors,
                                     get_result_filename(data_file, all_eps, st_ed, program), errors_only)
-  
+  #return 0
   return result_book
 
 

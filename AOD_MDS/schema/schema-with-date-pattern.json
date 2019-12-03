@@ -15,7 +15,7 @@
           "Indigenous status", "Preferred language",
           "Commencement date", "End date","Client type",
           "Principle drug of concern", "ODC1", "ODC2", "ODC3","ODC4", "ODC5",
-          "Main treatment type",       "OTT1", "OTT2", "OTT3","OTT4", "OTT5",
+          "Main treatment type",       "OTT1", "OTT2", "OTT3","OTT4",
           "Reason for cessation",
           "Method of use for PDC","Usual accommodation", "Living arrangements",
           "Injecting drug use status", "Treatment delivery setting", "Source of referral", 
@@ -55,7 +55,6 @@
             "Main treatment type": {"$ref": "main_treatment_type.json"},
             "OTT1": {"$ref": "other_treatment_type.json"}, "OTT2": {"$ref": "other_treatment_type.json"},
             "OTT3": {"$ref": "other_treatment_type.json"}, "OTT4": {"$ref": "other_treatment_type.json"},
-            "OTT5": {"$ref": "other_treatment_type.json"},
 
             "Reason for cessation": {"$ref": "cessation_reason.json"},
 

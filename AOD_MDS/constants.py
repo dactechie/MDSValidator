@@ -1,3 +1,8 @@
+
+# schemaObj['definitions']['episode']['properties']['Principle drug of concern']['description']
+
+# TODO: Build this from the schema.json file. The "description" for each property is the key and the 
+# key of each property (in schema.json), is the value in the below dict.
 MDS = {
     "ID": "ID",
     "SEX": "Sex",

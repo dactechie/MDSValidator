@@ -31,4 +31,14 @@ rule_definitions = [
   # The scope of the AODTS NMDS excludes 'clients who are on an opioid pharmacotherapy program and who are not 
   # receiving any other form of treatment that falls within the scope of the AODTS-NMDS'. 
   # Please check that no addition treatment information is available. For more information, please contact the AIHW.
+  {
+    "message": f"If MTT is Pharmacotherapy, OTT1 should be present",
+    "field": M['MTT'],
+    "type" : "Error",
+    "rule":  {"!" : {"and": [
+                {"==": [{"var": M['MTT']}, "Pharmacotherapy"]},
+                {"==": [{"var": 'OTT1'}, "" ]}                
+            ]}}
+  }
+  
 ]

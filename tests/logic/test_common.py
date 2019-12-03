@@ -20,7 +20,7 @@ def test_header_noerrors(json_validator):
   expected_header = ['ID','First name','Surname','SLK 581','DOB','Sex','Date accuracy indicator','Country of birth','Indigenous status','Preferred language',
     'Client type','Source of referral','Commencement date','End date','Reason for cessation','Treatment delivery setting','Method of use for PDC',
     'Injecting drug use status','Principle drug of concern','ODC1','ODC2','ODC3','ODC4','ODC5','Main treatment type','OTT1','OTT2','OTT3','OTT4',
-    'OTT5','Postcode (Australian)','Living arrangements','Usual accommodation','Previous alcohol and other drug treatment received','Mental health']
+    'Postcode (Australian)','Living arrangements','Usual accommodation','Previous alcohol and other drug treatment received','Mental health']
 
 
   assert expected_header == fixed_header

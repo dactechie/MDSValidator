@@ -32,15 +32,15 @@ def has_duplicate_values(*arr) -> bool:
 
 """
 
-def _first_index_of(*arr, val)-> int:
+def _first_index_of(*arr, val=None)-> int:
   try:
     if not val and arr:
+      #return next(i for i, item in enumerate(arr) if not item)
       for i, ar in enumerate(arr):
         if not ar:
           return i
-      #return next(i for i, ar in enumerate(arr) if not ar)
-      #return arr.index(val)
     else:
+      #return next(i for i, item in enumerate(arr) if item)
       for i, item in enumerate(arr):
         if item:
           return i      
@@ -52,7 +52,7 @@ def _first_index_of(*arr, val)-> int:
 
 def has_gaps(*arr) -> bool:
   # 1. find first non-blank
-  blank_index = _first_index_of(*arr, val=None)
+  blank_index = _first_index_of(*arr)
   
   if -1 < blank_index < len(arr)-1:
     # 2. if there is a real value (non-blank) in the remainder of the list, then there was a gap

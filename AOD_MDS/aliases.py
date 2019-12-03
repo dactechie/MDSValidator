@@ -124,7 +124,6 @@ mds_aliases['fields']['ODC5'] = pdc
 mtt = mds_aliases['fields'][M['MTT']]
 mds_aliases['fields']['OTT1'] = mds_aliases['fields']['OTT2'] = mtt
 mds_aliases['fields']['OTT3'] = mds_aliases['fields']['OTT4'] = mtt
-mds_aliases['fields']['OTT5'] = mtt
 
 mds_aliases['headers'][M['ATSI']]     = ["INDIG STATUS"]
 mds_aliases['headers'][M['CLNT_TYP']] = ["CLIENT"]
