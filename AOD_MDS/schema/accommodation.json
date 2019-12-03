@@ -2,7 +2,7 @@
     "title": "Usual Accommodation",
     "$id": "#accomodation",
     "enum": [
-      "Private residence",
+      "Private Residence",
       "Boarding house/private hotel",
       "Supported accommodation facility",
       "Alcohol and other drugs",

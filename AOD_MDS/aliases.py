@@ -112,7 +112,11 @@ mds_aliases = {
           "Other specialised community residential": ["Other specialised community residential"],        
           "Boarding house/private hotel" : ["Boarding house/private rental"],
           "None/homeless/public place" : ["None/homeless/public space"],
+        },
+        M['MENT_HEL']: { 
+          "Not stated/inadequately described" : ["Not Stated / Inadequately Described" ]
         }
+        
     }
 }
 
