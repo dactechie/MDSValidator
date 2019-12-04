@@ -49,6 +49,7 @@ mds_aliases = {
           "Not known/inadequately described": ["Not Stated / Inadequately Described"]
         },        
         M['MENT_HEL']: {
+          "Not stated/inadequately described" : ["Not Stated / Inadequately Described" ],
           "Diagnosed more than twelve months ago": ["Diagnosed more than 12 months ago"],        
           "Diagnosed three months ago or less" : ["Diagnosed 3 months ago or less"],        
           "Never been diagnosed": [ "Not Diagnosed, displaying possible symptoms"],
@@ -112,11 +113,7 @@ mds_aliases = {
           "Other specialised community residential": ["Other specialised community residential"],        
           "Boarding house/private hotel" : ["Boarding house/private rental"],
           "None/homeless/public place" : ["None/homeless/public space"],
-        },
-        M['MENT_HEL']: { 
-          "Not stated/inadequately described" : ["Not Stated / Inadequately Described" ]
-        }
-        
+        },       
     }
 }
 

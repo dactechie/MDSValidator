@@ -12,7 +12,7 @@ drug_usage = {
 'Buprenorphine'   : 	['Ingests'],
 
 'Caffeine'        : ['Ingests'],
-'Cannabinoids and Related Drugs, n.e.c.': ['Smokes'],
+
 'Cannabinoids'    : 	['Ingests',	'Inhales (vapour)',	'Smokes'],
 'Cocaine' : 	['Ingests','Sniffs (powder)', 'Injects'],
 'Codeine'         : 	['Ingests'],
@@ -31,7 +31,7 @@ drug_usage = {
 'Morphine': ['Ingests', 'Injects', 'Smokes','Not stated/inadequately described','Inhales (vapour)'],
 
 'Nicotine': ['Ingests',	'Inhales (vapour)', 'Smokes'],
-'Not Stated / Inadequately Described' : 	['Ingests',	'Not stated/inadequately described'],
+'Not Stated / Inadequately Described' : 	['Injects', 'Ingests',	'Not stated/inadequately described'],
 'Not stated/inadequately described' : ['Not stated/inadequately described'],            # TODO cleanup with the above
 
 'Opioid analgesics nfd' : ['Ingests'],
@@ -41,6 +41,10 @@ drug_usage = {
 'Other Drugs of Concern' : 	['Not stated/inadequately described', 'Sniffs (powder)'],
 'Oxycodone'       : 	['Ingests'],
 
-'Tramadol'        : 	['Ingests']
-
+'Tramadol'        : 	['Ingests'],
+'Zolpidem': 	['Ingests']
 }
+
+
+drug_usage['Cannabinoid agonists'] = drug_usage['Cannabinoids']
+drug_usage['Cannabinoids and Related Drugs, n.e.c.'] = drug_usage['Cannabinoids']

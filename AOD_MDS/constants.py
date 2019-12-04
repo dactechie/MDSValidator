@@ -31,7 +31,7 @@ MDS = {
     "REAS_CESS": "Reason for cessation"
 }
 
-MDS_Dates = ["DOB", "COMM_DATE", "END_DATE"]
+MDS_Dates = ("DOB", "COMM_DATE", "END_DATE")
 
 MDS_ST_FLD = 'O'+MDS['COMM_DATE']
 MDS_END_FLD = 'O'+MDS['END_DATE']
