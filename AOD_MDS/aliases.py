@@ -31,6 +31,7 @@ mds_aliases = {
           "EEA - Day and month are estimated, year is accurate" : ["EEA"],
         },
         M['INJ_USE'] : {
+          "Not stated/inadequately described" : ["Not stated / inadequately described"],
           "Last injected more than twelve months ago":[
               "Injecting drug use more than 12 months ago",
               "Injecting drug use more than twelve months ago (and not in last twelve months)"],
@@ -63,11 +64,12 @@ mds_aliases = {
         },        
         M['MTT'] : {
           "Counselling" : [ "DATS Counselling" ],
-          "Support and case management": ["Support and case management only"],
+          "Support and case management": ["Support and case management only", "Support & case management only"],
           "Information and education" : [ "Information and education only"],
           "Assessment": ["Assessment only"]
         },
         M["PDC"]: {
+              "Not stated/inadequately described" :["Not Stated / Inadequately Described"],
               "Methamphetamine" : ["Crystal(meth) / Ice / Methamphetamine /Speed"],   # Coordinare Sep 2019 ; MJ's common Drugs translation
               "Lysergic acid diethylamide": ["LSD"],
               "Alcohol": ["Ethanol"  , "Alcohol /Ethanol" ],
@@ -99,7 +101,10 @@ mds_aliases = {
         },
         M['SRC_REF']:{
           "Medical Practitioner": ["Medical practitioner"],
-          "Correctional service" : ["Correctional Service"]
+          "Correctional service" : ["Correctional Service"],
+          "Family member/friend" : ["Family member/Friend"],
+          "Alcohol and other drug treatment service": ["Alcohol & other drug treatment"],
+          "Other Community/health care service" : ["Other community/health service"]
         },
         M['TRDLVSTG']:{
           "Outreach setting" : ["Outreach Setting"],

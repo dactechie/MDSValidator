@@ -4,14 +4,14 @@
 import pytest
 import copy
 from MDSValidator import schema_dir, schema_file_name
-from . import start_end, JSONValidator, noerrors_base, noerrors_base_translated, S_PRISON_OUTR
+from . import JSONValidator, noerrors_base, noerrors_base_translated, S_PRISON_OUTR, period
 
 S_NOTREAT_RESI = "TSS team does not provide service (treatment delivery) in Home/'Other'/Resi setting "
 ex_tds = { 'etype': 'logic', 'field': 'Treatment delivery setting'}
 
 @pytest.fixture(scope="module")
 def TSS_json_validator():
-    return JSONValidator(schema_dir, schema_file_name, start_end, program='TSS')
+    return JSONValidator(schema_dir, schema_file_name, period=period, program='TSS')
 
 
 @pytest.mark.parametrize("client_id, tds", [('11525',  'Home'),

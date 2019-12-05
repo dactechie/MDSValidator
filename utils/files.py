@@ -12,14 +12,12 @@ def get_latest_data_file(dir='input'):
     return max(list_of_files, key=os.path.getctime)
 
 
-def get_result_filename(fullname, all_eps=True, st_end=None, program='TSS'):
-  
-    st = str(st_end["start"].date())
-    ed = str(st_end["end"].date())
+def get_result_filename(fullname, all_eps=True, program='TSS'):
+
     if not all_eps:
-        output_fname_tags =f'{program}_closed_eps_period_( {st}_{ed} )'
+        output_fname_tags =f'{program}_closed_eps_period_'
     else:
-        output_fname_tags = f'{program}_with_open_eps_period_( {st}_{ed} )'  
+        output_fname_tags = f'{program}_with_open_eps_period_'  
     logger.debug("outputfile tags :" + output_fname_tags)
     base = os.path.basename(fullname)
     input_filename = os.path.splitext(base)[0]

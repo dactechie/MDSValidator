@@ -10,7 +10,7 @@ from rule_checker.JSONValidator import JSONValidator
 from rule_checker.MJValidationError import MJValidationError
 from utils.ExcelWriter import write_data_to_book
 from utils.files import get_latest_data_file, get_result_filename
-from utils.dates import get_period_dict
+from utils.dates import get_period, Period
 #from utils.log import log_results
 from rule_checker.constants import MODE_LOOSE
 #import pprint
@@ -26,10 +26,10 @@ from rule_checker.constants import MODE_LOOSE
         then return the path to the new .xlsx to the user.
 """
 
-def get_json_validator(start_end, schema_dir_name, schema_file_name, program=''):
+def get_json_validator(period: Period, schema_dir_name, schema_file_name, program=''):
     schema_dir = os.path.join(os.getcwd(), schema_dir_name)
     schema_file = os.path.realpath(os.path.join(schema_dir, schema_file_name))
-    return JSONValidator(schema_dir, schema_file, start_end, program=program)
+    return JSONValidator(schema_dir, schema_file, period, program=program)
 
 
 def get_valid_header_or_die(filename, validator, mode):
@@ -43,9 +43,9 @@ def get_valid_header_or_die(filename, validator, mode):
     return fixed_header, header_warnings
 
 
-def get_data_or_die(filename, mds_header, hmap, start_end, all_eps=None):
+def get_data_or_die(filename, mds_header, hmap, all_eps=None):
 
-    data = read_data(filename, mds_header, hmap, start_end, all_eps=all_eps)
+    data = read_data(filename, mds_header, hmap, all_eps=all_eps)
     if not data or not data['episodes'] or len(data['episodes']) < 1 :
         logger.critical("No data. Quitting...")
         sys.exit(0)
@@ -104,12 +104,13 @@ def exe(data_file, all_eps, errors_only, start_date, program='', period="3", nos
   
   start_time = time()
  
-  st_ed = get_period_dict(start_date, period_months=int(period))
-  jv = get_json_validator(st_ed, schema_dir_name='AOD_MDS/schema/',
+  period = get_period(start_date, period_months=int(period))
+  
+  jv = get_json_validator(period, schema_dir_name='AOD_MDS/schema/',
                           schema_file_name='schema.json', program=program)
   mds_header, header_warnings = get_valid_header_or_die(data_file, validator=jv, mode=nostrict)
     
-  data = get_data_or_die(data_file, mds_header, header_warnings, st_ed, all_eps=all_eps)
+  data = get_data_or_die(data_file, mds_header, header_warnings, all_eps=all_eps)
 
   verrors, warnings =  jv.validate(data, mode=nostrict)
   
@@ -127,7 +128,7 @@ def exe(data_file, all_eps, errors_only, start_date, program='', period="3", nos
 
   logger.info("\t ...Writing results to spreadsheet..\n")    
   result_book = write_data_to_book(data['episodes'], verrors,
-                                    get_result_filename(data_file, all_eps, st_ed, program), errors_only)
+                                    get_result_filename(data_file, all_eps, program), errors_only)
   #return 0
   return result_book
 

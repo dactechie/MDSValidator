@@ -5,7 +5,7 @@ import pytest
 import copy
 from ...AOD_MDS.constants import MDS as M
 from MDSValidator import schema_dir, schema_file_name
-from . import start_end, JSONValidator, noerrors_base, noerrors_base_translated, S_PRISON_OUTR
+from . import  JSONValidator, noerrors_base, noerrors_base_translated, S_PRISON_OUTR, period
 
 S_MTT_PHARM = "If MTT is Pharmacotherapy, OTT1 should be present"
 ex_tds = { 'etype': 'logic', 'field': M['MTT']}
@@ -14,7 +14,7 @@ error = { 'index': 0 ,'cid': '',  **ex_tds, 'message': S_MTT_PHARM}
 
 @pytest.fixture(scope="module")
 def Althea_json_validator():
-    return JSONValidator(schema_dir, schema_file_name, start_end, program='Althea')
+    return JSONValidator(schema_dir, schema_file_name, period=period, program='Althea')
 
 
 @pytest.mark.parametrize("client_id, mtt, ott1, err", [

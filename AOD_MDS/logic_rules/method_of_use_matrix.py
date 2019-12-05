@@ -48,3 +48,4 @@ drug_usage = {
 
 drug_usage['Cannabinoid agonists'] = drug_usage['Cannabinoids']
 drug_usage['Cannabinoids and Related Drugs, n.e.c.'] = drug_usage['Cannabinoids']
+drug_usage["GHB type Drugs and Analogues nfd"] = drug_usage['GHB type Drugs and Analogues, n.e.c.']

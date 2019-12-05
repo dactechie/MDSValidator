@@ -1,18 +1,17 @@
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+from collections import namedtuple
 
+Period = namedtuple('Period', 'start end')
 
-def in_period_date(period: dict, ep_start: datetime) -> bool:
-  return ep_start <=  period['end']
+def in_period(period: Period, ep_end: datetime) -> bool:
+  return period.start<= ep_end <= period.end
 
+ 
+def get_period(start_date: datetime, period_months=3) -> datetime :
 
-def inperiod(period: dict, ep_start: datetime, ep_end: datetime) -> bool:
-  return period['start'] <= ep_start <=  ep_end <=  period['end']
-
-
-def get_period_dict(start_date: datetime, period_months=3) -> datetime :
-  end_date =  start_date + relativedelta(months=+period_months) - relativedelta(days=+1)
-  return  {'start': start_date, 'end': end_date }
+  end_date =  start_date + relativedelta(months=+period_months) - relativedelta(days=+1)  
+  return Period(start=start_date.toordinal(), end=end_date.toordinal())
 
 
 def str_to_date(str):

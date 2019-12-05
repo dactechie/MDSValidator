@@ -5,12 +5,30 @@ from logger import logger
 from AOD_MDS.constants import MDS
 from utils import remove_unicode
 
+# def cleanse_header(csvfile, data_header):
+#   clean_header = True
+#   if MDS['FNAME'] not in data_header and "FULL NAME" in data_header:
+#     reader = csv.DictReader(csvfile, data_header)
+#     #    rows = _split_fullname(reader)
+#     #reader = rows
+#     data_header.remove("FULL NAME")
+#     data_header.extend([MDS['FNAME'], MDS['LNAME']])
+  
+#   result = {}
+#   for dh in data_header:
+#     tmp = remove_unicode(dh)    
+#     if dh is not tmp:
+#       clean_header = False    
+#     result[dh] = tmp
+#   return result, clean_header
+
 
 def read_header(filename: str) -> list:
-    with open(filename, 'r') as csvfile:
-        headers = [header for header in csvfile.readline().split(',')]
-        headers[-1] = headers[-1].strip('\n')
-        return headers
+  with open(filename, 'r') as csvfile:
+    headers = [header for header in csvfile.readline().split(',')]
+    headers[-1] = headers[-1].strip('\n')
+    #cleanse_header(csvfile, headers)
+    return headers
 
 
 def _split_fullname(reader) -> list:
@@ -19,6 +37,7 @@ def _split_fullname(reader) -> list:
     if  "".join(r.values()) == '':
         logger.error(f"\n\tFound Blank row at {i}. Quitting...")
         return None
+
     row = copy.deepcopy(r)
     if row.get("FULL NAME"):              
         row[MDS['LNAME']], row[MDS['FNAME']]  = str.split(row["FULL NAME"], ", ")
@@ -31,7 +50,7 @@ def _split_fullname(reader) -> list:
 
 # TODO clean this up (use a generator)
 def read_data(filename: str, data_header: dict, hmap: dict, 
-                             start_end: dict, all_eps=True) -> dict:
+                                        all_eps=True) -> dict:
     """
     - Assumes that if a "FULL NAME" column exists, all rows will have a format of
         'LastName, FirstName'.

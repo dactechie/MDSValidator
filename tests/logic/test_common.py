@@ -1,16 +1,20 @@
 #import os
 import pytest
 import pytest_dependency
-#import copy
+import copy
 #from AOD_MDS.constants import MDS as M, MDS_Dates as D
-from  MDSValidator import schema_dir, schema_file_name
-from . import start_end, JSONValidator, noerrors_base, noerrors_base_translated
+
+
 from collections import OrderedDict
+from  MDSValidator import schema_dir, schema_file_name
+
+#from  MDSValidator.rule_checker import  
+from . import JSONValidator, noerrors_base, noerrors_base_translated, period
 
 
 @pytest.fixture(scope="module")
-def json_validator():
-    return JSONValidator(schema_dir, schema_file_name, start_end=start_end, program=None)
+def json_validator():    
+    return JSONValidator(schema_dir, schema_file_name, period=period, program=None)
 
 
 @pytest.mark.dependency() 
@@ -43,3 +47,19 @@ def test_data_noerrors(json_validator):
     
         expected = []        
         assert errors[0] == expected
+
+
+def test_out_of_period(json_validator):
+  baseerror = copy.deepcopy(noerrors_base_translated)
+  baseerror['Commencement date'] = '01/01/2017'
+  baseerror['End date'] ='01/01/2020'
+  baseerror['ID'] ='7777'
+  input = [baseerror]
+
+  errors, _ = json_validator.validate({'episodes' :input})
+
+  expected4 = [{'cid': '7777',  'etype': 'logic','field': 'End date',
+                'index': 0, 'message': 'Episode End Date is not in the reporting period'
+                }]
+
+  assert errors[0] == expected4

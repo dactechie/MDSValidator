@@ -4,13 +4,14 @@
 import pytest
 import copy
 #from  ...AOD_MDS.constants import MDS as M, MDS_Dates as D
+
 from ... import schema_dir, schema_file_name
-from . import  start_end, JSONValidator, noerrors_base, noerrors_base_translated
+from . import  JSONValidator, noerrors_base, noerrors_base_translated, period
 
 
 @pytest.fixture(scope="module")
 def Arcadia_Resi_json_validator():
-    return JSONValidator(schema_dir, schema_file_name, start_end, program='Arcadia-Resi')
+    return JSONValidator(schema_dir, schema_file_name, period=period, program='Arcadia-Resi')
 
 
 def test_Arcadia_Resi(Arcadia_Resi_json_validator):

@@ -46,7 +46,24 @@ rule_definitions = [
               True
             ]}
   },
-  
+  # Date of cessation out of collection period
+  # Priority: Critical
+  # Rule 10
+  # Records were found where Date of cessation did not fall within the collection period. 
+  # Records where Date of cessation falls outside the period from July 1, 2018 to June 30, 2019 are not in the scope of the collection.
+  # Please review and amend the Date of cessation or exclude the episodes.
+
+  {
+    "message": f"Episode End Date is not in the reporting period",
+    "field": M['END_DATE'],
+    "involvedFields": [M['END_DATE']],
+    "type" :"Error",
+    "rule" : {"!": {"and":[
+                  {"!=": [{"var": M['END_DATE']}, ""]},
+                  {"is_notin_period": [ {"var": MDS_END_FLD} ]}
+                ]
+            }}
+  },
   # Potential duplicate records
   # ValidationCode : Duplicate Eps
   # Priority: Critical
@@ -81,9 +98,3 @@ rule_definitions = [
   # For example, a client born of November 3rd, 1986 should have the following Date of birth entry: 03111986. 
   # Date of birth should not contain any slashes, dashes or other nonnumeric characters.
 
-  # Date of cessation out of collection period
-  # Priority: Critical
-  # Rule 10
-  # Records were found where Date of cessation did not fall within the collection period. 
-  # Records where Date of cessation falls outside the period from July 1, 2018 to June 30, 2019 are not in the scope of the collection.
-  # Please review and amend the Date of cessation or exclude the episodes.

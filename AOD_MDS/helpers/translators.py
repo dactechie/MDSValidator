@@ -1,6 +1,6 @@
 
 import copy
-from AOD_MDS.constants import MDS, MDS_Dates
+from AOD_MDS.constants import MDS, MDS_Dates, MDS_ST_FLD, MDS_END_FLD
 from utils import v_warn_lam
 from AOD_MDS.aliases import mds_aliases
 
@@ -26,7 +26,8 @@ alias_map_lam2 = lambda mds_dict_of_aliasedicts : { mds_field_name: alias_map_la
 
 headers_map = alias_map_lam(mds_aliases['headers'])
 fields_map = alias_map_lam2(mds_aliases['fields'])
-val_translation_excluded_fields = ["ENROLLING PROVIDER", "EID", "Age", MDS["FNAME"], MDS["LNAME"],
+val_translation_excluded_fields = ["ENROLLING PROVIDER", "EID", "AGE", "DAYS ENROLLED", MDS["FNAME"], MDS["LNAME"],
+                                  "ARCADIA", "TREATED IN", MDS_ST_FLD, MDS_END_FLD, 'ODOB',
                                    MDS["ID"], MDS["PCODE"], MDS["SLK"] ] + [MDS[md] for md in MDS_Dates]
 
 

@@ -12,7 +12,8 @@ from AOD_MDS.helpers import (prep_and_check_overlap,
 from AOD_MDS.constants import MDS, MDS_Dates, MDS_ST_FLD, MDS_END_FLD
 from AOD_MDS.logic_rules.common import rule_definitions as common_rules
 from utils import (cleanse_string, get_date_converter, has_duplicate_values, 
-                    has_gaps, compile_logic_errors, remove_vrules, add_error_obj)
+                    has_gaps, compile_logic_errors, remove_vrules, 
+                    add_error_obj, Period, in_period)
 from logger import logger
 from .MJValidationError import MJValidationError
 from .constants import MODE_LOOSE, NOW_ORD, NOW
@@ -30,10 +31,10 @@ header_er_lam = lambda field, miss_extra: MJValidationError(index='all',
 
 class JSONValidator(object):
     
-    def __init__(self, schema_dir, schema_file_name, start_end, program):
+    def __init__(self, schema_dir, schema_file_name, period: Period, program):
         self.validator, self.schema = JSONValidator.setup_validator(
                                                     schema_dir, schema_file_name)
-        self.start_end = start_end                                                      
+        self.period = period                                                      
         
         self.rule_definitions = copy.deepcopy(common_rules)
         self.rules = [r['rule'] for r in self.rule_definitions]
@@ -134,7 +135,7 @@ class JSONValidator(object):
           return errors, -1
       return errors, 0
 
-
+    
 
     # TODO : convert everything to MDS codes first to check numeric values (faster). failed lookups are automatically errors
     def validate(self, data, mode=MODE_LOOSE):
@@ -160,27 +161,19 @@ class JSONValidator(object):
           return errors, -1
 
         add_operation('has_duplicate_values', has_duplicate_values)
-        add_operation('check_slk', self.check_slk)
+        add_operation('check_slk', self.check_slk)          # change to is_invalid_slk
         add_operation('has_blanks_in_otherdrugs', has_gaps)
-        add_operation('is_valid_drug_use', is_valid_drug_use)
-        #add_operation('is_outside_period', )            
+        add_operation('is_valid_drug_use', is_valid_drug_use) # change to is_invalid_drug use
+        add_operation('is_notin_period', self.is_notin_period)
+
         client_eps = {}
-        # stdate = MDS['COMM_DATE']
-        # enddate = MDS['END_DATE']
-        
-        # period_st_ed = { 'start': self.start_end['start'].toordinal(),
-        #                  'end' :  self.start_end['end'].toordinal()
-        #                 }
+
         fn_date_converter = get_date_converter(sample_date_str=episodes[0][MDS_Dates[0]])
      
         for i, ep_data in enumerate(episodes):
             date_conversion_errors = fix_check_dates(ep_data, i, fn_date_converter,
-                                                     id_field, MDS_Dates)                                                     
-  
-            # ep_data[stdate] =str(ep_data[stdate])
-            # ep_data[enddate] =str(ep_data[enddate])
-            # ep_data[MDS['DOB']] =str(ep_data[MDS['DOB']])
-            #print(ep_data)
+                                                     id_field, MDS_Dates)
+
             self.validate_logic(errors, ep_data, i, date_conversion_errors,
                                          id_field, client_eps)
         if self.slk_suggestions:
@@ -188,7 +181,11 @@ class JSONValidator(object):
 
         return errors , warnings
  
-    
+
+    def is_notin_period(self, episode_end):
+      return not in_period(self.period, episode_end)        
+
+
     def check_slk(self, id, data_slk, firstname, lastname, DOB_str, sex_str):
         must_be = getSLK(firstname, lastname, DOB_str, sex_str)
 
