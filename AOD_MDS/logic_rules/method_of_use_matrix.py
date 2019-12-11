@@ -2,7 +2,7 @@
 drug_usage = {
 
 'Alcohols nfd'    : 	['Ingests'],
-'Alcohol'         :   ['Ingests',	'Injects',	'Not stated/inadequately described', 'Smokes',	'Sniffs (powder)'],
+'Alcohol'         :   ['Ingests',	'Injects',	'Not stated/inadequately described', 'Smokes',	'Sniffs (powder)', 'Other'],
 'Amphetamines, n.e.c.'     : 	['Ingests',	'Inhales (vapour)',	'Injects',	'Smokes'],
 'ANALGESICS'      : ['Ingests'],
 'Amphetamine'     : 	['Ingests',	'Inhales (vapour)',	'Injects',	'Smokes'],
@@ -49,3 +49,4 @@ drug_usage = {
 drug_usage['Cannabinoid agonists'] = drug_usage['Cannabinoids']
 drug_usage['Cannabinoids and Related Drugs, n.e.c.'] = drug_usage['Cannabinoids']
 drug_usage["GHB type Drugs and Analogues nfd"] = drug_usage['GHB type Drugs and Analogues, n.e.c.']
+drug_usage['Opioid Antagonists, n.e.c.'] = drug_usage['Opioid analgesics nfd']

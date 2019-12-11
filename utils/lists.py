@@ -36,8 +36,8 @@ def _first_index_of(*arr, val=None)-> int:
   try:
     if not val and arr:
       #return next(i for i, item in enumerate(arr) if not item)
-      for i, ar in enumerate(arr):
-        if not ar:
+      for i, item in enumerate(arr):
+        if not item:
           return i
     else:
       #return next(i for i, item in enumerate(arr) if item)

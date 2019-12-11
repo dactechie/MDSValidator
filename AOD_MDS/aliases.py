@@ -64,17 +64,19 @@ mds_aliases = {
         },        
         M['MTT'] : {
           "Counselling" : [ "DATS Counselling" ],
-          "Support and case management": ["Support and case management only", "Support & case management only"],
-          "Information and education" : [ "Information and education only"],
-          "Assessment": ["Assessment only"]
+          "Support and case management only": ["Support & case management only"],
+        #  "Support and case management": ["Support and case management only", "Support & case management only"],
+        #  "Information and education" : [ "Information and education only"],
+         # "Assessment": ["Assessment only"]
         },
         M["PDC"]: {
               "Not stated/inadequately described" :["Not Stated / Inadequately Described"],
+              "Opioid Antagonists, n.e.c." : ["Opoid Analgesics nfd","Opioid Analgesics nfd"],
               "Methamphetamine" : ["Crystal(meth) / Ice / Methamphetamine /Speed"],   # Coordinare Sep 2019 ; MJ's common Drugs translation
               "Lysergic acid diethylamide": ["LSD"],
               "Alcohol": ["Ethanol"  , "Alcohol /Ethanol" ],
               "MDMA": ["Ecstasy (MDMA)"],
-              "Cannabinoids" : ["Cannabis"],
+              "Cannabinoids" : ["Cannabis", "Cannabinoids and Related Drugs nfd"],
               "Diazepam": ["diazepam"],
               "Nicotine" : ["nicotine", "Nicotine/tobacco"],
               "Codeine": ["codeine"],
@@ -85,10 +87,11 @@ mds_aliases = {
               "Sedatives and Hypnotics nfd": ["Other sedatives/hypnotics"],
         },
         M['REAS_CESS']: {
+          "Ceased to participate against advice": ["Ceased against advice"],
           "Ceased to participate without notice" : ["Ceased without notice"],
           "Ceased to participate by mutual agreement": ["Ceased by mutual agreement"],
           "Ceased to participate involuntary (non-compliance)": ["Ceased involuntary"],
-          "Change in main treatment type" : ["Change in the main treatment type"],
+          "Change in main treatment type" : ["Change in the main treatment type"],          
           "Change in delivery setting" : ["Change in the delivery setting"],
           "Transferred to another service provider" : ["Transferred to other provider"],
           "Imprisoned, other than drug court sanctioned":["Imprisoned (not drug court)" ],
@@ -108,16 +111,18 @@ mds_aliases = {
         },
         M['TRDLVSTG']:{
           "Outreach setting" : ["Outreach Setting"],
-          "Private residence" : ["Private Residence", "Rented private house or flat", 
-            "Privately owned house or flat", "Rented public house or flat"],
+          "Private residence" : ["Private Residence", "Rented private house or flat",
+                                 "Privately owned house or flat", "Rented public house or flat"],
           "Non-residential treatment facility" :["Non-residential Facility"]
         },
         M['USACC']:{
+          "Private Residence": ["Rented public house or flat"],
           "Short term crisis, emergency or transitional accommodation facility" : [
             "Short term crisis, emergency or transitional accommodation f"],
           "Other specialised community residential": ["Other specialised community residential"],        
           "Boarding house/private hotel" : ["Boarding house/private rental"],
           "None/homeless/public place" : ["None/homeless/public space"],
+          
         },       
     }
 }
